@@ -38,6 +38,7 @@ const Questionnaire = () => {
     const [showExitIntent, setShowExitIntent] = useState(false);
     const [finalScores, setFinalScores] = useState(null);
     const [isStarted, setIsStarted] = useState(initialState.currentStepIndex > 0 || Object.keys(initialState.answers).length > 0);
+    const containerRef = wp.element.useRef(null);
 
     useEffect(() => {
         if (isStarted) {
@@ -56,21 +57,34 @@ const Questionnaire = () => {
         return () => document.removeEventListener('mouseleave', handleMouseLeave);
     }, [status, isStarted]);
 
+    const scrollToTop = () => {
+        if (containerRef.current) {
+            const yOffset = -50; 
+            const element = containerRef.current;
+            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    };
+
     const handleStart = () => {
         setIsStarted(true);
+        setTimeout(scrollToTop, 100);
     };
 
     const handleNext = () => {
         if (currentStepIndex < questions.length - 1) {
             setCurrentStepIndex(prev => prev + 1);
+            scrollToTop();
         } else {
             setShowLeadCapture(true);
+            scrollToTop();
         }
     };
 
     const handleBack = () => {
         if (currentStepIndex > 0) {
             setCurrentStepIndex(prev => prev - 1);
+            scrollToTop();
         }
     };
 
@@ -168,7 +182,7 @@ const Questionnaire = () => {
     };
 
     return (
-        <div style={{ position: 'relative', padding: '2rem', textAlign: 'left', animation: 'fadeIn 0.4s ease-in-out' }}>
+        <div ref={containerRef} style={{ position: 'relative', padding: '2rem', textAlign: 'left', animation: 'fadeIn 0.4s ease-in-out', minHeight: '550px', display: 'flex', flexDirection: 'column' }}>
             <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>
             
             {showExitIntent && (
@@ -184,24 +198,24 @@ const Questionnaire = () => {
             <h3 style={{ color: '#2E8B57', marginBottom: '0.5rem', fontFamily: 'Outfit, sans-serif', fontSize: '1.4rem' }}>{currentQuestion.title}</h3>
             {currentQuestion.subtitle && <p style={{ marginBottom: '1.5rem', fontStyle: 'italic', color: '#666', fontSize: '0.9rem' }}>{currentQuestion.subtitle}</p>}
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem', flex: 1 }}>
                 {currentQuestion.type === 'checkbox' && currentQuestion.options.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', padding: '0.75rem', border: '1px solid #DCD7C9', borderRadius: '6px', backgroundColor: currentAnswer.includes(option) ? '#f0f9f4' : '#fff' }}>
-                        <input type="checkbox" checked={currentAnswer.includes(option)} onChange={() => handleOptionToggle(option)} />
+                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', padding: '0.75rem', border: '1px solid', borderColor: currentAnswer.includes(option) ? '#2E8B57' : '#DCD7C9', borderRadius: '6px', backgroundColor: currentAnswer.includes(option) ? '#f0f9f4' : '#fff', outline: 'none', userSelect: 'none' }}>
+                        <input type="checkbox" checked={currentAnswer.includes(option)} onChange={() => handleOptionToggle(option)} style={{ outline: 'none' }} />
                         <span style={{ fontFamily: 'Lexend, sans-serif' }}>{option}</span>
                     </label>
                 ))}
 
                 {currentQuestion.type === 'radio' && currentQuestion.options.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', padding: '0.75rem', border: '1px solid #DCD7C9', borderRadius: '6px', backgroundColor: currentAnswer === option ? '#f0f9f4' : '#fff' }}>
-                        <input type="radio" name={`radio-${currentQuestion.id}`} checked={currentAnswer === option} onChange={() => handleRadioSelect(option)} />
+                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', padding: '0.75rem', border: '1px solid', borderColor: currentAnswer === option ? '#2E8B57' : '#DCD7C9', borderRadius: '6px', backgroundColor: currentAnswer === option ? '#f0f9f4' : '#fff', outline: 'none', userSelect: 'none' }}>
+                        <input type="radio" name={`radio-${currentQuestion.id}`} checked={currentAnswer === option} onChange={() => handleRadioSelect(option)} style={{ outline: 'none' }} />
                         <span style={{ fontFamily: 'Lexend, sans-serif' }}>{option}</span>
                     </label>
                 ))}
 
                 {currentQuestion.type === 'slider' && (
                     <div style={{ padding: '1rem 0' }}>
-                        <input type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer' }} />
+                        <input type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer', outline: 'none' }} />
                         <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '1.2rem', fontWeight: 'bold', color: '#2E8B57' }}>{currentAnswer}</div>
                     </div>
                 )}
