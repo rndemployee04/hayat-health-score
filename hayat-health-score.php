@@ -53,6 +53,7 @@ class Hayat_Health_Score {
             top_opportunities text NULL,
             raw_answers longtext NULL,
             utm_source varchar(100) NULL,
+            status varchar(50) DEFAULT 'Needs Follow-up' NULL,
             created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
             PRIMARY KEY  (id)
         ) $charset_collate;";
@@ -93,6 +94,13 @@ class Hayat_Health_Score {
                 'bookingUrl' => esc_url_raw( $booking_url ),
                 'primaryColor' => sanitize_hex_color( $primary_color )
             ] );
+            
+            wp_enqueue_style(
+                'hayat-health-score-custom-css',
+                plugin_dir_url( __FILE__ ) . 'assets/css/custom.css',
+                [],
+                '1.0.0'
+            );
         }
     }
 }

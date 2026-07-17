@@ -1,5 +1,5 @@
 import { useState } from '@wordpress/element';
-const primaryColor = window.hayatHealthData?.primaryColor || primaryColor;
+const primaryColor = window.hayatHealthData?.primaryColor || '#2E8B57';
 
 const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     const [firstName, setFirstName] = useState('');
@@ -16,7 +16,6 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
             return;
         }
 
-        // Basic email validation
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             setError('Please provide a valid email address.');
             return;
@@ -30,20 +29,46 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
         onSubmit({ first_name: firstName, email: email, phone: phone });
     };
 
-    return (
-        <div style={{ padding: '2rem', textAlign: 'left', animation: 'fadeIn 0.4s ease-in-out' }}>
-            <h3 style={{ color: primaryColor, marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: '1.6rem' }}>
-                Receive Your Personalized Hayat Tayyiba Health Snapshot
-            </h3>
-            <p style={{ marginBottom: '2rem', color: '#4A4A4A', fontFamily: 'Lexend, sans-serif', fontSize: '1rem', lineHeight: '1.5' }}>
-                You're almost there! Enter your details below to see your Health Score and receive your customized action plan.
-            </p>
+    const inputStyle = {
+        width: '100%', 
+        padding: '1rem 1.25rem', 
+        borderRadius: '12px', 
+        border: '1px solid rgba(220, 227, 235, 0.8)', 
+        fontSize: '1.05rem', 
+        fontFamily: 'Outfit, sans-serif',
+        backgroundColor: '#ffffff',
+        color: '#1a1f36',
+        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)',
+        transition: 'all 0.2s ease',
+        outline: 'none',
+        boxSizing: 'border-box'
+    };
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    const labelStyle = {
+        display: 'block', 
+        marginBottom: '0.6rem', 
+        fontFamily: 'Outfit, sans-serif', 
+        color: '#4f566b', 
+        fontWeight: '600',
+        fontSize: '0.95rem'
+    };
+
+    return (
+        <div style={{ padding: '1rem 0 0 0', textAlign: 'left', animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: '800', letterSpacing: '-0.5px' }}>
+                    Receive Your Personalized Snapshot
+                </h3>
+                <p style={{ color: '#8792a2', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3vw, 1.1rem)', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
+                    You're almost there! Enter your details below to see your Health Score and receive your customized action plan.
+                </p>
+            </div>
+
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', backgroundColor: '#ffffff', padding: 'clamp(1.5rem, 5vw, 2.5rem)', borderRadius: '20px', boxShadow: '0 15px 35px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.02)', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
                 
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontFamily: 'Lexend, sans-serif', color: '#333', fontWeight: 'bold' }}>
-                        First Name <span style={{ color: 'red' }}>*</span>
+                    <label style={labelStyle}>
+                        First Name <span style={{ color: '#d9534f' }}>*</span>
                     </label>
                     <input 
                         type="text" 
@@ -51,13 +76,15 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="e.g., John"
                         required
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #DCD7C9', fontSize: '1rem', fontFamily: 'Outfit, sans-serif' }}
+                        style={inputStyle}
+                        onFocus={(e) => { e.target.style.borderColor = primaryColor; e.target.style.boxShadow = `0 0 0 3px ${primaryColor}20`; }}
+                        onBlur={(e) => { e.target.style.borderColor = 'rgba(220, 227, 235, 0.8)'; e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
                     />
                 </div>
 
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontFamily: 'Lexend, sans-serif', color: '#333', fontWeight: 'bold' }}>
-                        Email Address <span style={{ color: 'red' }}>*</span>
+                    <label style={labelStyle}>
+                        Email Address <span style={{ color: '#d9534f' }}>*</span>
                     </label>
                     <input 
                         type="email" 
@@ -65,12 +92,14 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="e.g., john@example.com"
                         required
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #DCD7C9', fontSize: '1rem', fontFamily: 'Outfit, sans-serif' }}
+                        style={inputStyle}
+                        onFocus={(e) => { e.target.style.borderColor = primaryColor; e.target.style.boxShadow = `0 0 0 3px ${primaryColor}20`; }}
+                        onBlur={(e) => { e.target.style.borderColor = 'rgba(220, 227, 235, 0.8)'; e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
                     />
                 </div>
 
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontFamily: 'Lexend, sans-serif', color: '#333', fontWeight: 'bold' }}>
+                    <label style={labelStyle}>
                         Mobile Phone (Optional)
                     </label>
                     <input 
@@ -78,34 +107,43 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         value={phone} 
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="e.g., 555-0123"
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #DCD7C9', fontSize: '1rem', fontFamily: 'Outfit, sans-serif' }}
+                        style={inputStyle}
+                        onFocus={(e) => { e.target.style.borderColor = primaryColor; e.target.style.boxShadow = `0 0 0 3px ${primaryColor}20`; }}
+                        onBlur={(e) => { e.target.style.borderColor = 'rgba(220, 227, 235, 0.8)'; e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
                     />
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginTop: '0.5rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '12px' }}>
                     <input 
                         type="checkbox" 
                         id="consent" 
                         checked={consent} 
                         onChange={(e) => setConsent(e.target.checked)}
-                        style={{ marginTop: '0.25rem' }}
+                        style={{ marginTop: '0.25rem', width: '22px', height: '22px', cursor: 'pointer', accentColor: primaryColor, border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }}
                     />
-                    <label htmlFor="consent" style={{ fontSize: '0.9rem', color: '#666', fontFamily: 'Lexend, sans-serif', lineHeight: '1.4' }}>
+                    <label htmlFor="consent" style={{ fontSize: '1rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.5', cursor: 'pointer' }}>
                         I agree to receive emails from Hayat Tayyiba. I understand I can unsubscribe at any time.
                     </label>
                 </div>
                 
-                {error && <p style={{ color: 'red', margin: 0, fontSize: '0.9rem' }}>{error}</p>}
+                {error && (
+                    <div style={{ padding: '0.75rem 1rem', backgroundColor: '#fef2f2', borderLeft: '4px solid #ef4444', borderRadius: '4px' }}>
+                        <p style={{ color: '#b91c1c', margin: 0, fontSize: '0.95rem', fontWeight: '500' }}>{error}</p>
+                    </div>
+                )}
 
-                <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
+                <div style={{ marginTop: 'clamp(1rem, 4vw, 1.5rem)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                     <button 
                         type="button"
                         onClick={onBack}
                         style={{
-                            backgroundColor: '#fff', color: '#4A4A4A', padding: '0.75rem 1.5rem',
-                            border: '1px solid #DCD7C9', borderRadius: '4px', cursor: 'pointer',
-                            fontSize: '1.1rem', fontFamily: 'Outfit, sans-serif', flex: 1
+                            backgroundColor: 'transparent', color: '#4f566b', padding: 'clamp(0.8rem, 3vw, 1.2rem)',
+                            border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '12px', cursor: 'pointer',
+                            fontSize: 'clamp(1rem, 3vw, 1.15rem)', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
+                            transition: 'all 0.2s ease', textAlign: 'center'
                         }}
+                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                     >
                         Back
                     </button>
@@ -114,9 +152,28 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         type="submit"
                         disabled={isSubmitting}
                         style={{
-                            backgroundColor: primaryColor, color: '#FFF', padding: '0.75rem 1.5rem',
-                            border: 'none', borderRadius: '4px', cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                            opacity: isSubmitting ? 0.7 : 1, fontSize: '1.1rem', fontFamily: 'Outfit, sans-serif', flex: 2
+                            background: `linear-gradient(180deg, #009c46 0%, #004b20 100%)`, 
+                            color: '#FFF', padding: 'clamp(0.8rem, 3vw, 1.2rem)',
+                            border: 'none', borderRadius: '12px', cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                            opacity: isSubmitting ? 0.7 : 1, fontSize: 'clamp(1rem, 3.5vw, 1.15rem)', fontFamily: 'Outfit, sans-serif', 
+                            fontWeight: '700', flex: '2 1 200px',
+                            boxShadow: `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`,
+                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                            letterSpacing: '0.5px',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                            textAlign: 'center'
+                        }}
+                        onMouseOver={(e) => { 
+                            if (!isSubmitting) {
+                                e.currentTarget.style.transform = 'scale(1.03)'; 
+                                e.currentTarget.style.boxShadow = `0 15px 35px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.4)`; 
+                            }
+                        }}
+                        onMouseOut={(e) => { 
+                            if (!isSubmitting) {
+                                e.currentTarget.style.transform = 'scale(1)'; 
+                                e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`; 
+                            }
                         }}
                     >
                         {isSubmitting ? 'Generating...' : 'Get My Health Score'}
