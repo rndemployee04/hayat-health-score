@@ -34,6 +34,66 @@ const submitAssessment = async answers => {
 
 /***/ },
 
+/***/ "./src/components/ProgressBar.js"
+/*!***************************************!*\
+  !*** ./src/components/ProgressBar.js ***!
+  \***************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+const ProgressBar = ({
+  currentStep,
+  totalSteps
+}) => {
+  const percentage = Math.round(currentStep / totalSteps * 100);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+    style: {
+      marginBottom: '2rem'
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+      style: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: '0.5rem',
+        fontFamily: 'Lexend, sans-serif',
+        fontSize: '0.9rem',
+        color: '#666'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+        children: ["Question ", currentStep, " of ", totalSteps]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+        children: [percentage, "% Complete"]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      style: {
+        width: '100%',
+        height: '8px',
+        backgroundColor: '#DCD7C9',
+        borderRadius: '4px',
+        overflow: 'hidden'
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+        style: {
+          height: '100%',
+          width: `${percentage}%`,
+          backgroundColor: '#2E8B57',
+          // Primary Brand Green
+          transition: 'width 0.4s ease-in-out'
+        }
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProgressBar);
+
+/***/ },
+
 /***/ "./src/components/Questionnaire.js"
 /*!*****************************************!*\
   !*** ./src/components/Questionnaire.js ***!
@@ -47,121 +107,318 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _api_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/api */ "./src/api/api.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _data_questions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/questions */ "./src/data/questions.js");
+/* harmony import */ var _ProgressBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProgressBar */ "./src/components/ProgressBar.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
-const Q1_OPTIONS = ["Weight that's difficult to lose", "Low energy or fatigue", "Poor sleep", "Blood sugar concerns", "High blood pressure", "High cholesterol", "Brain fog", "High stress", "I take more medications than I'd like", "I don't feel like myself anymore"];
+
+
 const Questionnaire = () => {
-  const [selectedOptions, setSelectedOptions] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [currentStepIndex, setCurrentStepIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
+  const [answers, setAnswers] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)({});
   const [status, setStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('idle'); // idle, submitting, success, error
 
-  const toggleOption = option => {
-    setSelectedOptions(prev => prev.includes(option) ? prev.filter(item => item !== option) : [...prev, option]);
+  const currentQuestion = _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions[currentStepIndex];
+  const currentAnswer = answers[currentQuestion.id] || (currentQuestion.type === 'checkbox' ? [] : currentQuestion.type === 'slider' ? 5 : '');
+  const handleOptionToggle = option => {
+    setAnswers(prev => {
+      const prevAnswers = prev[currentQuestion.id] || [];
+      let newAnswers;
+
+      // Handle exclusive "None" or "I haven't really tried yet"
+      if (option === 'None' || option === "I haven't really tried yet") {
+        newAnswers = [option];
+      } else if (prevAnswers.includes('None') || prevAnswers.includes("I haven't really tried yet")) {
+        newAnswers = [option]; // Remove the exclusive option if another is picked
+      } else {
+        newAnswers = prevAnswers.includes(option) ? prevAnswers.filter(item => item !== option) : [...prevAnswers, option];
+      }
+      return {
+        ...prev,
+        [currentQuestion.id]: newAnswers
+      };
+    });
   };
-  const handleSubmit = async () => {
-    if (selectedOptions.length === 0) return;
-    setStatus('submitting');
-    try {
-      await (0,_api_api__WEBPACK_IMPORTED_MODULE_1__.submitAssessment)({
-        q1: selectedOptions
-      });
-      setStatus('success');
-    } catch (error) {
-      console.error(error);
-      setStatus('error');
+  const handleRadioSelect = option => {
+    setAnswers(prev => ({
+      ...prev,
+      [currentQuestion.id]: option
+    }));
+  };
+  const handleSliderChange = e => {
+    setAnswers(prev => ({
+      ...prev,
+      [currentQuestion.id]: parseInt(e.target.value, 10)
+    }));
+  };
+  const handleNext = async () => {
+    if (currentStepIndex < _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1) {
+      setCurrentStepIndex(prev => prev + 1);
+    } else {
+      // Final submission
+      setStatus('submitting');
+      try {
+        await (0,_api_api__WEBPACK_IMPORTED_MODULE_1__.submitAssessment)(answers);
+        setStatus('success');
+      } catch (error) {
+        console.error(error);
+        setStatus('error');
+      }
     }
   };
+  const handleBack = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(prev => prev - 1);
+    }
+  };
+  const isNextDisabled = () => {
+    if (currentQuestion.type === 'checkbox') return currentAnswer.length === 0;
+    if (currentQuestion.type === 'radio') return currentAnswer === '';
+    return false; // slider always has a value
+  };
   if (status === 'success') {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       style: {
         textAlign: 'center',
-        padding: '2rem'
+        padding: '2rem',
+        animation: 'fadeIn 0.5s'
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
         style: {
           color: '#2E8B57'
         },
         children: "Success!"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-        children: "Tracer bullet complete. Q1 data saved to the database."
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+        children: "All questions answered. State machine complete!"
       })]
     });
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     style: {
       padding: '2rem',
-      textAlign: 'left'
+      textAlign: 'left',
+      animation: 'fadeIn 0.4s ease-in-out'
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("style", {
+      children: `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                `
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ProgressBar__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      currentStep: currentStepIndex + 1,
+      totalSteps: _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
       style: {
         color: '#2E8B57',
-        marginBottom: '1.5rem',
-        fontFamily: 'Outfit, sans-serif'
+        marginBottom: '0.5rem',
+        fontFamily: 'Outfit, sans-serif',
+        fontSize: '1.4rem'
       },
-      children: "Which of these are you currently struggling with?"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+      children: currentQuestion.title
+    }), currentQuestion.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
       style: {
-        marginBottom: '1rem',
+        marginBottom: '1.5rem',
         fontStyle: 'italic',
-        color: '#666'
+        color: '#666',
+        fontSize: '0.9rem'
       },
-      children: "(Check all that apply.)"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      children: currentQuestion.subtitle
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       style: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.5rem',
+        gap: '0.75rem',
         marginBottom: '2rem'
       },
-      children: Q1_OPTIONS.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+      children: [currentQuestion.type === 'checkbox' && currentQuestion.options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
         style: {
           display: 'flex',
           alignItems: 'center',
-          gap: '0.5rem',
+          gap: '0.75rem',
           cursor: 'pointer',
-          padding: '0.5rem',
+          padding: '0.75rem',
           border: '1px solid #DCD7C9',
-          borderRadius: '4px'
+          borderRadius: '6px',
+          backgroundColor: currentAnswer.includes(option) ? '#f0f9f4' : '#fff'
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
           type: "checkbox",
-          checked: selectedOptions.includes(option),
-          onChange: () => toggleOption(option)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          checked: currentAnswer.includes(option),
+          onChange: () => handleOptionToggle(option)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
           style: {
             fontFamily: 'Lexend, sans-serif'
           },
           children: option
         })]
-      }, option))
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-      onClick: handleSubmit,
-      disabled: selectedOptions.length === 0 || status === 'submitting',
+      }, option)), currentQuestion.type === 'radio' && currentQuestion.options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          cursor: 'pointer',
+          padding: '0.75rem',
+          border: '1px solid #DCD7C9',
+          borderRadius: '6px',
+          backgroundColor: currentAnswer === option ? '#f0f9f4' : '#fff'
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+          type: "radio",
+          name: `radio-${currentQuestion.id}`,
+          checked: currentAnswer === option,
+          onChange: () => handleRadioSelect(option)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          style: {
+            fontFamily: 'Lexend, sans-serif'
+          },
+          children: option
+        })]
+      }, option)), currentQuestion.type === 'slider' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        style: {
+          padding: '1rem 0'
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+          type: "range",
+          min: currentQuestion.min,
+          max: currentQuestion.max,
+          value: currentAnswer,
+          onChange: handleSliderChange,
+          style: {
+            width: '100%',
+            cursor: 'pointer'
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          style: {
+            textAlign: 'center',
+            marginTop: '1rem',
+            fontSize: '1.2rem',
+            fontWeight: 'bold',
+            color: '#2E8B57'
+          },
+          children: currentAnswer
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       style: {
-        backgroundColor: '#2E8B57',
-        color: '#FFF',
-        padding: '0.75rem 1.5rem',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: selectedOptions.length === 0 ? 'not-allowed' : 'pointer',
-        opacity: selectedOptions.length === 0 ? 0.6 : 1,
-        fontSize: '1.1rem',
-        fontFamily: 'Outfit, sans-serif',
-        width: '100%'
+        display: 'flex',
+        gap: '1rem'
       },
-      children: status === 'submitting' ? 'Submitting...' : 'Continue'
-    }), status === 'error' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+      children: [currentStepIndex > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        onClick: handleBack,
+        style: {
+          backgroundColor: '#fff',
+          color: '#4A4A4A',
+          padding: '0.75rem 1.5rem',
+          border: '1px solid #DCD7C9',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '1.1rem',
+          fontFamily: 'Outfit, sans-serif',
+          flex: 1
+        },
+        children: "Back"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        onClick: handleNext,
+        disabled: isNextDisabled() || status === 'submitting',
+        style: {
+          backgroundColor: '#2E8B57',
+          color: '#FFF',
+          padding: '0.75rem 1.5rem',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: isNextDisabled() ? 'not-allowed' : 'pointer',
+          opacity: isNextDisabled() ? 0.6 : 1,
+          fontSize: '1.1rem',
+          fontFamily: 'Outfit, sans-serif',
+          flex: 2
+        },
+        children: status === 'submitting' ? 'Submitting...' : currentStepIndex === _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1 ? 'See My Score' : 'Continue'
+      })]
+    }), status === 'error' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
       style: {
         color: 'red',
-        marginTop: '1rem'
+        marginTop: '1rem',
+        textAlign: 'center'
       },
-      children: "An error occurred while submitting. Please try again."
+      children: "An error occurred. Please try again."
     })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Questionnaire);
+
+/***/ },
+
+/***/ "./src/data/questions.js"
+/*!*******************************!*\
+  !*** ./src/data/questions.js ***!
+  \*******************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   questions: () => (/* binding */ questions)
+/* harmony export */ });
+const questions = [{
+  id: 'q1',
+  title: "Which of these are you currently struggling with?",
+  subtitle: "(Check all that apply.)",
+  type: 'checkbox',
+  options: ["Weight that's difficult to lose", "Low energy or fatigue", "Poor sleep", "Blood sugar concerns", "High blood pressure", "High cholesterol", "Brain fog", "High stress", "I take more medications than I'd like", "I don't feel like myself anymore"]
+}, {
+  id: 'q2',
+  title: "If you could improve ONE thing over the next six months...",
+  subtitle: "",
+  type: 'radio',
+  options: ["Lose weight", "Have more energy", "Sleep better", "Improve blood sugar", "Improve blood pressure", "Reduce medications (with physician guidance)", "Feel healthier overall"]
+}, {
+  id: 'q3',
+  title: "How long have these concerns been affecting you?",
+  subtitle: "",
+  type: 'radio',
+  options: ["Less than 6 months", "6–12 months", "1–3 years", "More than 3 years"]
+}, {
+  id: 'q4',
+  title: "What have you already tried?",
+  subtitle: "(Check all that apply.)",
+  type: 'checkbox',
+  options: ["Diets", "Exercise", "Supplements", "Medications", "Weight-loss programs", "I've tried almost everything", "I haven't really tried yet"]
+}, {
+  id: 'q5',
+  title: "Which statement best describes your energy?",
+  subtitle: "",
+  type: 'radio',
+  options: ["I feel energetic most days.", "I often crash in the afternoon.", "I rely on caffeine most days.", "I'm tired most of the day."]
+}, {
+  id: 'q6',
+  title: "How often do you experience cravings for sugar, bread, snacks, or caffeine?",
+  subtitle: "",
+  type: 'radio',
+  options: ["Rarely", "Occasionally", "Daily", "Multiple times per day"]
+}, {
+  id: 'q7',
+  title: "Do you currently have any of these conditions?",
+  subtitle: "(Check all that apply.)",
+  type: 'checkbox',
+  options: ["Prediabetes", "Type 2 Diabetes", "High Blood Pressure", "High Cholesterol", "Fatty Liver", "Thyroid Concerns", "Sleep Apnea", "None"]
+}, {
+  id: 'q8',
+  title: "If nothing changed over the next year... What concerns you the most?",
+  subtitle: "",
+  type: 'radio',
+  options: ["Taking more medications", "Gaining more weight", "Having less energy", "My health continuing to decline", "Not enjoying life the way I'd like"]
+}, {
+  id: 'q9',
+  title: "On a scale of 1–10... How ready are you to improve your health?",
+  subtitle: "1 = Not ready, 10 = Ready right now",
+  type: 'slider',
+  min: 1,
+  max: 10
+}];
 
 /***/ },
 
