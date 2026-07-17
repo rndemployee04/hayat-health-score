@@ -10,7 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+// Load Composer autoloader if it exists
+if ( file_exists( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' ) ) {
+    require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+}
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-api.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-pdf.php';
 
 class Hayat_Health_Score {
     public function __construct() {
@@ -69,10 +75,11 @@ class Hayat_Health_Score {
                 );
             }
 
-            // Pass REST API URL and Nonce to the React app
+            // Pass REST API URL, Nonce, and Booking URL to the React app
             wp_localize_script( 'hayat-health-score-js', 'hayatHealthData', [
-                'restUrl' => esc_url_raw( rest_url( 'hayat/v1/submit' ) ),
-                'nonce'   => wp_create_nonce( 'wp_rest' )
+                'restUrl'    => esc_url_raw( rest_url( 'hayat/v1/submit' ) ),
+                'nonce'      => wp_create_nonce( 'wp_rest' ),
+                'bookingUrl' => 'https://cal.com/hayattayyiba/assessment'
             ] );
         }
     }

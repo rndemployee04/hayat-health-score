@@ -3,6 +3,7 @@ import { submitAssessment } from '../api/api';
 import { questions } from '../data/questions';
 import ProgressBar from './ProgressBar';
 import LeadCapture from './LeadCapture';
+import Results from './Results';
 
 const STORAGE_KEY = 'hayat_health_score_state';
 
@@ -21,6 +22,7 @@ const Questionnaire = () => {
     const [status, setStatus] = useState('idle'); // idle, submitting, success, error
     const [showLeadCapture, setShowLeadCapture] = useState(false);
     const [showExitIntent, setShowExitIntent] = useState(false);
+    const [finalScores, setFinalScores] = useState(null);
 
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentStepIndex, answers }));
@@ -55,7 +57,8 @@ const Questionnaire = () => {
         setStatus('submitting');
         try {
             const payload = { ...contactInfo, answers };
-            await submitAssessment(payload);
+            const response = await submitAssessment(payload);
+            setFinalScores(response.scores);
             localStorage.removeItem(STORAGE_KEY);
             setStatus('success');
             setShowLeadCapture(false);
@@ -65,13 +68,8 @@ const Questionnaire = () => {
         }
     };
 
-    if (status === 'success') {
-        return (
-            <div style={{ textAlign: 'center', padding: '2rem', animation: 'fadeIn 0.5s' }}>
-                <h3 style={{ color: '#2E8B57' }}>Success!</h3>
-                <p>Assessment and contact info saved securely to the database. Ready for Results UI.</p>
-            </div>
-        );
+    if (status === 'success' && finalScores) {
+        return <Results scores={finalScores} />;
     }
 
     if (showLeadCapture) {
