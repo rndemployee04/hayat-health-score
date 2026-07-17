@@ -24,6 +24,9 @@ class Hayat_Health_Score_Email {
             return;
         }
 
+        // Get dynamic booking URL
+        $booking_url = get_option( 'hayat_booking_url', 'https://cal.com/hayattayyiba/assessment' );
+
         // Prepare email
         $to = $assessment->email;
         $subject = 'Your Personalized Hayat Tayyiba Health Score';
@@ -31,7 +34,7 @@ class Hayat_Health_Score_Email {
         $message = "Dear {$assessment->first_name},\n\n";
         $message .= "Thank you for completing the Hayat Tayyiba Health Assessment.\n\n";
         $message .= "Attached is your personalized Health Score and Top Opportunities report. Review it to see where you can focus over the next six months to improve your overall vitality.\n\n";
-        $message .= "We highly recommend booking a complimentary consultation with our clinical team to review your results in depth. You can book here: https://cal.com/hayattayyiba/assessment\n\n";
+        $message .= "We highly recommend booking a complimentary consultation with our clinical team to review your results in depth. You can book here: {$booking_url}\n\n";
         $message .= "Best regards,\nThe Hayat Tayyiba Team";
 
         $headers = [
