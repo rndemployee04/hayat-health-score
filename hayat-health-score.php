@@ -18,6 +18,7 @@ if ( file_exists( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' ) ) {
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-api.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-pdf.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-email.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-admin.php';
 
 class Hayat_Health_Score {
     public function __construct() {
@@ -29,6 +30,10 @@ class Hayat_Health_Score {
         add_action( 'hayat_process_assessment', [ 'Hayat_Health_Score_Email', 'process_assessment_and_email' ] );
         
         new Hayat_Health_Score_API();
+
+        if ( is_admin() ) {
+            new Hayat_Health_Score_Admin();
+        }
     }
 
     public function activate_plugin() {
