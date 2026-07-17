@@ -34,6 +34,191 @@ const submitAssessment = async answers => {
 
 /***/ },
 
+/***/ "./src/components/LeadCapture.js"
+/*!***************************************!*\
+  !*** ./src/components/LeadCapture.js ***!
+  \***************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+const LeadCapture = ({
+  onSubmit,
+  onBack,
+  isSubmitting
+}) => {
+  const [firstName, setFirstName] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [email, setEmail] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!firstName.trim() || !email.trim()) {
+      setError('Please provide your name and email.');
+      return;
+    }
+
+    // Basic email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please provide a valid email address.');
+      return;
+    }
+    setError('');
+    onSubmit({
+      first_name: firstName,
+      email: email
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    style: {
+      padding: '2rem',
+      textAlign: 'left',
+      animation: 'fadeIn 0.4s ease-in-out'
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
+      style: {
+        color: '#2E8B57',
+        marginBottom: '1rem',
+        fontFamily: 'Outfit, sans-serif',
+        fontSize: '1.6rem'
+      },
+      children: "Receive Your Personalized Hayat Tayyiba Health Snapshot"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+      style: {
+        marginBottom: '2rem',
+        color: '#4A4A4A',
+        fontFamily: 'Lexend, sans-serif',
+        fontSize: '1rem',
+        lineHeight: '1.5'
+      },
+      children: "You're almost there! Enter your details below to see your Health Score and receive your customized action plan."
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("form", {
+      onSubmit: handleSubmit,
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.25rem'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
+          style: {
+            display: 'block',
+            marginBottom: '0.5rem',
+            fontFamily: 'Lexend, sans-serif',
+            color: '#333',
+            fontWeight: 'bold'
+          },
+          children: ["First Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+            style: {
+              color: 'red'
+            },
+            children: "*"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+          type: "text",
+          value: firstName,
+          onChange: e => setFirstName(e.target.value),
+          placeholder: "e.g., John",
+          required: true,
+          style: {
+            width: '100%',
+            padding: '0.75rem',
+            borderRadius: '4px',
+            border: '1px solid #DCD7C9',
+            fontSize: '1rem',
+            fontFamily: 'Outfit, sans-serif'
+          }
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
+          style: {
+            display: 'block',
+            marginBottom: '0.5rem',
+            fontFamily: 'Lexend, sans-serif',
+            color: '#333',
+            fontWeight: 'bold'
+          },
+          children: ["Email Address ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+            style: {
+              color: 'red'
+            },
+            children: "*"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+          type: "email",
+          value: email,
+          onChange: e => setEmail(e.target.value),
+          placeholder: "e.g., john@example.com",
+          required: true,
+          style: {
+            width: '100%',
+            padding: '0.75rem',
+            borderRadius: '4px',
+            border: '1px solid #DCD7C9',
+            fontSize: '1rem',
+            fontFamily: 'Outfit, sans-serif'
+          }
+        })]
+      }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+        style: {
+          color: 'red',
+          margin: 0,
+          fontSize: '0.9rem'
+        },
+        children: error
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        style: {
+          marginTop: '1rem',
+          display: 'flex',
+          gap: '1rem'
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+          type: "button",
+          onClick: onBack,
+          style: {
+            backgroundColor: '#fff',
+            color: '#4A4A4A',
+            padding: '0.75rem 1.5rem',
+            border: '1px solid #DCD7C9',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '1.1rem',
+            fontFamily: 'Outfit, sans-serif',
+            flex: 1
+          },
+          children: "Back"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+          type: "submit",
+          disabled: isSubmitting,
+          style: {
+            backgroundColor: '#2E8B57',
+            color: '#FFF',
+            padding: '0.75rem 1.5rem',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            opacity: isSubmitting ? 0.7 : 1,
+            fontSize: '1.1rem',
+            fontFamily: 'Outfit, sans-serif',
+            flex: 2
+          },
+          children: isSubmitting ? 'Generating...' : 'See My Score'
+        })]
+      })]
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LeadCapture);
+
+/***/ },
+
 /***/ "./src/components/ProgressBar.js"
 /*!***************************************!*\
   !*** ./src/components/ProgressBar.js ***!
@@ -109,8 +294,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _api_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/api */ "./src/api/api.js");
 /* harmony import */ var _data_questions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/questions */ "./src/data/questions.js");
 /* harmony import */ var _ProgressBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProgressBar */ "./src/components/ProgressBar.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _LeadCapture__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./LeadCapture */ "./src/components/LeadCapture.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -118,7 +305,6 @@ __webpack_require__.r(__webpack_exports__);
 
 const STORAGE_KEY = 'hayat_health_score_state';
 const Questionnaire = () => {
-  // Initialize state from localStorage if it exists
   const getInitialState = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -137,20 +323,16 @@ const Questionnaire = () => {
   const [currentStepIndex, setCurrentStepIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(initialState.currentStepIndex);
   const [answers, setAnswers] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(initialState.answers);
   const [status, setStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('idle'); // idle, submitting, success, error
+  const [showLeadCapture, setShowLeadCapture] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [showExitIntent, setShowExitIntent] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-
-  // Autosave to localStorage whenever answers or step changes
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       currentStepIndex,
       answers
     }));
   }, [currentStepIndex, answers]);
-
-  // Exit Intent Logic
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const handleMouseLeave = e => {
-      // Trigger if cursor leaves the top of the window and we haven't finished yet
       if (e.clientY <= 0 && status !== 'success' && !sessionStorage.getItem('hayat_exit_intent_shown')) {
         setShowExitIntent(true);
         sessionStorage.setItem('hayat_exit_intent_shown', 'true');
@@ -159,6 +341,58 @@ const Questionnaire = () => {
     document.addEventListener('mouseleave', handleMouseLeave);
     return () => document.removeEventListener('mouseleave', handleMouseLeave);
   }, [status]);
+  const handleNext = () => {
+    if (currentStepIndex < _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1) {
+      setCurrentStepIndex(prev => prev + 1);
+    } else {
+      setShowLeadCapture(true);
+    }
+  };
+  const handleBack = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(prev => prev - 1);
+    }
+  };
+  const handleFinalSubmit = async contactInfo => {
+    setStatus('submitting');
+    try {
+      const payload = {
+        ...contactInfo,
+        answers
+      };
+      await (0,_api_api__WEBPACK_IMPORTED_MODULE_1__.submitAssessment)(payload);
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('success');
+      setShowLeadCapture(false);
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    }
+  };
+  if (status === 'success') {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      style: {
+        textAlign: 'center',
+        padding: '2rem',
+        animation: 'fadeIn 0.5s'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
+        style: {
+          color: '#2E8B57'
+        },
+        children: "Success!"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: "Assessment and contact info saved securely to the database. Ready for Results UI."
+      })]
+    });
+  }
+  if (showLeadCapture) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_LeadCapture__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      onSubmit: handleFinalSubmit,
+      onBack: () => setShowLeadCapture(false),
+      isSubmitting: status === 'submitting'
+    });
+  }
   const currentQuestion = _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions[currentStepIndex];
   const currentAnswer = answers[currentQuestion.id] || (currentQuestion.type === 'checkbox' ? [] : currentQuestion.type === 'slider' ? 5 : '');
   const handleOptionToggle = option => {
@@ -190,64 +424,21 @@ const Questionnaire = () => {
       [currentQuestion.id]: parseInt(e.target.value, 10)
     }));
   };
-  const handleNext = async () => {
-    if (currentStepIndex < _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1) {
-      setCurrentStepIndex(prev => prev + 1);
-    } else {
-      setStatus('submitting');
-      try {
-        await (0,_api_api__WEBPACK_IMPORTED_MODULE_1__.submitAssessment)(answers);
-        // Clear localStorage on successful final submission
-        localStorage.removeItem(STORAGE_KEY);
-        setStatus('success');
-      } catch (error) {
-        console.error(error);
-        setStatus('error');
-      }
-    }
-  };
-  const handleBack = () => {
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex(prev => prev - 1);
-    }
-  };
   const isNextDisabled = () => {
     if (currentQuestion.type === 'checkbox') return currentAnswer.length === 0;
     if (currentQuestion.type === 'radio') return currentAnswer === '';
     return false;
   };
-  if (status === 'success') {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      style: {
-        textAlign: 'center',
-        padding: '2rem',
-        animation: 'fadeIn 0.5s'
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
-        style: {
-          color: '#2E8B57'
-        },
-        children: "Success!"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-        children: "All questions answered. State machine complete!"
-      })]
-    });
-  }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     style: {
       position: 'relative',
       padding: '2rem',
       textAlign: 'left',
       animation: 'fadeIn 0.4s ease-in-out'
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("style", {
-      children: `
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                `
-    }), showExitIntent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("style", {
+      children: `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`
+    }), showExitIntent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       style: {
         position: 'absolute',
         top: 0,
@@ -264,14 +455,14 @@ const Questionnaire = () => {
         textAlign: 'center',
         borderRadius: '12px'
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
         style: {
           color: '#2E8B57',
           marginBottom: '1rem',
           fontFamily: 'Outfit, sans-serif'
         },
         children: "Wait! Don't leave just yet."
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
         style: {
           marginBottom: '2rem',
           fontSize: '1.1rem',
@@ -279,7 +470,7 @@ const Questionnaire = () => {
           fontFamily: 'Lexend, sans-serif'
         },
         children: "You're only a few questions away from seeing your personalized Hayat Tayyiba Health Score."
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         onClick: () => setShowExitIntent(false),
         style: {
           backgroundColor: '#2E8B57',
@@ -293,10 +484,10 @@ const Questionnaire = () => {
         },
         children: "Continue Assessment"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ProgressBar__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ProgressBar__WEBPACK_IMPORTED_MODULE_3__["default"], {
       currentStep: currentStepIndex + 1,
       totalSteps: _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
       style: {
         color: '#2E8B57',
         marginBottom: '0.5rem',
@@ -304,7 +495,7 @@ const Questionnaire = () => {
         fontSize: '1.4rem'
       },
       children: currentQuestion.title
-    }), currentQuestion.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+    }), currentQuestion.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
       style: {
         marginBottom: '1.5rem',
         fontStyle: 'italic',
@@ -312,14 +503,14 @@ const Questionnaire = () => {
         fontSize: '0.9rem'
       },
       children: currentQuestion.subtitle
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       style: {
         display: 'flex',
         flexDirection: 'column',
         gap: '0.75rem',
         marginBottom: '2rem'
       },
-      children: [currentQuestion.type === 'checkbox' && currentQuestion.options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+      children: [currentQuestion.type === 'checkbox' && currentQuestion.options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
         style: {
           display: 'flex',
           alignItems: 'center',
@@ -330,17 +521,17 @@ const Questionnaire = () => {
           borderRadius: '6px',
           backgroundColor: currentAnswer.includes(option) ? '#f0f9f4' : '#fff'
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "checkbox",
           checked: currentAnswer.includes(option),
           onChange: () => handleOptionToggle(option)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           style: {
             fontFamily: 'Lexend, sans-serif'
           },
           children: option
         })]
-      }, option)), currentQuestion.type === 'radio' && currentQuestion.options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+      }, option)), currentQuestion.type === 'radio' && currentQuestion.options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
         style: {
           display: 'flex',
           alignItems: 'center',
@@ -351,22 +542,22 @@ const Questionnaire = () => {
           borderRadius: '6px',
           backgroundColor: currentAnswer === option ? '#f0f9f4' : '#fff'
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "radio",
           name: `radio-${currentQuestion.id}`,
           checked: currentAnswer === option,
           onChange: () => handleRadioSelect(option)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           style: {
             fontFamily: 'Lexend, sans-serif'
           },
           children: option
         })]
-      }, option)), currentQuestion.type === 'slider' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }, option)), currentQuestion.type === 'slider' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         style: {
           padding: '1rem 0'
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "range",
           min: currentQuestion.min,
           max: currentQuestion.max,
@@ -376,7 +567,7 @@ const Questionnaire = () => {
             width: '100%',
             cursor: 'pointer'
           }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           style: {
             textAlign: 'center',
             marginTop: '1rem',
@@ -387,12 +578,12 @@ const Questionnaire = () => {
           children: currentAnswer
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       style: {
         display: 'flex',
         gap: '1rem'
       },
-      children: [currentStepIndex > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+      children: [currentStepIndex > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         onClick: handleBack,
         style: {
           backgroundColor: '#fff',
@@ -406,9 +597,9 @@ const Questionnaire = () => {
           flex: 1
         },
         children: "Back"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         onClick: handleNext,
-        disabled: isNextDisabled() || status === 'submitting',
+        disabled: isNextDisabled(),
         style: {
           backgroundColor: '#2E8B57',
           color: '#FFF',
@@ -421,9 +612,9 @@ const Questionnaire = () => {
           fontFamily: 'Outfit, sans-serif',
           flex: 2
         },
-        children: status === 'submitting' ? 'Submitting...' : currentStepIndex === _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1 ? 'See My Score' : 'Continue'
+        children: currentStepIndex === _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1 ? 'Continue' : 'Continue'
       })]
-    }), status === 'error' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+    }), status === 'error' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
       style: {
         color: 'red',
         marginTop: '1rem',

@@ -10,12 +10,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-api.php';
+
 class Hayat_Health_Score {
     public function __construct() {
         register_activation_hook( __FILE__, [ $this, 'activate_plugin' ] );
         add_shortcode( 'hayat_health_score', [ $this, 'render_shortcode' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-        add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+        
+        new Hayat_Health_Score_API();
     }
 
     public function activate_plugin() {
@@ -41,40 +44,6 @@ class Hayat_Health_Score {
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
-    }
-
-    public function register_rest_routes() {
-        register_rest_route( 'hayat/v1', '/submit', [
-            'methods'  => 'POST',
-            'callback' => [ $this, 'handle_submission' ],
-            'permission_callback' => '__return_true', // Public endpoint
-        ] );
-    }
-
-    public function handle_submission( $request ) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'hayat_assessments';
-        
-        $params = $request->get_json_params();
-
-        // For now, we are just saving raw answers (Tracer bullet)
-        $wpdb->insert(
-            $table_name,
-            [
-                'raw_answers' => wp_json_encode( $params ),
-                'created_at'  => current_time( 'mysql' )
-            ]
-        );
-
-        if ( $wpdb->insert_id ) {
-            return rest_ensure_response( [
-                'success' => true,
-                'message' => 'Assessment saved successfully',
-                'id'      => $wpdb->insert_id
-            ] );
-        }
-
-        return new WP_Error( 'db_error', 'Could not save assessment', [ 'status' => 500 ] );
     }
 
     public function render_shortcode() {
