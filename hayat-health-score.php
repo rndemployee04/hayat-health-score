@@ -86,10 +86,12 @@ class Hayat_Health_Score {
 
             // Pass REST API URL, Nonce, and Booking URL to the React app
             $booking_url = get_option( 'hayat_booking_url', 'https://cal.com/hayattayyiba/assessment' );
+            $primary_color = get_option( 'hayat_primary_color', '#2E8B57' );
             wp_localize_script( 'hayat-health-score-js', 'hayatHealthData', [
                 'restUrl'    => esc_url_raw( rest_url( 'hayat/v1/submit' ) ),
                 'nonce'      => wp_create_nonce( 'wp_rest' ),
-                'bookingUrl' => esc_url_raw( $booking_url )
+                'bookingUrl' => esc_url_raw( $booking_url ),
+                'primaryColor' => sanitize_hex_color( $primary_color )
             ] );
         }
     }

@@ -190,21 +190,98 @@ class Hayat_Health_Score_Admin {
             'sanitize_callback' => 'esc_url_raw',
             'default' => 'https://cal.com/hayattayyiba/assessment'
         ] );
+
+        register_setting( 'hayat_health_options_group', 'hayat_scoring_config', [
+            'type' => 'string',
+            'sanitize_callback' => function( $val ) {
+                $decoded = json_decode( $val, true );
+                if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $decoded ) ) {
+                    add_settings_error( 'hayat_health_options_group', 'invalid_json', 'Invalid JSON format. Changes were not saved.', 'error' );
+                    return get_option( 'hayat_scoring_config' );
+                }
+                
+                // Enforce Keys Match Original File
+                $config_path = plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json';
+                $default_config = file_exists( $config_path ) ? json_decode( file_get_contents( $config_path ), true ) : [];
+                
+                if ( ! empty( $default_config ) ) {
+                    // Check top-level keys
+                    $diff_top = array_diff_key( $default_config, $decoded );
+                    if ( ! empty( $diff_top ) ) {
+                        add_settings_error( 'hayat_health_options_group', 'invalid_keys', 'Error: You cannot add, remove, or modify the structure (keys) of the JSON. You may only change the number values.', 'error' );
+                        return get_option( 'hayat_scoring_config' );
+                    }
+                    
+                    // Check sub-keys for questions
+                    foreach ( $default_config as $k => $v ) {
+                        if ( is_array( $v ) ) {
+                            if ( ! isset( $decoded[$k] ) || ! is_array( $decoded[$k] ) ) {
+                                add_settings_error( 'hayat_health_options_group', 'invalid_keys', "Error: Missing configuration for $k.", 'error' );
+                                return get_option( 'hayat_scoring_config' );
+                            }
+                            $diff_sub = array_diff_key( $v, $decoded[$k] );
+                            if ( ! empty( $diff_sub ) ) {
+                                add_settings_error( 'hayat_health_options_group', 'invalid_keys', "Error: You modified the answers/keys in $k. Please only edit the point values.", 'error' );
+                                return get_option( 'hayat_scoring_config' );
+                            }
+                        }
+                    }
+                }
+                
+                return $val;
+            },
+            'default' => file_exists( plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json' ) ? file_get_contents( plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json' ) : ''
+        ] );
+
+        register_setting( 'hayat_health_options_group', 'hayat_pdf_testimonial', [
+            'type' => 'string',
+            'sanitize_callback' => 'wp_kses_post',
+            'default' => '"I finally feel like I have a structured plan. The team helped me focus on the right lifestyle changes, and the improvement in my daily energy has been incredible." <br><br><strong>— A Hayat Tayyiba Client</strong>'
+        ] );
+
+        register_setting( 'hayat_health_options_group', 'hayat_primary_color', [
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#2E8B57'
+        ] );
     }
 
     public function render_settings_page() {
         ?>
         <div class="wrap">
             <h1>Hayat Health Score Settings</h1>
+            <?php settings_errors( 'hayat_health_options_group' ); ?>
             <form method="post" action="options.php">
                 <?php settings_fields( 'hayat_health_options_group' ); ?>
                 <?php do_settings_sections( 'hayat_health_options_group' ); ?>
                 <table class="form-table">
                     <tr valign="top">
+                        <th scope="row">Brand Primary Color</th>
+                        <td>
+                            <input type="color" name="hayat_primary_color" value="<?php echo esc_attr( get_option('hayat_primary_color', '#2E8B57') ); ?>" />
+                            <p class="description">Used for buttons, progress bars, and PDF highlights.</p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
                         <th scope="row">Booking Redirect URL</th>
                         <td>
                             <input type="url" name="hayat_booking_url" value="<?php echo esc_attr( get_option('hayat_booking_url', 'https://cal.com/hayattayyiba/assessment') ); ?>" style="width: 100%; max-width: 400px;" />
-                            <p class="description">Users will be redirected to this URL after completing their assessment.</p>
+                            <p class="description">Users will be redirected to this URL after clicking on the "Book Your Complimentary Consultation" button.</p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">PDF Testimonial</th>
+                        <td>
+                            <textarea name="hayat_pdf_testimonial" rows="4" style="width: 100%; max-width: 600px;"><?php echo esc_textarea( get_option('hayat_pdf_testimonial', '"I finally feel like I have a structured plan. The team helped me focus on the right lifestyle changes, and the improvement in my daily energy has been incredible." <br><br><strong>— A Hayat Tayyiba Client</strong>') ); ?></textarea>
+                            <p class="description">Displayed on the final page of the PDF report.</p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Scoring Configuration (JSON)</th>
+                        <td>
+                            <?php $default_json = file_exists( plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json' ) ? file_get_contents( plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json' ) : ''; ?>
+                            <textarea name="hayat_scoring_config" rows="15" style="width: 100%; max-width: 800px; font-family: monospace;"><?php echo esc_textarea( get_option('hayat_scoring_config', $default_json) ); ?></textarea>
+                            <p class="description">Advanced: Configure point values and max scores using JSON format.</p>
                         </td>
                     </tr>
                 </table>

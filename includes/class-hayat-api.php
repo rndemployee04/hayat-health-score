@@ -62,6 +62,7 @@ class Hayat_Health_Score_API {
                 'user_id'           => $user_id,
                 'first_name'        => $first_name,
                 'email'             => $email,
+                'phone'             => isset( $params['phone'] ) ? sanitize_text_field( $params['phone'] ) : '',
                 'risk_score'        => $scores['risk_score'],
                 'health_score'      => $scores['health_score'],
                 'readiness_score'   => $scores['readiness_score'],
@@ -74,6 +75,7 @@ class Hayat_Health_Score_API {
                 '%d', // user_id
                 '%s', // first_name
                 '%s', // email
+                '%s', // phone
                 '%d', // risk_score
                 '%d', // health_score
                 '%d', // readiness_score
@@ -106,57 +108,100 @@ class Hayat_Health_Score_API {
         $risk_score = 0;
         $opportunities = [
             'Weight Management' => 0,
-            'Energy & Sleep' => 0,
-            'Metabolic Health (Blood Sugar)' => 0,
-            'Cardiovascular Health' => 0,
+            'Energy' => 0,
+            'Sleep' => 0,
+            'Blood Sugar' => 0,
+            'Blood Pressure' => 0,
+            'Stress Management' => 0,
         ];
 
+        // Load Scoring Config from Admin Settings
+        $config_json = get_option( 'hayat_scoring_config', '' );
+        if ( empty( $config_json ) ) {
+            $config_path = plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json';
+            $config_json = file_exists( $config_path ) ? file_get_contents( $config_path ) : '{}';
+        }
+        $config = json_decode( $config_json, true );
+        if ( ! is_array( $config ) ) {
+            $config = [];
+        }
+
         // Q1: Symptoms
-        if ( isset( $answers['q1'] ) && is_array( $answers['q1'] ) ) {
+        if ( isset( $answers['q1'] ) && is_array( $answers['q1'] ) && isset( $config['q1'] ) ) {
+            $q1_score = 0;
             foreach ( $answers['q1'] as $symptom ) {
-                if ( $symptom !== 'None' && $symptom !== "I don't feel like myself anymore" ) {
-                    $risk_score += 4;
+                if ( isset( $config['q1'][$symptom] ) ) {
+                    $q1_score += $config['q1'][$symptom];
                 }
-                if ( strpos( $symptom, 'Weight' ) !== false ) $opportunities['Weight Management'] += 5;
-                if ( strpos( $symptom, 'energy' ) !== false || strpos( $symptom, 'sleep' ) !== false ) $opportunities['Energy & Sleep'] += 5;
-                if ( strpos( $symptom, 'Blood sugar' ) !== false ) $opportunities['Metabolic Health (Blood Sugar)'] += 5;
-                if ( strpos( $symptom, 'blood pressure' ) !== false || strpos( $symptom, 'cholesterol' ) !== false ) $opportunities['Cardiovascular Health'] += 5;
+                
+                // Track Opportunities based on symptoms
+                if ( stripos( $symptom, 'Weight' ) !== false ) $opportunities['Weight Management'] += 5;
+                if ( stripos( $symptom, 'energy' ) !== false || stripos( $symptom, 'fatigue' ) !== false ) $opportunities['Energy'] += 5;
+                if ( stripos( $symptom, 'sleep' ) !== false ) $opportunities['Sleep'] += 5;
+                if ( stripos( $symptom, 'Blood sugar' ) !== false ) $opportunities['Blood Sugar'] += 5;
+                if ( stripos( $symptom, 'blood pressure' ) !== false || stripos( $symptom, 'cholesterol' ) !== false ) $opportunities['Blood Pressure'] += 5;
+                if ( stripos( $symptom, 'stress' ) !== false || stripos( $symptom, 'Brain fog' ) !== false ) $opportunities['Stress Management'] += 5;
             }
+            $risk_score += min( $config['q1']['max_points'], $q1_score );
         }
 
         // Q3: Duration
-        if ( isset( $answers['q3'] ) ) {
-            if ( $answers['q3'] === '1–3 years' ) $risk_score += 5;
-            if ( $answers['q3'] === 'More than 3 years' ) $risk_score += 10;
+        if ( isset( $answers['q3'] ) && isset( $config['q3'][$answers['q3']] ) ) {
+            $risk_score += $config['q3'][$answers['q3']];
+        }
+
+        // Q4: What have you tried
+        if ( isset( $answers['q4'] ) && is_array( $answers['q4'] ) && isset( $config['q4'] ) ) {
+            $q4_score = 0;
+            foreach ( $answers['q4'] as $tried ) {
+                if ( isset( $config['q4'][$tried] ) ) {
+                    $q4_score += $config['q4'][$tried];
+                }
+            }
+            $risk_score += min( $config['q4']['max_points'], $q4_score );
         }
 
         // Q5: Energy Pattern
-        if ( isset( $answers['q5'] ) ) {
-            if ( $answers['q5'] === 'I often crash in the afternoon.' ) { $risk_score += 3; $opportunities['Energy & Sleep'] += 3; }
-            if ( $answers['q5'] === 'I rely on caffeine most days.' ) { $risk_score += 5; $opportunities['Energy & Sleep'] += 4; }
-            if ( $answers['q5'] === "I'm tired most of the day." ) { $risk_score += 8; $opportunities['Energy & Sleep'] += 5; }
+        if ( isset( $answers['q5'] ) && isset( $config['q5'][$answers['q5']] ) ) {
+            $val = $config['q5'][$answers['q5']];
+            $risk_score += $val;
+            if ( $val > 0 ) $opportunities['Energy'] += $val;
         }
 
         // Q6: Cravings
-        if ( isset( $answers['q6'] ) ) {
-            if ( $answers['q6'] === 'Daily' ) { $risk_score += 5; $opportunities['Metabolic Health (Blood Sugar)'] += 3; }
-            if ( $answers['q6'] === 'Multiple times per day' ) { $risk_score += 10; $opportunities['Metabolic Health (Blood Sugar)'] += 5; }
+        if ( isset( $answers['q6'] ) && isset( $config['q6'][$answers['q6']] ) ) {
+            $val = $config['q6'][$answers['q6']];
+            $risk_score += $val;
+            if ( $val > 0 ) $opportunities['Blood Sugar'] += $val;
         }
 
         // Q7: Conditions
-        if ( isset( $answers['q7'] ) && is_array( $answers['q7'] ) ) {
+        if ( isset( $answers['q7'] ) && is_array( $answers['q7'] ) && isset( $config['q7'] ) ) {
+            $q7_score = 0;
             foreach ( $answers['q7'] as $condition ) {
-                if ( $condition !== 'None' ) {
-                    $risk_score += 8;
+                if ( isset( $config['q7'][$condition] ) ) {
+                    $q7_score += $config['q7'][$condition];
                 }
-                if ( in_array( $condition, ['Prediabetes', 'Type 2 Diabetes', 'Fatty Liver'] ) ) $opportunities['Metabolic Health (Blood Sugar)'] += 8;
-                if ( in_array( $condition, ['High Blood Pressure', 'High Cholesterol'] ) ) $opportunities['Cardiovascular Health'] += 8;
-                if ( $condition === 'Sleep Apnea' ) $opportunities['Energy & Sleep'] += 5;
+                
+                if ( in_array( $condition, ['Prediabetes', 'Type 2 Diabetes', 'Fatty Liver'] ) ) $opportunities['Blood Sugar'] += 8;
+                if ( in_array( $condition, ['High Blood Pressure', 'High Cholesterol'] ) ) $opportunities['Blood Pressure'] += 8;
+                if ( $condition === 'Sleep Apnea' ) $opportunities['Sleep'] += 5;
             }
+            $risk_score += min( $config['q7']['max_points'], $q7_score );
         }
 
-        // Cap risk score at 100
-        $risk_score = min( 100, $risk_score );
+        // Q8: Biggest Concern
+        if ( isset( $answers['q8'] ) && isset( $config['q8'][$answers['q8']] ) ) {
+            $val = $config['q8'][$answers['q8']];
+            $risk_score += $val;
+            
+            if ( stripos( $answers['q8'], 'weight' ) !== false ) $opportunities['Weight Management'] += 5;
+            if ( stripos( $answers['q8'], 'energy' ) !== false ) $opportunities['Energy'] += 5;
+        }
+
+        // Cap risk score
+        $max_risk = isset( $config['max_risk_score'] ) ? $config['max_risk_score'] : 100;
+        $risk_score = min( $max_risk, $risk_score );
         $health_score = 100 - $risk_score;
 
         // Readiness Score (Q9)
