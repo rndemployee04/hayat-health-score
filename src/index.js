@@ -3,15 +3,7 @@ import Questionnaire from './components/Questionnaire';
 
 const HealthScoreApp = () => {
     return (
-        <div style={{
-            backgroundColor: '#FBF5E8', 
-            border: '1px solid #DCD7C9', 
-            borderRadius: '12px', 
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-            maxWidth: '600px',
-            margin: '0 auto',
-            overflow: 'hidden'
-        }}>
+        <div style={{ padding: '2rem 1rem' }}>
             <Questionnaire />
         </div>
     );
