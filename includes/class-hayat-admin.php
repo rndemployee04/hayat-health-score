@@ -68,6 +68,27 @@ class Hayat_Assessments_List_Table extends WP_List_Table {
         );
     }
 
+    public function extra_tablenav( $which ) {
+        if ( $which === 'top' ) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'hayat_assessments';
+            $sources = $wpdb->get_col( "SELECT DISTINCT utm_source FROM $table_name WHERE utm_source != ''" );
+            $current_source = isset( $_GET['filter_source'] ) ? sanitize_text_field( $_GET['filter_source'] ) : '';
+            ?>
+            <div class="alignleft actions">
+                <select name="filter_source">
+                    <option value="">All Sources</option>
+                    <option value="direct" <?php selected( $current_source, 'direct' ); ?>>Direct</option>
+                    <?php foreach ( $sources as $source ) : ?>
+                        <option value="<?php echo esc_attr( $source ); ?>" <?php selected( $current_source, $source ); ?>><?php echo esc_html( $source ); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php submit_button( 'Filter', '', 'filter_action', false, [ 'id' => 'post-query-submit' ] ); ?>
+            </div>
+            <?php
+        }
+    }
+
     public function prepare_items() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'hayat_assessments';
@@ -88,17 +109,30 @@ class Hayat_Assessments_List_Table extends WP_List_Table {
         }
         $order = ( $order === 'asc' ) ? 'ASC' : 'DESC';
 
+        // Handle Search and Filter
+        $search = isset( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : '';
+        $filter_source = isset( $_REQUEST['filter_source'] ) ? sanitize_text_field( $_REQUEST['filter_source'] ) : '';
+
+        $where = "WHERE 1=1";
+        if ( ! empty( $search ) ) {
+            $where .= $wpdb->prepare( " AND (first_name LIKE %s OR email LIKE %s)", '%' . $wpdb->esc_like( $search ) . '%', '%' . $wpdb->esc_like( $search ) . '%' );
+        }
+        
+        if ( ! empty( $filter_source ) ) {
+            if ( $filter_source === 'direct' ) {
+                $where .= " AND (utm_source = '' OR utm_source IS NULL)";
+            } else {
+                $where .= $wpdb->prepare( " AND utm_source = %s", $filter_source );
+            }
+        }
+
         $current_page = $this->get_pagenum();
         $offset = ( $current_page - 1 ) * $per_page;
 
-        $total_items = $wpdb->get_var( "SELECT COUNT(id) FROM $table_name" );
+        $total_items = $wpdb->get_var( "SELECT COUNT(id) FROM $table_name $where" );
         
         $this->items = $wpdb->get_results( 
-            $wpdb->prepare( 
-                "SELECT * FROM $table_name ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d", 
-                $per_page, 
-                $offset 
-            ), 
+            "SELECT * FROM $table_name $where ORDER BY {$orderby} {$order} LIMIT $per_page OFFSET $offset", 
             ARRAY_A 
         );
 
@@ -114,9 +148,11 @@ class Hayat_Health_Score_Admin {
     
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
+        add_action( 'admin_init', [ $this, 'register_settings' ] );
     }
 
     public function add_admin_menu() {
+        // Main Menu
         add_menu_page(
             'Health Assessments',
             'Health Leads',
@@ -126,6 +162,56 @@ class Hayat_Health_Score_Admin {
             'dashicons-heart',
             30
         );
+
+        // Submenu for Leads
+        add_submenu_page(
+            'hayat-health-assessments',
+            'Health Leads',
+            'Leads',
+            'manage_options',
+            'hayat-health-assessments',
+            [ $this, 'render_admin_page' ]
+        );
+
+        // Submenu for Settings
+        add_submenu_page(
+            'hayat-health-assessments',
+            'Health Score Settings',
+            'Settings',
+            'manage_options',
+            'hayat-health-settings',
+            [ $this, 'render_settings_page' ]
+        );
+    }
+
+    public function register_settings() {
+        register_setting( 'hayat_health_options_group', 'hayat_booking_url', [
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw',
+            'default' => 'https://cal.com/hayattayyiba/assessment'
+        ] );
+    }
+
+    public function render_settings_page() {
+        ?>
+        <div class="wrap">
+            <h1>Hayat Health Score Settings</h1>
+            <form method="post" action="options.php">
+                <?php settings_fields( 'hayat_health_options_group' ); ?>
+                <?php do_settings_sections( 'hayat_health_options_group' ); ?>
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row">Booking Redirect URL</th>
+                        <td>
+                            <input type="url" name="hayat_booking_url" value="<?php echo esc_attr( get_option('hayat_booking_url', 'https://cal.com/hayattayyiba/assessment') ); ?>" style="width: 100%; max-width: 400px;" />
+                            <p class="description">Users will be redirected to this URL after completing their assessment.</p>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button(); ?>
+            </form>
+        </div>
+        <?php
     }
 
     public function render_admin_page() {
@@ -137,6 +223,7 @@ class Hayat_Health_Score_Admin {
             <p>View all completed health assessments and their calculated scores.</p>
             <form method="get">
                 <input type="hidden" name="page" value="hayat-health-assessments" />
+                <?php $table->search_box( 'Search Leads', 'search_id' ); ?>
                 <?php $table->display(); ?>
             </form>
         </div>
