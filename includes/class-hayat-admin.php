@@ -46,8 +46,9 @@ class Hayat_Assessments_List_Table extends WP_List_Table {
             case 'email':
             case 'health_score':
             case 'readiness_score':
-            case 'utm_source':
                 return esc_html( $item[ $column_name ] );
+            case 'utm_source':
+                return ! empty( $item[ $column_name ] ) ? esc_html( $item[ $column_name ] ) : '<span style="color:#999;">Direct</span>';
             case 'created_at':
                 return wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item[ $column_name ] ) );
             case 'id':

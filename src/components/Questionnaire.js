@@ -37,21 +37,28 @@ const Questionnaire = () => {
     const [showLeadCapture, setShowLeadCapture] = useState(false);
     const [showExitIntent, setShowExitIntent] = useState(false);
     const [finalScores, setFinalScores] = useState(null);
+    const [isStarted, setIsStarted] = useState(initialState.currentStepIndex > 0 || Object.keys(initialState.answers).length > 0);
 
     useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentStepIndex, answers, utm_source: utmSource }));
-    }, [currentStepIndex, answers, utmSource]);
+        if (isStarted) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentStepIndex, answers, utm_source: utmSource }));
+        }
+    }, [currentStepIndex, answers, utmSource, isStarted]);
 
     useEffect(() => {
         const handleMouseLeave = (e) => {
-            if (e.clientY <= 0 && status !== 'success' && !sessionStorage.getItem('hayat_exit_intent_shown')) {
+            if (e.clientY <= 0 && isStarted && status !== 'success' && !sessionStorage.getItem('hayat_exit_intent_shown')) {
                 setShowExitIntent(true);
                 sessionStorage.setItem('hayat_exit_intent_shown', 'true');
             }
         };
         document.addEventListener('mouseleave', handleMouseLeave);
         return () => document.removeEventListener('mouseleave', handleMouseLeave);
-    }, [status]);
+    }, [status, isStarted]);
+
+    const handleStart = () => {
+        setIsStarted(true);
+    };
 
     const handleNext = () => {
         if (currentStepIndex < questions.length - 1) {
@@ -88,11 +95,43 @@ const Questionnaire = () => {
 
     if (showLeadCapture) {
         return (
-            <LeadCapture 
-                onSubmit={handleFinalSubmit} 
-                onBack={() => setShowLeadCapture(false)} 
-                isSubmitting={status === 'submitting'} 
-            />
+            <div style={{ animation: 'fadeIn 0.5s' }}>
+                <ProgressBar currentStep={questions.length} totalSteps={questions.length} />
+                <LeadCapture onSubmit={handleFinalSubmit} isSubmitting={status === 'submitting'} />
+            </div>
+        );
+    }
+
+    if (!isStarted) {
+        return (
+            <div style={{ textAlign: 'center', padding: '3rem 1rem', animation: 'fadeIn 0.5s' }}>
+                <h2 style={{ color: '#2E8B57', fontFamily: 'Outfit, sans-serif', fontSize: '2rem', marginBottom: '1rem' }}>
+                    The 60-Second Hayat Tayyiba Health Score
+                </h2>
+                <p style={{ color: '#666', fontFamily: 'Lexend, sans-serif', fontSize: '1.1rem', marginBottom: '2.5rem', lineHeight: '1.6' }}>
+                    Discover your personalized health score, identify your top opportunities for vitality, and take the first step towards a healthier you. It only takes a minute.
+                </p>
+                <button 
+                    onClick={handleStart}
+                    style={{
+                        backgroundColor: '#2E8B57',
+                        color: '#FFF',
+                        padding: '1rem 2.5rem',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontSize: '1.2rem',
+                        fontFamily: 'Outfit, sans-serif',
+                        fontWeight: 'bold',
+                        boxShadow: '0 4px 6px rgba(46, 139, 87, 0.2)',
+                        transition: 'transform 0.2s ease'
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                    Start Assessment
+                </button>
+            </div>
         );
     }
 
