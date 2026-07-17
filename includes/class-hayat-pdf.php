@@ -59,12 +59,15 @@ class Hayat_Health_Score_PDF {
         }
 
         $score_color = '#2E8B57'; // Green
+        $score_bg_color = '#EAF3ED';
         $score_message = 'Excellent';
         if ( $score < 60 ) {
             $score_color = '#d9534f'; // Red
+            $score_bg_color = '#FBEAEA';
             $score_message = 'Action Needed';
         } elseif ( $score < 80 ) {
             $score_color = '#f0ad4e'; // Orange
+            $score_bg_color = '#FDF6EB';
             $score_message = 'Room for Improvement';
         }
 
@@ -102,16 +105,21 @@ class Hayat_Health_Score_PDF {
                     margin-bottom: 40px;
                 }
                 .score-circle {
-                    display: inline-block;
-                    width: 150px;
-                    height: 150px;
-                    border-radius: 75px;
+                    display: block;
+                    width: 140px;
+                    height: 140px;
+                    border-radius: 70px;
+                    background-color: <?php echo $score_bg_color; ?>;
                     border: 6px solid <?php echo $score_color; ?>;
                     text-align: center;
-                    line-height: 150px;
-                    font-size: 48px;
-                    font-weight: bold;
                     color: <?php echo $score_color; ?>;
+                    margin: 0 auto;
+                }
+                .score-value {
+                    font-size: 56px;
+                    font-weight: bold;
+                    margin-top: 36px;
+                    display: block;
                 }
                 .opportunities {
                     margin-top: 30px;
@@ -141,7 +149,7 @@ class Hayat_Health_Score_PDF {
                 <div class="score-section">
                     <h2>Your Health Score</h2>
                     <div class="score-circle">
-                        <?php echo $score; ?>
+                        <span class="score-value"><?php echo $score; ?></span>
                     </div>
                     <h3 style="color: <?php echo $score_color; ?>;"><?php echo $score_message; ?></h3>
                 </div>
