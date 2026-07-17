@@ -17,12 +17,16 @@ if ( file_exists( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' ) ) {
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-api.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-pdf.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-hayat-email.php';
 
 class Hayat_Health_Score {
     public function __construct() {
         register_activation_hook( __FILE__, [ $this, 'activate_plugin' ] );
         add_shortcode( 'hayat_health_score', [ $this, 'render_shortcode' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+        
+        // Register async hook for email and PDF processing
+        add_action( 'hayat_process_assessment', [ 'Hayat_Health_Score_Email', 'process_assessment_and_email' ] );
         
         new Hayat_Health_Score_API();
     }

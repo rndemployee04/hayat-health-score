@@ -84,16 +84,15 @@ class Hayat_Health_Score_API {
         if ( $inserted ) {
             $assessment_id = $wpdb->insert_id;
             
-            // Generate PDF synchronously for now
-            $pdf_path = Hayat_Health_Score_PDF::generate_and_save_pdf( $assessment_id );
+            // Schedule the background event to generate the PDF and send the email
+            wp_schedule_single_event( time(), 'hayat_process_assessment', [ $assessment_id ] );
 
             return rest_ensure_response( [
                 'success'  => true,
                 'message'  => 'Assessment saved successfully',
                 'id'       => $assessment_id,
                 'user_id'  => $user_id,
-                'scores'   => $scores,
-                'pdf_path' => $pdf_path ? 'Generated successfully' : 'Failed to generate'
+                'scores'   => $scores
             ] );
         }
 
