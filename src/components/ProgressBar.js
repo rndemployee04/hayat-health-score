@@ -1,3 +1,4 @@
+const primaryColor = window.hayatHealthData?.primaryColor || primaryColor;
 const ProgressBar = ({ currentStep, totalSteps }) => {
     const percentage = Math.round((currentStep / totalSteps) * 100);
 
@@ -12,7 +13,7 @@ const ProgressBar = ({ currentStep, totalSteps }) => {
                     style={{
                         height: '100%',
                         width: `${percentage}%`,
-                        backgroundColor: '#2E8B57', // Primary Brand Green
+                        backgroundColor: primaryColor, // Primary Brand Green
                         transition: 'width 0.4s ease-in-out'
                     }}
                 />

@@ -2,14 +2,20 @@ const Results = ({ scores }) => {
     const { health_score, top_opportunities } = scores;
 
     // Determine color based on score
-    let scoreColor = '#2E8B57'; // Green
-    let scoreMessage = 'Excellent';
-    if (health_score < 60) {
-        scoreColor = '#d9534f'; // Red
-        scoreMessage = 'Action Needed';
-    } else if (health_score < 80) {
+    let scoreColor = '#d9534f'; // Default Red for < 40
+    let scoreMessage = 'Significant Opportunity';
+    if (health_score >= 85) {
+        scoreColor = primaryColor; // Green
+        scoreMessage = 'Excellent';
+    } else if (health_score >= 70) {
+        scoreColor = '#f0ad4e'; // Orange/Yellow
+        scoreMessage = 'Good';
+    } else if (health_score >= 55) {
         scoreColor = '#f0ad4e'; // Orange
-        scoreMessage = 'Room for Improvement';
+        scoreMessage = 'Fair';
+    } else if (health_score >= 40) {
+        scoreColor = '#d9534f'; // Red
+        scoreMessage = 'Needs Attention';
     }
 
     const handleBookingRedirect = () => {
@@ -43,21 +49,22 @@ const Results = ({ scores }) => {
                         / 100
                     </span>
                 </div>
-                <h3 style={{ marginTop: '1.5rem', color: scoreColor, fontFamily: 'Outfit, sans-serif' }}>
+                <h3 style={{ marginTop: '1.5rem', color: scoreColor, fontFamily: 'Outfit, sans-serif', fontSize: '1.8rem' }}>
                     {scoreMessage}
                 </h3>
             </div>
 
             <div style={{ textAlign: 'left', backgroundColor: '#fff', padding: '1.5rem', borderRadius: '8px', border: '1px solid #DCD7C9', marginBottom: '2rem' }}>
-                <h4 style={{ color: '#2E8B57', fontFamily: 'Outfit, sans-serif', marginBottom: '1rem', fontSize: '1.2rem' }}>
-                    Top Focus Areas:
+                <h4 style={{ color: primaryColor, fontFamily: 'Outfit, sans-serif', marginBottom: '1rem', fontSize: '1.2rem' }}>
+                    Based on what you shared, your biggest opportunities appear to be:
                 </h4>
-                <ul style={{ margin: 0, paddingLeft: '1.5rem', fontFamily: 'Lexend, sans-serif', color: '#4A4A4A', lineHeight: '1.6' }}>
+                <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', fontFamily: 'Lexend, sans-serif', color: '#4A4A4A', lineHeight: '1.6' }}>
                     {top_opportunities.map((opp, index) => (
-                        <li key={index} style={{ marginBottom: '0.5rem' }}>{opp}</li>
+                        <li key={index} style={{ marginBottom: '0.5rem' }}><span style={{ color: primaryColor, fontWeight: 'bold', marginRight: '0.5rem' }}>✓</span>{opp}</li>
                     ))}
                 </ul>
                 <p style={{ marginTop: '1.5rem', fontSize: '0.95rem', color: '#666', fontStyle: 'italic' }}>
+                    This score is an educational snapshot based on your responses. It is not a medical diagnosis.<br/><br/>
                     *A detailed copy of your results is being generated and will arrive in your email inbox within the next 5 minutes.
                 </p>
             </div>
@@ -65,7 +72,7 @@ const Results = ({ scores }) => {
             <button 
                 onClick={handleBookingRedirect}
                 style={{
-                    backgroundColor: '#2E8B57',
+                    backgroundColor: primaryColor,
                     color: '#FFF',
                     padding: '1rem 2rem',
                     border: 'none',
@@ -81,7 +88,7 @@ const Results = ({ scores }) => {
                 onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 12px rgba(46, 139, 87, 0.3)'; }}
                 onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(46, 139, 87, 0.2)'; }}
             >
-                Book Your Complimentary Consultation
+                Book My Complimentary Hayat Tayyiba Consultation
             </button>
         </div>
     );
