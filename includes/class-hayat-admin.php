@@ -181,7 +181,7 @@ class Hayat_Assessments_List_Table extends WP_List_Table {
         global $wpdb;
         $table_name = $wpdb->prefix . 'hayat_assessments';
 
-        $per_page = 20;
+        $per_page = 10;
         $columns  = $this->get_columns();
         $hidden   = [];
         $sortable = $this->get_sortable_columns();

@@ -1,0 +1,17 @@
+/* 
+ * Hayat Tayyiba Health Score - Custom Styles
+ * 
+ * Use this file to override or add custom styles for the React plugin interface.
+ * The entire plugin is wrapped in the #hayat-health-score-root container.
+ * 
+ * Example usage:
+ * #hayat-health-score-root button {
+ *     box-shadow: none !important;
+ * }
+ */
+
+/* Uncomment and modify below to add custom styles:
+#hayat-health-score-root {
+    
+}
+*/

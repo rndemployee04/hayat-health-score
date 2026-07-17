@@ -94,6 +94,13 @@ class Hayat_Health_Score {
                 'bookingUrl' => esc_url_raw( $booking_url ),
                 'primaryColor' => sanitize_hex_color( $primary_color )
             ] );
+            
+            wp_enqueue_style(
+                'hayat-health-score-custom-css',
+                plugin_dir_url( __FILE__ ) . 'assets/css/custom.css',
+                [],
+                '1.0.0'
+            );
         }
     }
 }
