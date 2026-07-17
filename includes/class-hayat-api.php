@@ -27,6 +27,7 @@ class Hayat_Health_Score_API {
         $first_name = isset( $params['first_name'] ) ? sanitize_text_field( $params['first_name'] ) : '';
         $email      = isset( $params['email'] ) ? sanitize_email( $params['email'] ) : '';
         $answers    = isset( $params['answers'] ) ? $params['answers'] : [];
+        $utm_source = isset( $params['utm_source'] ) ? sanitize_text_field( $params['utm_source'] ) : '';
 
         $user_id = null;
 
@@ -66,6 +67,7 @@ class Hayat_Health_Score_API {
                 'readiness_score'   => $scores['readiness_score'],
                 'top_opportunities' => wp_json_encode( $scores['top_opportunities'] ),
                 'raw_answers'       => wp_json_encode( $answers ),
+                'utm_source'        => $utm_source,
                 'created_at'        => current_time( 'mysql' )
             ],
             [
@@ -77,6 +79,7 @@ class Hayat_Health_Score_API {
                 '%d', // readiness_score
                 '%s', // top_opportunities
                 '%s', // raw_answers
+                '%s', // utm_source
                 '%s'  // created_at
             ]
         );

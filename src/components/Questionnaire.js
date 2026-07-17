@@ -9,24 +9,38 @@ const STORAGE_KEY = 'hayat_health_score_state';
 
 const Questionnaire = () => {
     const getInitialState = () => {
+        // Parse URL params for UTM source
+        const urlParams = new URLSearchParams(window.location.search);
+        let utm_source = urlParams.get('utm_source') || urlParams.get('source') || '';
+
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
-            try { return JSON.parse(saved); } catch (e) { console.error("Failed to parse saved state"); }
+            try { 
+                const parsed = JSON.parse(saved); 
+                // Prefer URL param if it exists, otherwise use saved
+                if (utm_source) {
+                    parsed.utm_source = utm_source;
+                }
+                return parsed;
+            } catch (e) { 
+                console.error("Failed to parse saved state"); 
+            }
         }
-        return { currentStepIndex: 0, answers: {} };
+        return { currentStepIndex: 0, answers: {}, utm_source };
     };
 
     const initialState = getInitialState();
     const [currentStepIndex, setCurrentStepIndex] = useState(initialState.currentStepIndex);
     const [answers, setAnswers] = useState(initialState.answers);
+    const [utmSource, setUtmSource] = useState(initialState.utm_source);
     const [status, setStatus] = useState('idle'); // idle, submitting, success, error
     const [showLeadCapture, setShowLeadCapture] = useState(false);
     const [showExitIntent, setShowExitIntent] = useState(false);
     const [finalScores, setFinalScores] = useState(null);
 
     useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentStepIndex, answers }));
-    }, [currentStepIndex, answers]);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentStepIndex, answers, utm_source: utmSource }));
+    }, [currentStepIndex, answers, utmSource]);
 
     useEffect(() => {
         const handleMouseLeave = (e) => {
@@ -56,7 +70,7 @@ const Questionnaire = () => {
     const handleFinalSubmit = async (contactInfo) => {
         setStatus('submitting');
         try {
-            const payload = { ...contactInfo, answers };
+            const payload = { ...contactInfo, answers, utm_source: utmSource };
             const response = await submitAssessment(payload);
             setFinalScores(response.scores);
             localStorage.removeItem(STORAGE_KEY);
