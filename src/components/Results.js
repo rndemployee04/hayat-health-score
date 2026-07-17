@@ -1,3 +1,5 @@
+const primaryColor = window.hayatHealthData?.primaryColor || '#2E8B57';
+
 const Results = ({ scores }) => {
     const { health_score, top_opportunities } = scores;
 
@@ -28,7 +30,7 @@ const Results = ({ scores }) => {
             <h2 style={{ color: '#333', fontFamily: 'Outfit, sans-serif', fontSize: '2rem', marginBottom: '0.5rem' }}>
                 Your Hayat Tayyiba Health Score
             </h2>
-            
+
             <div style={{ margin: '3rem 0' }}>
                 <div style={{
                     display: 'inline-flex',
@@ -64,12 +66,12 @@ const Results = ({ scores }) => {
                     ))}
                 </ul>
                 <p style={{ marginTop: '1.5rem', fontSize: '0.95rem', color: '#666', fontStyle: 'italic' }}>
-                    This score is an educational snapshot based on your responses. It is not a medical diagnosis.<br/><br/>
+                    This score is an educational snapshot based on your responses. It is not a medical diagnosis.<br /><br />
                     *A detailed copy of your results is being generated and will arrive in your email inbox within the next 5 minutes.
                 </p>
             </div>
 
-            <button 
+            <button
                 onClick={handleBookingRedirect}
                 style={{
                     backgroundColor: primaryColor,
@@ -88,7 +90,7 @@ const Results = ({ scores }) => {
                 onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 12px rgba(46, 139, 87, 0.3)'; }}
                 onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(46, 139, 87, 0.2)'; }}
             >
-                Book My Complimentary Hayat Tayyiba Consultation
+                Book My Complimentary Consultation
             </button>
         </div>
     );

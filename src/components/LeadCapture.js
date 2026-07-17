@@ -1,5 +1,5 @@
 import { useState } from '@wordpress/element';
-const primaryColor = window.hayatHealthData?.primaryColor || primaryColor;
+const primaryColor = window.hayatHealthData?.primaryColor || '#2E8B57';
 
 const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     const [firstName, setFirstName] = useState('');
@@ -31,7 +31,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     };
 
     return (
-        <div style={{ padding: '2rem', textAlign: 'left', animation: 'fadeIn 0.4s ease-in-out' }}>
+        <div style={{ padding: '1rem 0 0 0', textAlign: 'left', animation: 'fadeIn 0.4s ease-in-out', display: 'flex', flexDirection: 'column', flex: 1 }}>
             <h3 style={{ color: primaryColor, marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: '1.6rem' }}>
                 Receive Your Personalized Hayat Tayyiba Health Snapshot
             </h3>

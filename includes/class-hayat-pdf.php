@@ -66,8 +66,12 @@ class Hayat_Health_Score_PDF {
         $title = '';
         $subtitle = '';
         $body_html = '';
+        $category = '';
+        
+        $date_completed = wp_date( get_option( 'date_format' ), strtotime( $assessment->created_at ) );
 
         if ( $score >= 85 ) {
+            $category = 'Excellent';
             $title = "You're Off to a Great Start.";
             $subtitle = "Congratulations!";
             $body_html = "
@@ -94,6 +98,7 @@ class Hayat_Health_Score_PDF {
                 <p>If you'd like to optimize your health even further, we'd love to meet with you. Book a complimentary Hayat Tayyiba consultation.</p>
             ";
         } elseif ( $score >= 70 ) {
+            $category = 'Good';
             $score_color = '#f0ad4e'; // Orange
             $score_bg_color = '#FDF6EB';
             $title = "You're On The Right Track.";
@@ -117,8 +122,9 @@ class Hayat_Health_Score_PDF {
                 <p>A complimentary Hayat Tayyiba consultation can help identify practical steps based on your goals.</p>
             ";
         } elseif ( $score >= 55 ) {
-            $score_color = '#d9534f'; // Red
-            $score_bg_color = '#FBEAEA';
+            $category = 'Fair';
+            $score_color = '#f0ad4e'; // Orange
+            $score_bg_color = '#FDF6EB';
             $title = "Your Body May Be Asking For Attention.";
             $subtitle = "Several health concerns appear to be affecting your day-to-day life.";
             $body_html = "
@@ -133,8 +139,9 @@ class Hayat_Health_Score_PDF {
                 <p>This is exactly what your complimentary Hayat Tayyiba consultation is designed for.</p>
             ";
         } elseif ( $score >= 40 ) {
-            $score_color = '#d9534f';
-            $score_bg_color = '#FBEAEA';
+            $category = 'Needs Attention';
+            $score_color = '#d9534f'; // Red
+            $score_bg_color = '#F9ECEC';
             $title = "There Is Hope.";
             $subtitle = "Your responses suggest multiple areas that deserve attention.";
             $body_html = "
@@ -149,9 +156,10 @@ class Hayat_Health_Score_PDF {
                 <p>Schedule your complimentary Hayat Tayyiba consultation. Together we'll discuss your goals and determine whether Hayat Tayyiba is right for you.</p>
             ";
         } else {
-            $score_color = '#d9534f';
-            $score_bg_color = '#FBEAEA';
-            $title = "Significant Opportunities To Improve Your Health.";
+            $category = 'Significant Opportunity';
+            $score_color = '#d9534f'; // Red
+            $score_bg_color = '#F9ECEC';
+            $title = "Your Results Suggest There May Be Significant Opportunities To Improve Your Health.";
             $subtitle = "The encouraging news? Today's score does not determine tomorrow's health.";
             $body_html = "
                 <p>Many people begin their journey exactly where you are now. What matters most isn't where you start. It's where you're headed.</p>
@@ -233,6 +241,7 @@ class Hayat_Health_Score_PDF {
                     color: <?php echo $primary_color; ?>;
                     margin-top: 25px;
                     margin-bottom: 10px;
+                    page-break-after: avoid;
                 }
                 .content-section .subtitle {
                     font-size: 18px;
@@ -293,6 +302,12 @@ class Hayat_Health_Score_PDF {
                     <div class="score-circle">
                         <span class="score-value"><?php echo $score; ?></span>
                     </div>
+                    <p style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: #4A4A4A; margin-top: 15px;">
+                        <strong>Category:</strong> <?php echo esc_html( $category ); ?>
+                    </p>
+                    <p style="font-family: 'Lexend', sans-serif; font-size: 0.9rem; color: #888;">
+                        Completed on: <?php echo esc_html( $date_completed ); ?>
+                    </p>
                 </div>
 
                 <div class="content-section">

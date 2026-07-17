@@ -110,9 +110,9 @@ const Questionnaire = () => {
 
     if (showLeadCapture) {
         return (
-            <div style={{ animation: 'fadeIn 0.5s' }}>
+            <div style={{ animation: 'fadeIn 0.5s', maxWidth: '600px', margin: '0 auto', backgroundColor: '#FBF5E8', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', minHeight: '600px' }}>
                 <ProgressBar currentStep={questions.length} totalSteps={questions.length} />
-                <LeadCapture onSubmit={handleFinalSubmit} isSubmitting={status === 'submitting'} />
+                <LeadCapture onSubmit={handleFinalSubmit} isSubmitting={status === 'submitting'} onBack={() => setShowLeadCapture(false)} />
             </div>
         );
     }
