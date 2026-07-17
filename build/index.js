@@ -116,23 +116,59 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const STORAGE_KEY = 'hayat_health_score_state';
 const Questionnaire = () => {
-  const [currentStepIndex, setCurrentStepIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
-  const [answers, setAnswers] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)({});
+  // Initialize state from localStorage if it exists
+  const getInitialState = () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse saved state");
+      }
+    }
+    return {
+      currentStepIndex: 0,
+      answers: {}
+    };
+  };
+  const initialState = getInitialState();
+  const [currentStepIndex, setCurrentStepIndex] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(initialState.currentStepIndex);
+  const [answers, setAnswers] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(initialState.answers);
   const [status, setStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('idle'); // idle, submitting, success, error
+  const [showExitIntent, setShowExitIntent] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
 
+  // Autosave to localStorage whenever answers or step changes
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      currentStepIndex,
+      answers
+    }));
+  }, [currentStepIndex, answers]);
+
+  // Exit Intent Logic
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const handleMouseLeave = e => {
+      // Trigger if cursor leaves the top of the window and we haven't finished yet
+      if (e.clientY <= 0 && status !== 'success' && !sessionStorage.getItem('hayat_exit_intent_shown')) {
+        setShowExitIntent(true);
+        sessionStorage.setItem('hayat_exit_intent_shown', 'true');
+      }
+    };
+    document.addEventListener('mouseleave', handleMouseLeave);
+    return () => document.removeEventListener('mouseleave', handleMouseLeave);
+  }, [status]);
   const currentQuestion = _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions[currentStepIndex];
   const currentAnswer = answers[currentQuestion.id] || (currentQuestion.type === 'checkbox' ? [] : currentQuestion.type === 'slider' ? 5 : '');
   const handleOptionToggle = option => {
     setAnswers(prev => {
       const prevAnswers = prev[currentQuestion.id] || [];
       let newAnswers;
-
-      // Handle exclusive "None" or "I haven't really tried yet"
       if (option === 'None' || option === "I haven't really tried yet") {
         newAnswers = [option];
       } else if (prevAnswers.includes('None') || prevAnswers.includes("I haven't really tried yet")) {
-        newAnswers = [option]; // Remove the exclusive option if another is picked
+        newAnswers = [option];
       } else {
         newAnswers = prevAnswers.includes(option) ? prevAnswers.filter(item => item !== option) : [...prevAnswers, option];
       }
@@ -158,10 +194,11 @@ const Questionnaire = () => {
     if (currentStepIndex < _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length - 1) {
       setCurrentStepIndex(prev => prev + 1);
     } else {
-      // Final submission
       setStatus('submitting');
       try {
         await (0,_api_api__WEBPACK_IMPORTED_MODULE_1__.submitAssessment)(answers);
+        // Clear localStorage on successful final submission
+        localStorage.removeItem(STORAGE_KEY);
         setStatus('success');
       } catch (error) {
         console.error(error);
@@ -177,7 +214,7 @@ const Questionnaire = () => {
   const isNextDisabled = () => {
     if (currentQuestion.type === 'checkbox') return currentAnswer.length === 0;
     if (currentQuestion.type === 'radio') return currentAnswer === '';
-    return false; // slider always has a value
+    return false;
   };
   if (status === 'success') {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -198,6 +235,7 @@ const Questionnaire = () => {
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     style: {
+      position: 'relative',
       padding: '2rem',
       textAlign: 'left',
       animation: 'fadeIn 0.4s ease-in-out'
@@ -209,6 +247,52 @@ const Questionnaire = () => {
                     to { opacity: 1; transform: translateY(0); }
                 }
                 `
+    }), showExitIntent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      style: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(251, 245, 232, 0.95)',
+        zIndex: 10,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '2rem',
+        textAlign: 'center',
+        borderRadius: '12px'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
+        style: {
+          color: '#2E8B57',
+          marginBottom: '1rem',
+          fontFamily: 'Outfit, sans-serif'
+        },
+        children: "Wait! Don't leave just yet."
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+        style: {
+          marginBottom: '2rem',
+          fontSize: '1.1rem',
+          color: '#4A4A4A',
+          fontFamily: 'Lexend, sans-serif'
+        },
+        children: "You're only a few questions away from seeing your personalized Hayat Tayyiba Health Score."
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        onClick: () => setShowExitIntent(false),
+        style: {
+          backgroundColor: '#2E8B57',
+          color: '#FFF',
+          padding: '0.75rem 2rem',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '1.1rem',
+          fontFamily: 'Outfit, sans-serif'
+        },
+        children: "Continue Assessment"
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ProgressBar__WEBPACK_IMPORTED_MODULE_3__["default"], {
       currentStep: currentStepIndex + 1,
       totalSteps: _data_questions__WEBPACK_IMPORTED_MODULE_2__.questions.length
