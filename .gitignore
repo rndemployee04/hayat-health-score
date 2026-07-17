@@ -1,10 +1,5 @@
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+vendor/
+build/
 .DS_Store
-
-# We typically keep /build in the repo for WordPress plugins so 
-# the plugin works immediately upon cloning without needing a build step.
-# If you prefer to exclude the build folder, uncomment the line below:
-# build/
+*.log
