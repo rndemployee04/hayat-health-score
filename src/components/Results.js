@@ -342,7 +342,7 @@ const Results = ({ scores, onRetake }) => {
                 {/* Disclaimer */}
                 <div style={{ marginTop: '1.2rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
                     <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic', lineHeight: '1.5', fontFamily: 'Lexend, sans-serif' }}>
-                        This score is an educational snapshot based only on the answers you provided. It is not a medical diagnosis and does not replace evaluation by a qualified healthcare professional.
+                        This Health Score is based on your responses to lifestyle and symptom questions and is intended for educational purposes only. It is not a medical diagnosis. Some health conditions, including insulin resistance and other metabolic disorders, may only be identified through laboratory testing and a comprehensive medical evaluation.
                     </p>
                 </div>
             </div>
