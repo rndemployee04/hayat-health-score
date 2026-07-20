@@ -2,8 +2,9 @@
 /**
  * Plugin Name: GliaFit Health Score Assessment
  * Description: Lead Generation Form Questionnaire “60-Second Health Assessment”. The goal is to educate visitors, engage them, generate a personalized health score, collect their contact information, and encourage them to book a complimentary consultation.
- * Version: 1.0.0
+ * Version: 0.1.0
  * Author: RND Experts
+ * Author URI: https://rndexperts.com/
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -94,13 +95,20 @@ class Health_Score {
             }
 
             // Pass REST API URL, Nonce, and Booking URL to the React app
-            $booking_url = get_option( 'health_score_booking_url', '' );
-            $primary_color = get_option( 'health_score_primary_color', '#2E8B57' );
+            $booking_url      = get_option( 'health_score_booking_url', '' );
+            $btn_bg_top       = get_option( 'health_score_btn_bg_top', '#40BAD5' );
+            $btn_bg_bottom    = get_option( 'health_score_btn_bg_bottom', '#07689F' );
+            $btn_hover_top    = get_option( 'health_score_btn_hover_top', '#FCBF1E' );
+            $btn_hover_bottom = get_option( 'health_score_btn_hover_bottom', '#F59C11' );
+
             wp_localize_script( 'health-score-js', 'healthScoreData', [
-                'restUrl'      => esc_url_raw( rest_url( 'health-score/v1/submit' ) ),
-                'nonce'        => wp_create_nonce( 'wp_rest' ),
-                'bookingUrl'   => esc_url_raw( $booking_url ),
-                'primaryColor' => sanitize_hex_color( $primary_color )
+                'restUrl'        => esc_url_raw( rest_url( 'health-score/v1/submit' ) ),
+                'nonce'          => wp_create_nonce( 'wp_rest' ),
+                'bookingUrl'     => esc_url_raw( $booking_url ),
+                'btnBgTop'       => sanitize_hex_color( $btn_bg_top ) ?: '#40BAD5',
+                'btnBgBottom'    => sanitize_hex_color( $btn_bg_bottom ) ?: '#07689F',
+                'btnHoverTop'    => sanitize_hex_color( $btn_hover_top ) ?: '#FCBF1E',
+                'btnHoverBottom' => sanitize_hex_color( $btn_hover_bottom ) ?: '#F59C11'
             ] );
             
             wp_enqueue_style(

@@ -114,14 +114,57 @@ class Assessments_List_Table extends WP_List_Table {
     }
 
     public function process_bulk_action() {
-        if ( 'bulk-delete' === $this->current_action() ) {
+        if ( 'bulk-delete' === $this->current_action() && ! empty( $_GET['bulk-delete'] ) ) {
             global $wpdb;
             $table_name = $wpdb->prefix . 'health_assessments';
-            $delete_ids = esc_sql( $_GET['bulk-delete'] );
+            $delete_ids = (array) $_GET['bulk-delete'];
             foreach ( $delete_ids as $id ) {
                 $wpdb->delete( $table_name, [ 'id' => intval( $id ) ] );
             }
         }
+    }
+
+    protected function extra_tablenav( $which ) {
+        if ( 'top' !== $which ) {
+            return;
+        }
+
+        $current_status   = isset( $_REQUEST['filter_status'] ) ? sanitize_text_field( $_REQUEST['filter_status'] ) : '';
+        $current_category = isset( $_REQUEST['filter_category'] ) ? sanitize_text_field( $_REQUEST['filter_category'] ) : '';
+
+        $statuses = [
+            'Needs Follow-up' => 'Needs Follow-up',
+            'Contacted'       => 'Contacted',
+            'Booked'          => 'Booked',
+            'Not Interested'  => 'Not Interested'
+        ];
+
+        $categories = [
+            'Excellent'               => 'Excellent',
+            'Good'                    => 'Good',
+            'Fair'                    => 'Fair',
+            'Needs Attention'         => 'Needs Attention',
+            'Significant Opportunity' => 'Significant Opportunity'
+        ];
+
+        echo '<div class="alignleft actions">';
+        
+        echo '<select name="filter_status">';
+        echo '<option value="">All Statuses</option>';
+        foreach ( $statuses as $val => $label ) {
+            printf( '<option value="%s" %s>%s</option>', esc_attr( $val ), selected( $current_status, $val, false ), esc_html( $label ) );
+        }
+        echo '</select>';
+
+        echo '<select name="filter_category">';
+        echo '<option value="">All Categories</option>';
+        foreach ( $categories as $val => $label ) {
+            printf( '<option value="%s" %s>%s</option>', esc_attr( $val ), selected( $current_category, $val, false ), esc_html( $label ) );
+        }
+        echo '</select>';
+
+        submit_button( 'Filter', '', 'filter_action', false, [ 'id' => 'post-query-submit' ] );
+        echo '</div>';
     }
 
     public function prepare_items() {
@@ -136,17 +179,30 @@ class Assessments_List_Table extends WP_List_Table {
         $this->_column_headers = [ $columns, $hidden, $sortable ];
         $this->process_bulk_action();
 
-        $search = isset( $_REQUEST['s'] ) ? sanitize_text_field( trim( $_REQUEST['s'] ) ) : '';
-        $where  = '';
+        $search          = isset( $_REQUEST['s'] ) ? sanitize_text_field( trim( $_REQUEST['s'] ) ) : '';
+        $filter_status   = isset( $_REQUEST['filter_status'] ) ? sanitize_text_field( trim( $_REQUEST['filter_status'] ) ) : '';
+        $filter_category = isset( $_REQUEST['filter_category'] ) ? sanitize_text_field( trim( $_REQUEST['filter_category'] ) ) : '';
+
+        $where_clauses = [];
         if ( ! empty( $search ) ) {
-            $where = $wpdb->prepare(
-                " WHERE first_name LIKE %s OR email LIKE %s OR score_category LIKE %s OR status LIKE %s",
+            $where_clauses[] = $wpdb->prepare(
+                "(first_name LIKE %s OR email LIKE %s OR score_category LIKE %s OR status LIKE %s)",
                 '%' . $wpdb->esc_like( $search ) . '%',
                 '%' . $wpdb->esc_like( $search ) . '%',
                 '%' . $wpdb->esc_like( $search ) . '%',
                 '%' . $wpdb->esc_like( $search ) . '%'
             );
         }
+
+        if ( ! empty( $filter_status ) ) {
+            $where_clauses[] = $wpdb->prepare( "status = %s", $filter_status );
+        }
+
+        if ( ! empty( $filter_category ) ) {
+            $where_clauses[] = $wpdb->prepare( "score_category = %s", $filter_category );
+        }
+
+        $where = ! empty( $where_clauses ) ? ' WHERE ' . implode( ' AND ', $where_clauses ) : '';
 
         $orderby = ! empty( $_GET['orderby'] ) ? sanitize_sql_orderby( $_GET['orderby'] ) : 'id';
         $order   = ! empty( $_GET['order'] ) ? sanitize_text_field( $_GET['order'] ) : 'DESC';
@@ -300,16 +356,28 @@ class Health_Score_Admin {
             'default' => file_exists( plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json' ) ? file_get_contents( plugin_dir_path( dirname( __FILE__ ) ) . 'scoring-config.json' ) : ''
         ] );
 
-        register_setting( 'health_score_options_group', 'health_score_pdf_testimonial', [
-            'type' => 'string',
-            'sanitize_callback' => 'wp_kses_post',
-            'default' => '"I finally feel like I have a structured plan. The team helped me focus on the right lifestyle changes, and the improvement in my daily energy has been incredible." <br><br><strong>— A Client</strong>'
-        ] );
-
-        register_setting( 'health_score_options_group', 'health_score_primary_color', [
+        register_setting( 'health_score_options_group', 'health_score_btn_bg_top', [
             'type' => 'string',
             'sanitize_callback' => 'sanitize_hex_color',
-            'default' => '#2E8B57'
+            'default' => '#40BAD5'
+        ] );
+
+        register_setting( 'health_score_options_group', 'health_score_btn_bg_bottom', [
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#07689F'
+        ] );
+
+        register_setting( 'health_score_options_group', 'health_score_btn_hover_top', [
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#FCBF1E'
+        ] );
+
+        register_setting( 'health_score_options_group', 'health_score_btn_hover_bottom', [
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#F59C11'
         ] );
     }
 
@@ -317,16 +385,33 @@ class Health_Score_Admin {
         ?>
         <div class="wrap">
             <h1>Health Score Settings</h1>
-            <?php settings_errors( 'health_score_options_group' ); ?>
+            <?php settings_errors(); ?>
             <form method="post" action="options.php">
                 <?php settings_fields( 'health_score_options_group' ); ?>
                 <?php do_settings_sections( 'health_score_options_group' ); ?>
                 <table class="form-table">
                     <tr valign="top">
-                        <th scope="row">Brand Primary Color</th>
+                        <th scope="row">Primary Brand Color</th>
                         <td>
-                            <input type="color" name="health_score_primary_color" value="<?php echo esc_attr( get_option('health_score_primary_color', '#2E8B57') ); ?>" />
-                            <p class="description">Used for buttons, progress bars, and PDF highlights.</p>
+                            <label style="margin-right: 15px;">
+                                Top Shade: <input type="color" name="health_score_btn_bg_top" value="<?php echo esc_attr( get_option('health_score_btn_bg_top', '#40BAD5') ); ?>" />
+                            </label>
+                            <label>
+                                Bottom Shade: <input type="color" name="health_score_btn_bg_bottom" value="<?php echo esc_attr( get_option('health_score_btn_bg_bottom', '#07689F') ); ?>" />
+                            </label>
+                            <p class="description">Primary brand color gradient applied to primary buttons and UI highlights in normal state.</p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Button Hover Color</th>
+                        <td>
+                            <label style="margin-right: 15px;">
+                                Top Shade: <input type="color" name="health_score_btn_hover_top" value="<?php echo esc_attr( get_option('health_score_btn_hover_top', '#FCBF1E') ); ?>" />
+                            </label>
+                            <label>
+                                Bottom Shade: <input type="color" name="health_score_btn_hover_bottom" value="<?php echo esc_attr( get_option('health_score_btn_hover_bottom', '#F59C11') ); ?>" />
+                            </label>
+                            <p class="description">Gradient applied to primary buttons when hovered.</p>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -334,13 +419,6 @@ class Health_Score_Admin {
                         <td>
                             <input type="url" name="health_score_booking_url" value="<?php echo esc_attr( get_option('health_score_booking_url', '') ); ?>" style="width: 100%; max-width: 400px;" />
                             <p class="description">Users will be redirected to this URL after clicking on the "Book Your Complimentary Consultation" button.</p>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">PDF Testimonial</th>
-                        <td>
-                            <textarea name="health_score_pdf_testimonial" rows="4" style="width: 100%; max-width: 600px;"><?php echo esc_textarea( get_option('health_score_pdf_testimonial', '"I finally feel like I have a structured plan. The team helped me focus on the right lifestyle changes, and the improvement in my daily energy has been incredible." <br><br><strong>— A Client</strong>') ); ?></textarea>
-                            <p class="description">Displayed on the final page of the PDF report.</p>
                         </td>
                     </tr>
                     <tr valign="top">

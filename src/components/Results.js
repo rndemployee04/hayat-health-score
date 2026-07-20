@@ -1,6 +1,205 @@
-const primaryColor = window.healthScoreData?.primaryColor || '#2E8B57';
+import { useEffect } from '@wordpress/element';
 
-const Results = ({ scores }) => {
+const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
+const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
+const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
+const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
+const primaryColor = btnBgBottom;
+
+// Convert 0° (Left) to 180° (Right) along the top semi-circle arc
+function polarToCartesian(centerX, centerY, radius, deg) {
+    const rad = (180 - deg) * Math.PI / 180.0;
+    return {
+        x: centerX + radius * Math.cos(rad),
+        y: centerY - radius * Math.sin(rad)
+    };
+}
+
+function describeArc(x, y, radius, startDeg, endDeg) {
+    const start = polarToCartesian(x, y, radius, startDeg);
+    const end = polarToCartesian(x, y, radius, endDeg);
+    const largeArcFlag = endDeg - startDeg <= 180 ? "0" : "1";
+    return [
+        "M", start.x, start.y,
+        "A", radius, radius, 0, largeArcFlag, 1, end.x, end.y
+    ].join(" ");
+}
+
+const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
+    // 5 Gauge Bands matching GliaFit spec image
+    const bands = [
+        { label: 'SIGNIFICANT OPPORTUNITY', range: '0–19', color: '#E50914', start: 0, end: 35, textX: 60, textY: 108 },
+        { label: 'NEEDS ATTENTION', range: '20–39', color: '#FF5722', start: 36, end: 71, textX: 142, textY: 14 },
+        { label: 'FAIR', range: '40–59', color: '#FFB300', start: 72, end: 107, textX: 250, textY: -5 },
+        { label: 'GOOD', range: '60–79', color: '#4CAF50', start: 108, end: 143, textX: 358, textY: 14 },
+        { label: 'EXCELLENT', range: '80–100', color: '#1B7E39', start: 144, end: 180, textX: 440, textY: 108 }
+    ];
+
+    // Center = (250, 175), R = 140
+    const scoreAngle = Math.min(180, Math.max(0, (score / 100) * 180));
+    const needleTip = polarToCartesian(250, 175, 106, scoreAngle);
+
+    // Ticks run from 0° to 180°
+    const ticks = [];
+    for (let a = 0; a <= 180; a += 3.6) {
+        ticks.push(a);
+    }
+
+    return (
+        <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto', fontFamily: 'Outfit, sans-serif', boxSizing: 'border-box' }}>
+            {/* Header Title */}
+            <div style={{ fontSize: 'clamp(0.85rem, 3.5vw, 1.05rem)', fontWeight: '800', color: '#07689F', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '0.6rem', textAlign: 'center' }}>
+                YOUR GLIAFIT METABOLIC HEALTH GAUGE™
+            </div>
+
+            {/* SVG viewBox tightly cropped around arc (25 -30 450 235) with generous top space for labels */}
+            <svg viewBox="25 -30 450 235" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <defs>
+                    <filter id="needle-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feDropShadow dx="0" dy="3" stdDeviation="3" floodOpacity="0.25" />
+                    </filter>
+                </defs>
+
+                {/* 5 Color Arc Bands */}
+                {bands.map((band, idx) => (
+                    <g key={idx}>
+                        <path
+                            d={describeArc(250, 175, 140, band.start, band.end)}
+                            fill="none"
+                            stroke={band.color}
+                            strokeWidth="26"
+                        />
+                        {/* Text Label Above/Outside Band */}
+                        <g transform={`translate(${band.textX}, ${band.textY})`}>
+                            <text
+                                textAnchor="middle"
+                                fill={band.color}
+                                fontFamily="Outfit, sans-serif"
+                            >
+                                {band.label.includes(' ') ? (
+                                    <>
+                                        <tspan x="0" dy="-7" fontSize="11" fontWeight="800">{band.label.split(' ')[0]}</tspan>
+                                        <tspan x="0" dy="12" fontSize="11" fontWeight="800">{band.label.split(' ').slice(1).join(' ')}</tspan>
+                                        <tspan x="0" dy="12" fill="#475569" fontSize="10" fontWeight="700">{band.range}</tspan>
+                                    </>
+                                ) : (
+                                    <>
+                                        <tspan x="0" dy="-2" fontSize="12" fontWeight="800">{band.label}</tspan>
+                                        <tspan x="0" dy="13" fill="#475569" fontSize="10" fontWeight="700">{band.range}</tspan>
+                                    </>
+                                )}
+                            </text>
+                        </g>
+                    </g>
+                ))}
+
+                {/* Inner Tick Arc */}
+                <path
+                    d={describeArc(250, 175, 124, 0, 180)}
+                    fill="none"
+                    stroke="#cbd5e1"
+                    strokeWidth="1.5"
+                />
+
+                {/* Ticks */}
+                {ticks.map((tAngle, i) => {
+                    const p1 = polarToCartesian(250, 175, 124, tAngle);
+                    const p2 = polarToCartesian(250, 175, (i % 5 === 0 ? 115 : 119), tAngle);
+                    return (
+                        <line
+                            key={i}
+                            x1={p1.x}
+                            y1={p1.y}
+                            x2={p2.x}
+                            y2={p2.y}
+                            stroke={i % 5 === 0 ? "#475569" : "#94a3b8"}
+                            strokeWidth={i % 5 === 0 ? "1.5" : "1"}
+                        />
+                    );
+                })}
+
+                {/* 0 and 100 Scale Markers perfectly aligned with baseline tips */}
+                <text x="110" y="194" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="800">0</text>
+                <text x="390" y="194" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="800">100</text>
+
+                {/* Pointer Needle */}
+                <g filter="url(#needle-shadow)">
+                    <line
+                        x1="250"
+                        y1="175"
+                        x2={needleTip.x}
+                        y2={needleTip.y}
+                        stroke="#1e293b"
+                        strokeWidth="7.5"
+                        strokeLinecap="round"
+                        style={{ transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+                    />
+                    <circle cx="250" cy="175" r="10" fill="#1e293b" />
+                    <circle cx="250" cy="175" r="4" fill="#ffffff" />
+                </g>
+            </svg>
+
+            {/* Bottom Score & Status Callout Banner */}
+            <div style={{ marginTop: '0.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                    <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '900', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
+                        {score}
+                    </span>
+                    <span style={{ fontSize: 'clamp(1rem, 3.2vw, 1.25rem)', fontWeight: '700', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
+                        /100
+                    </span>
+                </div>
+
+                <div style={{
+                    backgroundColor: scoreColor,
+                    color: '#ffffff',
+                    padding: '8px 18px',
+                    borderRadius: '50px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    marginTop: '0.6rem',
+                    maxWidth: '96%',
+                    boxSizing: 'border-box',
+                    boxShadow: `0 6px 18px ${scoreColor}40`
+                }}>
+                    <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        backgroundColor: '#ffffff',
+                        color: scoreColor,
+                        fontWeight: '900',
+                        fontSize: '0.85rem',
+                        flexShrink: 0
+                    }}>
+                        !
+                    </span>
+                    <span style={{ fontSize: 'clamp(0.72rem, 2.6vw, 0.82rem)', fontWeight: '800', letterSpacing: '0.3px', textTransform: 'uppercase', fontFamily: 'Outfit, sans-serif', textAlign: 'center' }}>
+                        YOUR METABOLIC HEALTH: <strong>{categoryName}</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const Results = ({ scores, onRetake }) => {
+    useEffect(() => {
+        const el = document.querySelector('.results-wrapper');
+        if (el) {
+            const yOffset = -60;
+            const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, []);
+
     const {
         health_score,
         score_category,
@@ -9,18 +208,25 @@ const Results = ({ scores }) => {
         main_concerns
     } = scores;
 
-    // Determine color based on score
-    let scoreColor = '#d9534f'; // Default Red for < 40
+    // Determine 5-color band based on score (matching GliaFit spec)
+    let scoreColor = '#E50914'; // Red (0-19)
     let scoreCategoryName = score_category || 'Significant Opportunity';
 
-    if (health_score >= 85) {
-        scoreColor = primaryColor; // Green
-    } else if (health_score >= 70) {
-        scoreColor = '#f0ad4e'; // Yellow/Orange
-    } else if (health_score >= 55) {
-        scoreColor = '#f0ad4e'; // Orange
+    if (health_score >= 80) {
+        scoreColor = '#1B7E39'; // Excellent (Green)
+        scoreCategoryName = 'EXCELLENT';
+    } else if (health_score >= 60) {
+        scoreColor = '#4CAF50'; // Good (Lime Green)
+        scoreCategoryName = 'GOOD';
     } else if (health_score >= 40) {
-        scoreColor = '#d9534f'; // Red
+        scoreColor = '#FFB300'; // Fair (Yellow/Amber)
+        scoreCategoryName = 'FAIR';
+    } else if (health_score >= 20) {
+        scoreColor = '#FF5722'; // Needs Attention (Orange)
+        scoreCategoryName = 'NEEDS ATTENTION';
+    } else {
+        scoreColor = '#E50914'; // Significant Opportunity (Red)
+        scoreCategoryName = 'SIGNIFICANT OPPORTUNITY';
     }
 
     const handleBookingRedirect = () => {
@@ -29,109 +235,68 @@ const Results = ({ scores }) => {
     };
 
     return (
-        <div style={{ padding: 'clamp(1rem, 4vw, 2rem)', textAlign: 'center', animation: 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+        <div className="results-wrapper" style={{ padding: 'clamp(0.5rem, 3vw, 1.8rem)', textAlign: 'center', animation: 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
             <style>{`
                 @media (max-width: 480px) {
-                    .hide-on-mobile { display: none !important; }
-                    .show-on-mobile { display: inline !important; }
-                }
-                @media (min-width: 481px) {
-                    .show-on-mobile { display: none !important; }
+                    .results-wrapper {
+                        padding: 0.5rem 0.2rem !important;
+                    }
+                    .cta-button {
+                        border-radius: 14px !important;
+                        padding: 0.9rem 1.2rem !important;
+                        font-size: 1rem !important;
+                        line-height: 1.3 !important;
+                    }
                 }
             `}</style>
 
-            <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.6rem, 5vw, 2.2rem)', fontWeight: '800', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
-                Your Health Score Is:
-            </h2>
-
-            <div style={{ margin: '2.5rem 0 2rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{
-                    position: 'relative',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '190px',
-                    height: '190px',
-                    borderRadius: '50%',
-                    background: `conic-gradient(${scoreColor} ${health_score}%, #f0f3f6 ${health_score}%)`,
-                    boxShadow: `0 20px 40px -10px ${scoreColor}40`,
-                    marginBottom: '1.5rem'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '166px',
-                        height: '166px',
-                        borderRadius: '50%',
-                        backgroundColor: '#ffffff',
-                        boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.05)'
-                    }}>
-                        <span style={{ fontSize: '4rem', fontWeight: '800', color: '#1a1f36', lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
-                            {health_score}
-                        </span>
-                        <span style={{ fontSize: '0.9rem', color: '#8792a2', fontFamily: 'Lexend, sans-serif', marginTop: '0.2rem', fontWeight: '600' }}>
-                            OUT OF 100
-                        </span>
-                    </div>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: '1.1rem', color: '#4f566b', fontWeight: '600' }}>
-                        Category:
-                    </span>
-                    <span style={{
-                        display: 'inline-block',
-                        padding: '6px 18px',
-                        backgroundColor: `${scoreColor}15`,
-                        color: scoreColor,
-                        borderRadius: '30px',
-                        fontFamily: 'Outfit, sans-serif',
-                        fontSize: '1.1rem',
-                        fontWeight: '700',
-                        letterSpacing: '0.5px'
-                    }}>
-                        {scoreCategoryName}
-                    </span>
-                </div>
+            <div style={{ margin: '1rem 0 2rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <GliaFitGauge score={health_score} scoreColor={scoreColor} categoryName={scoreCategoryName} />
             </div>
 
             <div style={{
                 textAlign: 'left',
                 backgroundColor: '#ffffff',
-                padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+                padding: 'clamp(1.2rem, 4vw, 2rem)',
                 borderRadius: '20px',
-                boxShadow: '0 15px 35px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.02)',
-                border: '1px solid rgba(220, 227, 235, 0.6)',
-                marginBottom: '2rem'
+                border: '1px solid #e2e8f0',
+                marginBottom: '1.8rem',
+                boxSizing: 'border-box'
             }}>
-                <h3 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', marginBottom: '1.2rem', fontSize: 'clamp(1.2rem, 4vw, 1.4rem)', fontWeight: '700' }}>
+                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '0 0 1.2rem 0', fontSize: 'clamp(1.15rem, 3.5vw, 1.35rem)', fontWeight: '800' }}>
                     Based on What You Shared
                 </h3>
 
+                {/* Primary Goal */}
                 {primary_goal && (
-                    <div style={{ marginBottom: '1.5rem', backgroundColor: '#f8fafc', padding: '1rem 1.2rem', borderRadius: '12px' }}>
-                        <p style={{ margin: 0, fontSize: '0.95rem', color: '#8792a2', fontFamily: 'Lexend, sans-serif', fontWeight: '600' }}>
-                            Your primary goal:
+                    <div style={{
+                        marginBottom: '1.2rem',
+                        backgroundColor: '#f8fafc',
+                        padding: '1rem 1.2rem',
+                        borderRadius: '12px',
+                        border: '1px solid #e2e8f0'
+                    }}>
+                        <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                            Your Primary Goal:
                         </p>
-                        <p style={{ margin: '0.3rem 0 0 0', fontSize: '1.1rem', color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
+                        <p style={{ margin: 0, fontSize: '1.05rem', color: '#0f172a', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
                             {primary_goal}
                         </p>
                     </div>
                 )}
 
+                {/* Main Areas of Concern */}
                 {main_concerns && main_concerns.length > 0 && (
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <p style={{ margin: '0 0 0.8rem 0', fontSize: '1rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontWeight: '600' }}>
-                            Your main areas of concern:
+                    <div style={{ marginBottom: '1.2rem' }}>
+                        <p style={{ margin: '0 0 0.8rem 0', fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                            Your Main Areas of Concern:
                         </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
                                     marginBottom: '0.6rem',
-                                    fontSize: '1.05rem',
-                                    color: '#1a1f36',
+                                    fontSize: '0.98rem',
+                                    color: '#1e293b',
                                     fontFamily: 'Lexend, sans-serif',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -141,13 +306,13 @@ const Results = ({ scores }) => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        width: '24px',
-                                        height: '24px',
+                                        width: '20px',
+                                        height: '20px',
                                         borderRadius: '50%',
                                         backgroundColor: `${primaryColor}15`,
                                         color: primaryColor,
-                                        fontWeight: '700',
-                                        fontSize: '0.9rem',
+                                        fontWeight: '800',
+                                        fontSize: '0.75rem',
                                         flexShrink: 0
                                     }}>
                                         ✓
@@ -159,29 +324,38 @@ const Results = ({ scores }) => {
                     </div>
                 )}
 
+                {/* Category Explanation */}
                 {category_explanation && (
-                    <div style={{ backgroundColor: '#f0f4f8', padding: '1.2rem', borderRadius: '12px', borderLeft: `4px solid ${primaryColor}` }}>
-                        <p style={{ margin: 0, color: '#334155', fontFamily: 'Lexend, sans-serif', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                    <div style={{
+                        backgroundColor: '#f8fafc',
+                        padding: '1rem 1.2rem',
+                        borderRadius: '12px',
+                        border: '1px solid #e2e8f0',
+                        marginTop: '1rem'
+                    }}>
+                        <p style={{ margin: 0, color: '#334155', fontFamily: 'Lexend, sans-serif', fontSize: '0.92rem', lineHeight: '1.6' }}>
                             {category_explanation}
                         </p>
                     </div>
                 )}
 
-                <div style={{ marginTop: '1.5rem', paddingTop: '1.2rem', borderTop: '1px solid #f0f3f6' }}>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#8792a2', fontStyle: 'italic', lineHeight: '1.6', fontFamily: 'Lexend, sans-serif' }}>
+                {/* Disclaimer */}
+                <div style={{ marginTop: '1.2rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic', lineHeight: '1.5', fontFamily: 'Lexend, sans-serif' }}>
                         This score is an educational snapshot based only on the answers you provided. It is not a medical diagnosis and does not replace evaluation by a qualified healthcare professional.
                     </p>
                 </div>
             </div>
 
             <button
+                className="cta-button"
                 onClick={handleBookingRedirect}
                 style={{
-                    background: `linear-gradient(180deg, #009c46 0%, #004b20 100%)`,
+                    background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                     color: '#FFF',
                     padding: 'clamp(1rem, 4vw, 1.2rem) clamp(1rem, 5vw, 2rem)',
                     border: 'none',
-                    borderRadius: '12px',
+                    borderRadius: '50px',
                     cursor: 'pointer',
                     fontSize: 'clamp(1.05rem, 3.8vw, 1.2rem)',
                     fontFamily: 'Outfit, sans-serif',
@@ -190,23 +364,45 @@ const Results = ({ scores }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '12px',
-                    boxShadow: `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`,
+                    boxShadow: `0 8px 20px rgba(0,0,0,0.15)`,
                     transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    letterSpacing: '0.5px',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                    letterSpacing: '0.5px'
                 }}
                 onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.03)';
-                    e.currentTarget.style.boxShadow = `0 15px 35px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.4)`;
+                    e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
+                    e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`;
                 }}
                 onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`;
+                    e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
+                    e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
                 }}
             >
                 Book My Complimentary Consultation
             </button>
+
+            {onRetake && (
+                <div style={{ marginTop: '1.2rem', textAlign: 'center' }}>
+                    <button
+                        onClick={onRetake}
+                        style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: '#64748b',
+                            cursor: 'pointer',
+                            fontSize: '0.95rem',
+                            fontFamily: 'Lexend, sans-serif',
+                            fontWeight: '600',
+                            textDecoration: 'underline',
+                            padding: '0.4rem 1rem',
+                            transition: 'color 0.2s'
+                        }}
+                        onMouseOver={(e) => { e.currentTarget.style.color = '#1e293b'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; }}
+                    >
+                        Retake Health Assessment
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
