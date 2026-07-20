@@ -1,62 +1,31 @@
 {
     "q1": {
-        "Weight that's difficult to lose": 5,
-        "Low energy or fatigue": 5,
-        "Poor sleep": 5,
-        "Blood sugar concerns": 5,
-        "High blood pressure": 5,
-        "High cholesterol": 5,
-        "Brain fog": 5,
-        "High stress": 5,
-        "I take more medications than I'd like": 5,
-        "I don't feel like myself anymore": 5,
-        "max_points": 50
+        "points_per_item": 5,
+        "max_points": 25
     },
     "q3": {
         "Less than 6 months": 0,
         "6–12 months": 3,
         "1–3 years": 6,
-        "More than 3 years": 10
+        "3–5 years": 8,
+        "More than 5 years": 10
     },
     "q4": {
-        "Diets": 2,
-        "Exercise": 2,
-        "Supplements": 2,
-        "Medications": 3,
-        "Weight-loss programs": 3,
-        "I've tried almost everything": 5,
-        "I haven't really tried yet": 0,
-        "max_points": 10
+        "I feel energetic most days.": 0,
+        "I usually crash in the afternoon.": 4,
+        "I rely on caffeine most days.": 7,
+        "I'm tired most of the day.": 11,
+        "I'm exhausted even after sleeping.": 15
     },
     "q5": {
-        "I feel energetic most days.": 0,
-        "I often crash in the afternoon.": 4,
-        "I rely on caffeine most days.": 7,
-        "I'm tired most of the day.": 10
+        "Rarely": 0,
+        "A few times each week": 5,
+        "Daily": 10,
+        "Multiple times per day": 15
     },
     "q6": {
-        "Rarely": 0,
-        "Occasionally": 3,
-        "Daily": 7,
-        "Multiple times per day": 10
-    },
-    "q7": {
-        "Prediabetes": 7,
-        "Type 2 Diabetes": 7,
-        "High Blood Pressure": 7,
-        "High Cholesterol": 7,
-        "Fatty Liver": 7,
-        "Thyroid Concerns": 7,
-        "Sleep Apnea": 7,
-        "None": 0,
-        "max_points": 28
-    },
-    "q8": {
-        "Taking more medications": 6,
-        "Gaining more weight": 6,
-        "Having less energy": 6,
-        "My health continuing to decline": 8,
-        "Not enjoying life the way I'd like": 6
+        "points_per_item": 5,
+        "max_points": 35
     },
     "max_risk_score": 100
 }

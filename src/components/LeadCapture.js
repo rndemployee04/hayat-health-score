@@ -1,10 +1,9 @@
 import { useState } from '@wordpress/element';
-const primaryColor = window.hayatHealthData?.primaryColor || '#2E8B57';
+const primaryColor = window.healthScoreData?.primaryColor || '#2E8B57';
 
 const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
     const [consent, setConsent] = useState(false);
     const [error, setError] = useState('');
 
@@ -12,7 +11,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
         e.preventDefault();
         
         if (!firstName.trim() || !email.trim()) {
-            setError('Please provide your name and email.');
+            setError('Please provide your first name and email address.');
             return;
         }
 
@@ -20,13 +19,14 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
             setError('Please provide a valid email address.');
             return;
         }
+
         if (!consent) {
-            setError('Please agree to receive emails to continue.');
+            setError('Please agree to receive emails to view your results.');
             return;
         }
         
         setError('');
-        onSubmit({ first_name: firstName, email: email, phone: phone });
+        onSubmit({ first_name: firstName, email: email });
     };
 
     const inputStyle = {
@@ -55,12 +55,12 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
 
     return (
         <div style={{ padding: '1rem 0 0 0', textAlign: 'left', animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: '800', letterSpacing: '-0.5px' }}>
-                    Receive Your Personalized Snapshot
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.4rem, 5vw, 2rem)', fontWeight: '800', letterSpacing: '-0.5px' }}>
+                    Your Personalized Health Snapshot Is Ready
                 </h3>
                 <p style={{ color: '#8792a2', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3vw, 1.1rem)', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
-                    You're almost there! Enter your details below to see your Health Score and receive your customized action plan.
+                    Enter your first name and email to view your results and receive your Health Snapshot.
                 </p>
             </div>
 
@@ -74,7 +74,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         type="text" 
                         value={firstName} 
                         onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="e.g., John"
+                        placeholder="e.g., Sarah"
                         required
                         style={inputStyle}
                         onFocus={(e) => { e.target.style.borderColor = primaryColor; e.target.style.boxShadow = `0 0 0 3px ${primaryColor}20`; }}
@@ -90,23 +90,8 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         type="email" 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g., john@example.com"
+                        placeholder="e.g., sarah@example.com"
                         required
-                        style={inputStyle}
-                        onFocus={(e) => { e.target.style.borderColor = primaryColor; e.target.style.boxShadow = `0 0 0 3px ${primaryColor}20`; }}
-                        onBlur={(e) => { e.target.style.borderColor = 'rgba(220, 227, 235, 0.8)'; e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
-                    />
-                </div>
-
-                <div>
-                    <label style={labelStyle}>
-                        Mobile Phone (Optional)
-                    </label>
-                    <input 
-                        type="tel" 
-                        value={phone} 
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="e.g., 555-0123"
                         style={inputStyle}
                         onFocus={(e) => { e.target.style.borderColor = primaryColor; e.target.style.boxShadow = `0 0 0 3px ${primaryColor}20`; }}
                         onBlur={(e) => { e.target.style.borderColor = 'rgba(220, 227, 235, 0.8)'; e.target.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
@@ -121,8 +106,8 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         onChange={(e) => setConsent(e.target.checked)}
                         style={{ marginTop: '0.25rem', width: '22px', height: '22px', cursor: 'pointer', accentColor: primaryColor, border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }}
                     />
-                    <label htmlFor="consent" style={{ fontSize: '1rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.5', cursor: 'pointer' }}>
-                        I agree to receive emails from Hayat Tayyiba. I understand I can unsubscribe at any time.
+                    <label htmlFor="consent" style={{ fontSize: '0.95rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.5', cursor: 'pointer' }}>
+                        I agree to receive my assessment report and updates via email. I understand that I may unsubscribe at any time.
                     </label>
                 </div>
                 
@@ -176,7 +161,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                             }
                         }}
                     >
-                        {isSubmitting ? 'Generating...' : 'Get My Health Score'}
+                        {isSubmitting ? 'Analyzing Results...' : 'View My Results'}
                     </button>
                 </div>
             </form>

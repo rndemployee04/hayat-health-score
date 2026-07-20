@@ -4,9 +4,9 @@ import { questions } from '../data/questions';
 import ProgressBar from './ProgressBar';
 import LeadCapture from './LeadCapture';
 import Results from './Results';
-const primaryColor = window.hayatHealthData?.primaryColor || '#2E8B57';
+const primaryColor = window.healthScoreData?.primaryColor || '#2E8B57';
 
-const STORAGE_KEY = 'hayat_health_score_state';
+const STORAGE_KEY = 'health_score_state';
 
 const Questionnaire = () => {
     const getInitialState = () => {
@@ -47,9 +47,9 @@ const Questionnaire = () => {
 
     useEffect(() => {
         const handleMouseLeave = (e) => {
-            if (e.clientY <= 0 && isStarted && status !== 'success' && !sessionStorage.getItem('hayat_exit_intent_shown')) {
+            if (e.clientY <= 0 && isStarted && status !== 'success' && !sessionStorage.getItem('health_exit_intent_shown')) {
                 setShowExitIntent(true);
-                sessionStorage.setItem('hayat_exit_intent_shown', 'true');
+                sessionStorage.setItem('health_exit_intent_shown', 'true');
             }
         };
         document.addEventListener('mouseleave', handleMouseLeave);
@@ -150,7 +150,7 @@ const Questionnaire = () => {
                     }
                 `}</style>
                 <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.8rem, 6vw, 2.5rem)', fontWeight: '800', marginBottom: '1.5rem', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
-                    The 60-Second Hayat Tayyiba Health Score
+                    60-Second Metabolic Health Assessment
                 </h2>
                 <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1rem, 3.5vw, 1.2rem)', marginBottom: 'clamp(2rem, 5vw, 3rem)', lineHeight: '1.7', maxWidth: '90%', margin: '0 auto clamp(2rem, 5vw, 3rem) auto' }}>
                     Discover your personalized health score, identify your top opportunities for vitality, and take the first step towards a healthier you. It only takes a minute.
@@ -208,12 +208,15 @@ const Questionnaire = () => {
         setAnswers(prev => {
             const prevAnswers = prev[currentQuestion.id] || [];
             let newAnswers;
-            if (option === 'None' || option === "I haven't really tried yet") {
-                newAnswers = [option];
-            } else if (prevAnswers.includes('None') || prevAnswers.includes("I haven't really tried yet")) {
+            const exclusiveOptions = ['None', "I haven't really tried yet", "I haven't seriously tried yet."];
+            
+            if (exclusiveOptions.includes(option)) {
                 newAnswers = [option];
             } else {
-                newAnswers = prevAnswers.includes(option) ? prevAnswers.filter(item => item !== option) : [...prevAnswers, option];
+                const filteredPrev = prevAnswers.filter(item => !exclusiveOptions.includes(item));
+                newAnswers = filteredPrev.includes(option)
+                    ? filteredPrev.filter(item => item !== option)
+                    : [...filteredPrev, option];
             }
             return { ...prev, [currentQuestion.id]: newAnswers };
         });
@@ -240,7 +243,7 @@ const Questionnaire = () => {
             {showExitIntent && (
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)', zIndex: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '3rem', textAlign: 'center' }}>
                     <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: '800', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
-                    <p style={{ marginBottom: '2.5rem', fontSize: '1.2rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.6' }}>You're only a few questions away from seeing your personalized Hayat Tayyiba Health Score.</p>
+                    <p style={{ marginBottom: '2.5rem', fontSize: '1.2rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.6' }}>You're only a few questions away from seeing your personalized Health Score.</p>
                     <button onClick={() => setShowExitIntent(false)} style={{ background: `linear-gradient(180deg, #009c46 0%, #004b20 100%)`, color: '#FFF', padding: '1.2rem 3rem', border: '3px solid #E8F5E9', borderRadius: '12px', cursor: 'pointer', fontSize: '1.25rem', fontFamily: 'Outfit, sans-serif', fontWeight: '700', boxShadow: `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`, textShadow: '0 1px 2px rgba(0,0,0,0.2)', transition: 'all 0.3s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = `0 15px 35px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.4)`; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`; }}>Continue Assessment</button>
                 </div>
             )}
