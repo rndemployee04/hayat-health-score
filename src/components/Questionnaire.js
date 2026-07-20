@@ -11,8 +11,21 @@ const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
 const primaryColor = btnBgBottom;
 
 const STORAGE_KEY = 'health_score_state';
+const COMPLETED_KEY = 'health_score_completed_results';
 
 const Questionnaire = () => {
+    const getInitialCompleted = () => {
+        const saved = localStorage.getItem(COMPLETED_KEY);
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                console.error("Failed to parse completed state");
+            }
+        }
+        return null;
+    };
+
     const getInitialState = () => {
         const urlParams = new URLSearchParams(window.location.search);
         let utm_source = urlParams.get('utm_source') || urlParams.get('source') || '';
@@ -32,22 +45,23 @@ const Questionnaire = () => {
         return { currentStepIndex: 0, answers: {}, utm_source };
     };
 
+    const initialCompleted = getInitialCompleted();
     const initialState = getInitialState();
     const [currentStepIndex, setCurrentStepIndex] = useState(initialState.currentStepIndex);
     const [answers, setAnswers] = useState(initialState.answers);
     const [utmSource, setUtmSource] = useState(initialState.utm_source);
-    const [status, setStatus] = useState('idle');
+    const [status, setStatus] = useState(initialCompleted ? 'success' : 'idle');
     const [showLeadCapture, setShowLeadCapture] = useState(false);
     const [showExitIntent, setShowExitIntent] = useState(false);
-    const [finalScores, setFinalScores] = useState(null);
+    const [finalScores, setFinalScores] = useState(initialCompleted);
     const [isStarted, setIsStarted] = useState(initialState.currentStepIndex > 0 || Object.keys(initialState.answers).length > 0);
     const containerRef = wp.element.useRef(null);
 
     useEffect(() => {
-        if (isStarted) {
+        if (isStarted && !finalScores) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentStepIndex, answers, utm_source: utmSource }));
         }
-    }, [currentStepIndex, answers, utmSource, isStarted]);
+    }, [currentStepIndex, answers, utmSource, isStarted, finalScores]);
 
     useEffect(() => {
         const handleMouseLeave = (e) => {
@@ -75,6 +89,7 @@ const Questionnaire = () => {
     };
 
     const handleNext = () => {
+        if (isNextDisabled()) return;
         if (currentStepIndex < questions.length - 1) {
             setCurrentStepIndex(prev => prev + 1);
             scrollToTop();
@@ -97,13 +112,27 @@ const Questionnaire = () => {
             const payload = { ...contactInfo, answers, utm_source: utmSource };
             const response = await submitAssessment(payload);
             setFinalScores(response.scores);
+            localStorage.setItem(COMPLETED_KEY, JSON.stringify(response.scores));
             localStorage.removeItem(STORAGE_KEY);
             setStatus('success');
             setShowLeadCapture(false);
+            setTimeout(() => scrollToTop(), 50);
         } catch (error) {
             console.error(error);
             setStatus('error');
         }
+    };
+
+    const handleRetake = () => {
+        localStorage.removeItem(COMPLETED_KEY);
+        localStorage.removeItem(STORAGE_KEY);
+        setFinalScores(null);
+        setStatus('idle');
+        setShowLeadCapture(false);
+        setCurrentStepIndex(0);
+        setAnswers({});
+        setIsStarted(false);
+        scrollToTop();
     };
 
     const cardStyle = {
@@ -127,7 +156,7 @@ const Questionnaire = () => {
     if (status === 'success' && finalScores) {
         return (
             <div style={cardStyle}>
-                <Results scores={finalScores} />
+                <Results scores={finalScores} onRetake={handleRetake} />
             </div>
         );
     }
@@ -156,7 +185,7 @@ const Questionnaire = () => {
                 <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.8rem, 6vw, 2.5rem)', fontWeight: '800', marginBottom: '1.5rem', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                     GliaFit – 60-Second Health Score
                 </h2>
-                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1rem, 3.5vw, 1.2rem)', marginBottom: 'clamp(2rem, 5vw, 3rem)', lineHeight: '1.7', maxWidth: '90%', margin: '0 auto clamp(2rem, 5vw, 3rem) auto' }}>
+                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1.05rem, 3.5vw, 1.2rem)', marginBottom: 'clamp(2rem, 5vw, 3rem)', lineHeight: '1.7', maxWidth: '90%', margin: '0 auto clamp(2rem, 5vw, 3rem) auto' }}>
                     Discover your personalized health score, identify your top opportunities for vitality, and take the first step towards a healthier you. It only takes a minute.
                 </p>
                 <button
@@ -236,8 +265,15 @@ const Questionnaire = () => {
     };
 
     return (
-        <div ref={containerRef} style={cardStyle}>
-            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+        <div ref={containerRef} style={{
+            ...cardStyle,
+            padding: 'clamp(1rem, 3.5vw, 1.8rem)',
+            minHeight: 'auto',
+            margin: '0.8rem auto'
+        }}>
+            <style>{`
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            `}</style>
 
             {showExitIntent && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', zIndex: 999999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1.5rem' }}>
@@ -277,45 +313,37 @@ const Questionnaire = () => {
 
             <ProgressBar currentStep={currentStepIndex + 1} totalSteps={questions.length} />
 
-            <h3 style={{ color: '#1a1f36', marginTop: '1rem', marginBottom: '0.5rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.3' }}>{currentQuestion.title}</h3>
-            {currentQuestion.subtitle && <p style={{ marginBottom: '0', fontStyle: 'italic', color: '#8792a2', fontSize: 'clamp(0.9rem, 3.5vw, 1.05rem)', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
+            <h3 style={{ color: '#1a1f36', marginTop: '0.6rem', marginBottom: '0.3rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.3rem, 4vw, 1.65rem)', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
+            {currentQuestion.subtitle && <p style={{ marginBottom: '0', fontStyle: 'italic', color: '#64748b', fontSize: 'clamp(0.85rem, 3vw, 1rem)', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: 'clamp(1.5rem, 4vw, 2rem)', marginBottom: '2.5rem', flex: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '1rem', marginBottom: '1.2rem' }}>
                 {currentQuestion.type === 'checkbox' && currentQuestion.options.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', padding: 'clamp(0.8rem, 3vw, 1.2rem) clamp(1rem, 4vw, 1.5rem)', border: '1px solid', borderColor: currentAnswer.includes(option) ? primaryColor : 'rgba(220, 227, 235, 0.8)', borderRadius: '12px', backgroundColor: currentAnswer.includes(option) ? `${primaryColor}08` : '#ffffff', outline: 'none', userSelect: 'none', transition: 'all 0.2s', boxShadow: currentAnswer.includes(option) ? `0 0 0 2px ${primaryColor}30` : 'none' }}>
-                        <input type="checkbox" checked={currentAnswer.includes(option)} onChange={() => handleOptionToggle(option)} style={{ width: '24px', height: '24px', accentColor: primaryColor, cursor: 'pointer', border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }} />
-                        <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1rem, 4vw, 1.2rem)', color: currentAnswer.includes(option) ? '#1a1f36' : '#4f566b', fontWeight: currentAnswer.includes(option) ? '600' : '400' }}>{option}</span>
+                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', padding: '0.75rem 1rem', border: '1px solid', borderColor: currentAnswer.includes(option) ? primaryColor : 'rgba(220, 227, 235, 0.85)', borderRadius: '12px', backgroundColor: currentAnswer.includes(option) ? `${primaryColor}0C` : '#ffffff', outline: 'none', userSelect: 'none', transition: 'all 0.2s', boxShadow: currentAnswer.includes(option) ? `0 0 0 2px ${primaryColor}30` : '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <input type="checkbox" checked={currentAnswer.includes(option)} onChange={() => handleOptionToggle(option)} style={{ width: '22px', height: '22px', accentColor: primaryColor, cursor: 'pointer', border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }} />
+                        <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3.2vw, 1.1rem)', color: currentAnswer.includes(option) ? '#1a1f36' : '#334155', fontWeight: currentAnswer.includes(option) ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
                     </label>
                 ))}
 
                 {currentQuestion.type === 'radio' && currentQuestion.options.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', padding: 'clamp(0.8rem, 3vw, 1.2rem) clamp(1rem, 4vw, 1.5rem)', border: '1px solid', borderColor: currentAnswer === option ? primaryColor : 'rgba(220, 227, 235, 0.8)', borderRadius: '12px', backgroundColor: currentAnswer === option ? `${primaryColor}08` : '#ffffff', outline: 'none', userSelect: 'none', transition: 'all 0.2s', boxShadow: currentAnswer === option ? `0 0 0 2px ${primaryColor}30` : 'none' }}>
-                        <input type="radio" name={`radio-${currentQuestion.id}`} checked={currentAnswer === option} onChange={() => handleRadioSelect(option)} style={{ width: '24px', height: '24px', accentColor: primaryColor, cursor: 'pointer', border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }} />
-                        <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1rem, 4vw, 1.2rem)', color: currentAnswer === option ? '#1a1f36' : '#4f566b', fontWeight: currentAnswer === option ? '600' : '400' }}>{option}</span>
+                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', padding: '0.75rem 1rem', border: '1px solid', borderColor: currentAnswer === option ? primaryColor : 'rgba(220, 227, 235, 0.85)', borderRadius: '12px', backgroundColor: currentAnswer === option ? `${primaryColor}0C` : '#ffffff', outline: 'none', userSelect: 'none', transition: 'all 0.2s', boxShadow: currentAnswer === option ? `0 0 0 2px ${primaryColor}30` : '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <input type="radio" name={`radio-${currentQuestion.id}`} checked={currentAnswer === option} onChange={() => handleRadioSelect(option)} style={{ width: '22px', height: '22px', accentColor: primaryColor, cursor: 'pointer', border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }} />
+                        <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3.2vw, 1.1rem)', color: currentAnswer === option ? '#1a1f36' : '#334155', fontWeight: currentAnswer === option ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
                     </label>
                 ))}
 
                 {currentQuestion.type === 'slider' && (
-                    <div style={{ padding: 'clamp(1.2rem, 4vw, 2rem) clamp(0.8rem, 3vw, 1rem)', backgroundColor: '#f8fafc', borderRadius: '16px', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
+                    <div style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '14px', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
                         <input type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer', outline: 'none', accentColor: '#1a1f36' }} />
-                        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', fontWeight: '800', color: '#1a1f36', fontFamily: 'Outfit, sans-serif' }}>{currentAnswer}</div>
+                        <div style={{ textAlign: 'center', marginTop: '0.8rem', fontSize: '1.5rem', fontWeight: '800', color: '#1a1f36', fontFamily: 'Outfit, sans-serif' }}>{currentAnswer}</div>
                     </div>
                 )}
             </div>
 
-            {currentQuestion.insight && (
-                <div style={{ backgroundColor: `${btnBgBottom}0F`, padding: 'clamp(1rem, 4vw, 1.5rem)', borderRadius: '12px', borderLeft: `4px solid ${btnBgBottom}`, marginBottom: '2.5rem' }}>
-                    <p style={{ margin: 0, color: '#1a1f36', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.9rem, 3vw, 1rem)', lineHeight: '1.6' }}>
-                        <strong style={{ fontWeight: '700', color: btnBgBottom }}>Insight:</strong> {currentQuestion.insight}
-                    </p>
-                </div>
-            )}
-
-            <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                 {currentStepIndex > 0 && (
                     <button
                         onClick={handleBack}
-                        style={{ backgroundColor: 'transparent', color: '#4f566b', padding: 'clamp(0.8rem, 3vw, 1.2rem)', border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer', fontSize: 'clamp(1rem, 3vw, 1.15rem)', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px', transition: 'all 0.2s', textAlign: 'center' }}
+                        style={{ backgroundColor: 'transparent', color: '#4f566b', padding: '0.75rem 1.2rem', border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer', fontSize: '1rem', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 100px', transition: 'all 0.2s', textAlign: 'center' }}
                         onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
                         onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
                     >
@@ -328,28 +356,28 @@ const Questionnaire = () => {
                     style={{
                         background: isNextDisabled() ? '#cbd5e1' : `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                         color: isNextDisabled() ? '#64748b' : '#FFF',
-                        padding: 'clamp(0.8rem, 3vw, 1.2rem)',
+                        padding: '0.75rem 1.4rem',
                         border: 'none',
                         borderRadius: '50px',
                         cursor: isNextDisabled() ? 'not-allowed' : 'pointer',
-                        fontSize: 'clamp(1rem, 3.5vw, 1.15rem)',
+                        fontSize: '1rem',
                         fontFamily: 'Outfit, sans-serif',
                         fontWeight: '700',
-                        flex: '2 1 200px',
-                        boxShadow: isNextDisabled() ? 'none' : `0 8px 20px rgba(0,0,0,0.15)`,
+                        flex: '2 1 180px',
+                        boxShadow: isNextDisabled() ? 'none' : `0 6px 16px rgba(0,0,0,0.12)`,
                         transition: 'all 0.3s',
                         textAlign: 'center'
                     }}
                     onMouseOver={(e) => {
                         if (!isNextDisabled()) {
                             e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
-                            e.currentTarget.style.boxShadow = `0 12px 25px rgba(0,0,0,0.2)`;
+                            e.currentTarget.style.boxShadow = `0 10px 20px rgba(0,0,0,0.18)`;
                         }
                     }}
                     onMouseOut={(e) => {
                         if (!isNextDisabled()) {
                             e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
-                            e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
+                            e.currentTarget.style.boxShadow = `0 6px 16px rgba(0,0,0,0.12)`;
                         }
                     }}
                 >
