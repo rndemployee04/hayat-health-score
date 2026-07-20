@@ -54,6 +54,7 @@ jobs:
           cd ..
           mv hayat-health-score health-score
           zip -r health-score-${{ github.ref_name }}.zip health-score/ -x "*.git*"
+          mv health-score hayat-health-score
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
