@@ -1,5 +1,4 @@
 // wp.element is the WordPress abstraction of React and ReactDOM.
-// This allows us to use React without needing a complex build step (Webpack/Babel) immediately.
 const { createElement } = wp.element;
 const { render } = wp.element;
 
@@ -28,7 +27,7 @@ const HealthScoreApp = () => {
                     fontSize: '2rem'
                 } 
             },
-            'Hayat Tayyiba Health Score'
+            'Health Score Assessment'
         ),
         createElement(
             'p',
@@ -40,14 +39,14 @@ const HealthScoreApp = () => {
                     lineHeight: '1.5'
                 }
             },
-            'The React application has successfully mounted. The design tokens have been verified and applied. Ready for Issue 2!'
+            'The React application has successfully mounted.'
         )
     );
 };
 
 // Mount the React app to the DOM once it's fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    const rootElement = document.getElementById('hayat-health-score-root');
+    const rootElement = document.getElementById('health-score-root');
     if (rootElement) {
         render(createElement(HealthScoreApp), rootElement);
     }

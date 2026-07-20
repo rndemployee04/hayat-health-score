@@ -10,7 +10,7 @@ const HealthScoreApp = () => {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    const rootElement = document.getElementById('hayat-health-score-root');
+    const rootElement = document.getElementById('health-score-root');
     if (rootElement) {
         const root = createRoot(rootElement);
         root.render(<HealthScoreApp />);

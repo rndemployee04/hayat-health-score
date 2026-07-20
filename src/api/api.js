@@ -1,6 +1,6 @@
 export const submitAssessment = async (answers) => {
-    // hayatHealthData is passed via wp_localize_script in PHP
-    const { restUrl, nonce } = window.hayatHealthData;
+    // healthScoreData is passed via wp_localize_script in PHP
+    const { restUrl, nonce } = window.healthScoreData || {};
 
     const response = await fetch(restUrl, {
         method: 'POST',

@@ -1,4 +1,4 @@
-const primaryColor = window.hayatHealthData?.primaryColor || '#2E8B57';
+const primaryColor = window.healthScoreData?.primaryColor || '#2E8B57';
 const ProgressBar = ({ currentStep, totalSteps }) => {
     const percentage = Math.round((currentStep / totalSteps) * 100);
 
