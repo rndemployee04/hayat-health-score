@@ -16,7 +16,6 @@ class Health_Score_Email {
             return;
         }
 
-        // Get the fixed PDF path
         $pdf_path = Health_Score_PDF::generate_and_save_pdf( $assessment_id );
 
         if ( ! $pdf_path || ! file_exists( $pdf_path ) ) {
@@ -24,7 +23,6 @@ class Health_Score_Email {
             return;
         }
 
-        // Get dynamic booking URL
         $booking_url = get_option( 'health_score_booking_url', '' );
 
         $first_name   = ! empty( $assessment->first_name ) ? $assessment->first_name : 'Friend';
@@ -47,12 +45,11 @@ class Health_Score_Email {
             $concerns_list .= "• {$concern}\n";
         }
 
-        // Prepare email
         $to      = $assessment->email;
         $subject = "{$first_name}, Your Health Snapshot Is Ready";
 
         $message  = "Hi {$first_name},\n\n";
-        $message .= "Thank you for completing the 60-Second Metabolic Health Assessment.\n\n";
+        $message .= "Thank you for completing the GliaFit – 60-Second Health Score.\n\n";
         $message .= "Your Health Score is:\n\n";
         $message .= "{$health_score} / 100\n\n";
         $message .= "Category:\n";
@@ -73,7 +70,6 @@ class Health_Score_Email {
 
         $attachments = [ $pdf_path ];
 
-        // Send email
         $sent = wp_mail( $to, $subject, $message, $headers, $attachments );
 
         if ( ! $sent ) {

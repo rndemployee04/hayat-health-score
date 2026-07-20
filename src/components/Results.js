@@ -1,4 +1,8 @@
-const primaryColor = window.healthScoreData?.primaryColor || '#2E8B57';
+const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
+const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
+const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
+const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
+const primaryColor = btnBgBottom;
 
 const Results = ({ scores }) => {
     const {
@@ -177,11 +181,11 @@ const Results = ({ scores }) => {
             <button
                 onClick={handleBookingRedirect}
                 style={{
-                    background: `linear-gradient(180deg, #009c46 0%, #004b20 100%)`,
+                    background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                     color: '#FFF',
                     padding: 'clamp(1rem, 4vw, 1.2rem) clamp(1rem, 5vw, 2rem)',
                     border: 'none',
-                    borderRadius: '12px',
+                    borderRadius: '50px',
                     cursor: 'pointer',
                     fontSize: 'clamp(1.05rem, 3.8vw, 1.2rem)',
                     fontFamily: 'Outfit, sans-serif',
@@ -190,19 +194,17 @@ const Results = ({ scores }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '12px',
-                    boxShadow: `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`,
+                    boxShadow: `0 8px 20px rgba(0,0,0,0.15)`,
                     transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    letterSpacing: '0.5px',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                    letterSpacing: '0.5px'
                 }}
                 onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.03)';
-                    e.currentTarget.style.boxShadow = `0 15px 35px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.4)`;
+                    e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
+                    e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`;
                 }}
                 onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3)`;
+                    e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
+                    e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
                 }}
             >
                 Book My Complimentary Consultation
