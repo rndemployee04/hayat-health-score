@@ -13,7 +13,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         if (!firstName.trim() || !email.trim()) {
             setError('Please provide your first name and email address.');
             return;
@@ -28,17 +28,17 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
             setError('Please agree to receive emails to view your results.');
             return;
         }
-        
+
         setError('');
         onSubmit({ first_name: firstName, email: email });
     };
 
     const inputStyle = {
-        width: '100%', 
-        padding: '1rem 1.25rem', 
-        borderRadius: '12px', 
-        border: '1px solid rgba(220, 227, 235, 0.8)', 
-        fontSize: '1.05rem', 
+        width: '100%',
+        padding: '1rem 1.25rem',
+        borderRadius: '12px',
+        border: '1px solid rgba(220, 227, 235, 0.8)',
+        fontSize: '1.05rem',
         fontFamily: 'Outfit, sans-serif',
         backgroundColor: '#ffffff',
         color: '#1a1f36',
@@ -49,10 +49,10 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     };
 
     const labelStyle = {
-        display: 'block', 
-        marginBottom: '0.6rem', 
-        fontFamily: 'Outfit, sans-serif', 
-        color: '#4f566b', 
+        display: 'block',
+        marginBottom: '0.6rem',
+        fontFamily: 'Outfit, sans-serif',
+        color: '#4f566b',
         fontWeight: '600',
         fontSize: '0.95rem'
     };
@@ -61,7 +61,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
         <div style={{ padding: '1rem 0 0 0', textAlign: 'left', animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                 <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.4rem, 5vw, 2rem)', fontWeight: '800', letterSpacing: '-0.5px' }}>
-                    Your Personalized Health Snapshot Is Ready
+                    Your Personalized Health Snapshot Is Ready!!!
                 </h3>
                 <p style={{ color: '#8792a2', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3vw, 1.1rem)', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
                     Enter your first name and email to view your results and receive your Health Snapshot.
@@ -69,14 +69,14 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', backgroundColor: '#ffffff', padding: 'clamp(1.5rem, 5vw, 2.5rem)', borderRadius: '20px', boxShadow: '0 15px 35px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.02)', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
-                
+
                 <div>
                     <label style={labelStyle}>
                         First Name <span style={{ color: '#d9534f' }}>*</span>
                     </label>
-                    <input 
-                        type="text" 
-                        value={firstName} 
+                    <input
+                        type="text"
+                        value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="e.g., Sarah"
                         required
@@ -90,9 +90,9 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                     <label style={labelStyle}>
                         Email Address <span style={{ color: '#d9534f' }}>*</span>
                     </label>
-                    <input 
-                        type="email" 
-                        value={email} 
+                    <input
+                        type="email"
+                        value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="e.g., sarah@example.com"
                         required
@@ -103,10 +103,10 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginTop: '0.5rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '12px' }}>
-                    <input 
-                        type="checkbox" 
-                        id="consent" 
-                        checked={consent} 
+                    <input
+                        type="checkbox"
+                        id="consent"
+                        checked={consent}
                         onChange={(e) => setConsent(e.target.checked)}
                         style={{ marginTop: '0.25rem', width: '22px', height: '22px', cursor: 'pointer', accentColor: primaryColor, border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }}
                     />
@@ -114,7 +114,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         I agree to receive my assessment report and updates via email. I understand that I may unsubscribe at any time.
                     </label>
                 </div>
-                
+
                 {error && (
                     <div style={{ padding: '0.75rem 1rem', backgroundColor: '#fef2f2', borderLeft: '4px solid #ef4444', borderRadius: '4px' }}>
                         <p style={{ color: '#b91c1c', margin: 0, fontSize: '0.95rem', fontWeight: '500' }}>{error}</p>
@@ -122,7 +122,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                 )}
 
                 <div style={{ marginTop: 'clamp(1rem, 4vw, 1.5rem)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                    <button 
+                    <button
                         type="button"
                         onClick={onBack}
                         style={{
@@ -137,34 +137,34 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         Back
                     </button>
 
-                    <button 
+                    <button
                         type="submit"
                         disabled={isSubmitting}
                         style={{
-                            background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`, 
+                            background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                             color: '#FFF', padding: 'clamp(0.8rem, 3vw, 1.2rem)',
                             border: 'none', borderRadius: '50px', cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                            opacity: isSubmitting ? 0.7 : 1, fontSize: 'clamp(1rem, 3.5vw, 1.15rem)', fontFamily: 'Outfit, sans-serif', 
+                            opacity: isSubmitting ? 0.7 : 1, fontSize: 'clamp(1rem, 3.5vw, 1.15rem)', fontFamily: 'Outfit, sans-serif',
                             fontWeight: '700', flex: '2 1 200px',
                             boxShadow: `0 8px 20px rgba(0,0,0,0.15)`,
                             transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                             letterSpacing: '0.5px',
                             textAlign: 'center'
                         }}
-                        onMouseOver={(e) => { 
+                        onMouseOver={(e) => {
                             if (!isSubmitting) {
                                 e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
-                                e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`; 
+                                e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`;
                             }
                         }}
-                        onMouseOut={(e) => { 
+                        onMouseOut={(e) => {
                             if (!isSubmitting) {
                                 e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
-                                e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`; 
+                                e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
                             }
                         }}
                     >
-                        {isSubmitting ? 'Analyzing Results...' : 'View My Results'}
+                        {isSubmitting ? 'Loading Results...' : 'View My Results'}
                     </button>
                 </div>
             </form>
