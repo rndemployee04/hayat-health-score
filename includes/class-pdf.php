@@ -154,20 +154,27 @@ class Health_Score_PDF {
 
         // Render PDF via Dompdf
         try {
+            $upload_dir = wp_upload_dir();
+            $pdf_dir    = $upload_dir['basedir'] . '/health-snapshots';
+            $font_dir   = $pdf_dir . '/fonts';
+
+            if ( ! file_exists( $pdf_dir ) ) {
+                wp_mkdir_p( $pdf_dir );
+            }
+            if ( ! file_exists( $font_dir ) ) {
+                wp_mkdir_p( $font_dir );
+            }
+
             $options = new Options();
             $options->set( 'isRemoteEnabled', true );
             $options->set( 'isHtml5ParserEnabled', true );
+            $options->set( 'fontDir', $font_dir );
+            $options->set( 'fontCache', $font_dir );
 
             $dompdf = new Dompdf( $options );
             $dompdf->loadHtml( $html );
             $dompdf->setPaper( 'A4', 'portrait' );
             $dompdf->render();
-
-            $upload_dir = wp_upload_dir();
-            $pdf_dir    = $upload_dir['basedir'] . '/health-snapshots';
-            if ( ! file_exists( $pdf_dir ) ) {
-                wp_mkdir_p( $pdf_dir );
-            }
 
             $filename = 'GliaFit_Health_Snapshot_' . $assessment_id . '.pdf';
             $pdf_path = $pdf_dir . '/' . $filename;
