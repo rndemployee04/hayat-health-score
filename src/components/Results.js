@@ -1,4 +1,4 @@
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
@@ -26,6 +26,9 @@ function describeArc(x, y, radius, startDeg, endDeg) {
 }
 
 const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
+    const [displayedScore, setDisplayedScore] = useState(0);
+    const [animatedAngle, setAnimatedAngle] = useState(0);
+
     // 5 Gauge Bands matching GliaFit spec image
     const bands = [
         { label: 'SIGNIFICANT OPPORTUNITY', range: '0–19', color: '#E50914', start: 0, end: 35, textX: 60, textY: 108 },
@@ -35,9 +38,40 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
         { label: 'EXCELLENT', range: '80–100', color: '#1B7E39', start: 144, end: 180, textX: 440, textY: 108 }
     ];
 
+    useEffect(() => {
+        const targetScore = Math.min(100, Math.max(0, score));
+        const targetAngle = (targetScore / 100) * 180;
+        const duration = 1200; // 1.2s smooth needle sweep
+        let startTime = null;
+        let animationFrameId = null;
+
+        const animate = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+
+            // Smooth cubic ease-out curve for needle sweep
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+
+            setDisplayedScore(Math.round(easeOut * targetScore));
+            setAnimatedAngle(easeOut * targetAngle);
+
+            if (progress < 1) {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        };
+
+        const timer = setTimeout(() => {
+            animationFrameId = requestAnimationFrame(animate);
+        }, 150);
+
+        return () => {
+            clearTimeout(timer);
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        };
+    }, [score]);
+
     // Center = (250, 175), R = 140
-    const scoreAngle = Math.min(180, Math.max(0, (score / 100) * 180));
-    const needleTip = polarToCartesian(250, 175, 106, scoreAngle);
+    const needleTip = polarToCartesian(250, 175, 106, animatedAngle);
 
     // Ticks run from 0° to 180°
     const ticks = [];
@@ -47,13 +81,9 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
 
     return (
         <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto', fontFamily: 'Outfit, sans-serif', boxSizing: 'border-box' }}>
-            {/* Header Title */}
-            <div style={{ fontSize: 'clamp(0.85rem, 3.5vw, 1.05rem)', fontWeight: '800', color: '#07689F', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '0.6rem', textAlign: 'center' }}>
-                YOUR GLIAFIT METABOLIC HEALTH GAUGE™
-            </div>
 
-            {/* SVG viewBox tightly cropped around arc (25 -30 450 235) with generous top space for labels */}
-            <svg viewBox="25 -30 450 235" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+            {/* SVG viewBox cropped around arc */}
+            <svg viewBox="25 -20 450 220" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
                 <defs>
                     <filter id="needle-shadow" x="-30%" y="-30%" width="160%" height="160%">
                         <feDropShadow dx="0" dy="3" stdDeviation="3" floodOpacity="0.25" />
@@ -132,7 +162,6 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                         stroke="#1e293b"
                         strokeWidth="7.5"
                         strokeLinecap="round"
-                        style={{ transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
                     />
                     <circle cx="250" cy="175" r="10" fill="#1e293b" />
                     <circle cx="250" cy="175" r="4" fill="#ffffff" />
@@ -143,7 +172,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
             <div style={{ marginTop: '0.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                     <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '900', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
-                        {score}
+                        {displayedScore}
                     </span>
                     <span style={{ fontSize: 'clamp(1rem, 3.2vw, 1.25rem)', fontWeight: '700', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
                         /100
@@ -255,7 +284,7 @@ const Results = ({ scores, onRetake }) => {
             </div>
 
             <div style={{
-                textAlign: 'left',
+                textAlign: 'center',
                 backgroundColor: '#ffffff',
                 padding: 'clamp(1.2rem, 4vw, 2rem)',
                 borderRadius: '20px',
@@ -263,7 +292,7 @@ const Results = ({ scores, onRetake }) => {
                 marginBottom: '1.8rem',
                 boxSizing: 'border-box'
             }}>
-                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '0 0 1.2rem 0', fontSize: 'clamp(1.15rem, 3.5vw, 1.35rem)', fontWeight: '800' }}>
+                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '0 0 1.2rem 0', fontSize: 'clamp(1.15rem, 3.5vw, 1.35rem)', fontWeight: '800', textAlign: 'center' }}>
                     Based on What You Shared
                 </h3>
 
@@ -274,7 +303,8 @@ const Results = ({ scores, onRetake }) => {
                         backgroundColor: '#f8fafc',
                         padding: '1rem 1.2rem',
                         borderRadius: '12px',
-                        border: '1px solid #e2e8f0'
+                        border: '1px solid #e2e8f0',
+                        textAlign: 'center'
                     }}>
                         <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             Your Primary Goal:
@@ -287,11 +317,11 @@ const Results = ({ scores, onRetake }) => {
 
                 {/* Main Areas of Concern */}
                 {main_concerns && main_concerns.length > 0 && (
-                    <div style={{ marginBottom: '1.2rem' }}>
+                    <div style={{ marginBottom: '1.2rem', textAlign: 'center' }}>
                         <p style={{ margin: '0 0 0.8rem 0', fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             Your Main Areas of Concern:
                         </p>
-                        <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'inline-block', textAlign: 'left' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
                                     marginBottom: '0.6rem',
@@ -331,7 +361,8 @@ const Results = ({ scores, onRetake }) => {
                         padding: '1rem 1.2rem',
                         borderRadius: '12px',
                         border: '1px solid #e2e8f0',
-                        marginTop: '1rem'
+                        marginTop: '1rem',
+                        textAlign: 'center'
                     }}>
                         <p style={{ margin: 0, color: '#334155', fontFamily: 'Lexend, sans-serif', fontSize: '0.92rem', lineHeight: '1.6' }}>
                             {category_explanation}
@@ -340,7 +371,7 @@ const Results = ({ scores, onRetake }) => {
                 )}
 
                 {/* Disclaimer */}
-                <div style={{ marginTop: '1.2rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
+                <div style={{ marginTop: '1.2rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
                     <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic', lineHeight: '1.5', fontFamily: 'Lexend, sans-serif' }}>
                         This Health Score is based on your responses to lifestyle and symptom questions and is intended for educational purposes only. It is not a medical diagnosis. Some health conditions, including insulin resistance and other metabolic disorders, may only be identified through laboratory testing and a comprehensive medical evaluation.
                     </p>

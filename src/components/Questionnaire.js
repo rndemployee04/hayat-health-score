@@ -1,9 +1,11 @@
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { submitAssessment } from '../api/api';
 import { questions } from '../data/questions';
 import ProgressBar from './ProgressBar';
 import LeadCapture from './LeadCapture';
 import Results from './Results';
+import AnalysisLoader from './AnalysisLoader';
+
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
 const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
@@ -51,11 +53,12 @@ const Questionnaire = () => {
     const [answers, setAnswers] = useState(initialState.answers);
     const [utmSource, setUtmSource] = useState(initialState.utm_source);
     const [status, setStatus] = useState(initialCompleted ? 'success' : 'idle');
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [showLeadCapture, setShowLeadCapture] = useState(false);
     const [showExitIntent, setShowExitIntent] = useState(false);
     const [finalScores, setFinalScores] = useState(initialCompleted);
     const [isStarted, setIsStarted] = useState(initialState.currentStepIndex > 0 || Object.keys(initialState.answers).length > 0);
-    const containerRef = wp.element.useRef(null);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         if (isStarted && !finalScores) {
@@ -65,21 +68,28 @@ const Questionnaire = () => {
 
     useEffect(() => {
         const handleMouseLeave = (e) => {
-            if (e.clientY <= 0 && isStarted && status !== 'success' && !sessionStorage.getItem('health_exit_intent_shown')) {
+            if (e.clientY <= 0 && isStarted && status !== 'success' && !isAnalyzing && !sessionStorage.getItem('health_exit_intent_shown')) {
                 setShowExitIntent(true);
                 sessionStorage.setItem('health_exit_intent_shown', 'true');
             }
         };
         document.addEventListener('mouseleave', handleMouseLeave);
         return () => document.removeEventListener('mouseleave', handleMouseLeave);
-    }, [status, isStarted]);
+    }, [status, isStarted, isAnalyzing]);
 
     const scrollToTop = () => {
         if (containerRef.current) {
             const yOffset = -50;
             const element = containerRef.current;
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({ top: y, behavior: 'smooth' });
+            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+            
+            // Additional fail-safe for custom theme wrappers
+            try {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (e) {
+                // Fallback for legacy browsers
+            }
         }
     };
 
@@ -94,9 +104,16 @@ const Questionnaire = () => {
             setCurrentStepIndex(prev => prev + 1);
             scrollToTop();
         } else {
-            setShowLeadCapture(true);
+            // Last question completed -> Transition to 2-second Analysis Loader screen
+            setIsAnalyzing(true);
             scrollToTop();
         }
+    };
+
+    const handleAnalysisComplete = () => {
+        setIsAnalyzing(false);
+        setShowLeadCapture(true);
+        scrollToTop();
     };
 
     const handleBack = () => {
@@ -128,6 +145,7 @@ const Questionnaire = () => {
         localStorage.removeItem(STORAGE_KEY);
         setFinalScores(null);
         setStatus('idle');
+        setIsAnalyzing(false);
         setShowLeadCapture(false);
         setCurrentStepIndex(0);
         setAnswers({});
@@ -157,6 +175,14 @@ const Questionnaire = () => {
         return (
             <div style={cardStyle}>
                 <Results scores={finalScores} onRetake={handleRetake} />
+            </div>
+        );
+    }
+
+    if (isAnalyzing) {
+        return (
+            <div style={cardStyle}>
+                <AnalysisLoader onComplete={handleAnalysisComplete} />
             </div>
         );
     }
