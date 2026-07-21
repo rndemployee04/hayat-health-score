@@ -53,8 +53,13 @@ class Assessments_List_Table extends WP_List_Table {
             case 'phone':
             case 'health_score':
             case 'score_category':
-            case 'utm_source':
                 return esc_html( $item[ $column_name ] );
+            case 'utm_source':
+                $src = ! empty( $item[ $column_name ] ) ? $item[ $column_name ] : 'Direct';
+                return sprintf(
+                    '<span style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block;">%s</span>',
+                    esc_html( $src )
+                );
             case 'readiness_score':
                 $val = intval( $item[ $column_name ] );
                 $badge_color = '#646970';

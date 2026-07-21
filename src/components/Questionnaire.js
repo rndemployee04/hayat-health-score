@@ -30,13 +30,26 @@ const Questionnaire = () => {
 
     const getInitialState = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        let utm_source = urlParams.get('utm_source') || urlParams.get('source') || '';
+        let utm_source = urlParams.get('utm_source') || urlParams.get('source') || urlParams.get('utm_medium') || '';
+
+        if (!utm_source && document.referrer) {
+            try {
+                const refUrl = new URL(document.referrer);
+                if (refUrl.hostname && !refUrl.hostname.includes(window.location.hostname)) {
+                    utm_source = refUrl.hostname.replace('www.', '');
+                }
+            } catch (e) {}
+        }
+
+        if (!utm_source) {
+            utm_source = 'Direct';
+        }
 
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                if (utm_source) {
+                if (utm_source && utm_source !== 'Direct') {
                     parsed.utm_source = utm_source;
                 }
                 return parsed;
