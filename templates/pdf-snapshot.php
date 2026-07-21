@@ -157,12 +157,13 @@ td {
 }
 
 /* Grid Circle Icons */
-.circle-box {
+.grid .circle {
     text-align: center;
-    padding: 2px;
+    vertical-align: top;
+    padding: 3px;
 }
 
-.icon-circle-bg {
+.icon-circle {
     width: 36px;
     height: 36px;
     background: #ffffff;
@@ -170,10 +171,10 @@ td {
     border-radius: 50%;
     margin: 0 auto 3px auto;
     text-align: center;
-    padding-top: 6px;
+    padding-top: 8px;
 }
 
-.circle-label {
+.grid .circle p {
     font-size: 7.5pt;
     color: #333333;
     font-weight: bold;
@@ -527,59 +528,61 @@ if ( ! empty( $qr_code_url ) ) {
         <td style="width: 50%; padding-right: 8px;">
             <div class="section-title">WHAT YOUR SCORE MAY BE AFFECTING</div>
 
-            <table style="margin-top: 4px;">
-                <tr>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-                        </div>
-                        <div class="circle-label">Energy</div>
-                    </td>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M12.3 2a10 10 0 1 0 9.7 12.8A8 8 0 0 1 12.3 2z"/></svg>
-                        </div>
-                        <div class="circle-label">Sleep</div>
-                    </td>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"/></svg>
-                        </div>
-                        <div class="circle-label">Weight</div>
-                    </td>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                        </div>
-                        <div class="circle-label">Blood Sugar</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        </div>
-                        <div class="circle-label">Blood Pressure</div>
-                    </td>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
-                        </div>
-                        <div class="circle-label">Mental Clarity</div>
-                    </td>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.55 3.89 3.57 4.23V22h2.86v-8.77C11.45 12.89 13 11.12 13 9V2h-2v7zm8-7h-2v20h2V2z"/></svg>
-                        </div>
-                        <div class="circle-label">Cravings</div>
-                    </td>
-                    <td class="circle-box" style="width: 25%;">
-                        <div class="icon-circle-bg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#0b5f84"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
-                        </div>
-                        <div class="circle-label">Mood</div>
-                    </td>
-                </tr>
+            <table class="grid" cellpadding="0" cellspacing="0" border="0" style="margin-top: 4px;">
+                <tbody>
+                    <tr>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-energy">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 384 512" fill="#0b5f84"><path d="M0 256L224 0x176 192H384L160 512 208 320H0z"/></svg>
+                            </div>
+                            <p>Energy</p>
+                        </td>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-sleep">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 640 512" fill="#0b5f84"><path d="M32 32c17.7 0 32 14.3 32 32V288H576V64c0-17.7 14.3-32 32-32s32 14.3 32 32V448c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H64v96c0 17.7-14.3 32-32 32s-32-14.3-32-32V64C0 46.3 14.3 32 32 32zM160 224c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64zm112-48c-17.7 0-32 14.3-32 32v80H576V208c0-17.7-14.3-32-32-32H272z"/></svg>
+                            </div>
+                            <p>Sleep</p>
+                        </td>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-weight">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="#0b5f84"><path d="M128 32C92.7 0 32 92.7 32 128V384c0 35.3 28.7 64 64 64H416c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H128zm128 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zM232 160c0-13.3 10.7-24 24-24s24 10.7 24 24v40h-48v-40z"/></svg>
+                            </div>
+                            <p>Weight</p>
+                        </td>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-bloodsugar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 384 512" fill="#0b5f84"><path d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C173.2 3.4 182.4 0 192 0C201.6 0 210.8 3.4 217.4 11.7C253.8 57.7 384 228.8 384 320C384 426 298 512 192 512Z"/></svg>
+                            </div>
+                            <p>Blood Sugar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-bp">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="#0b5f84"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141c-45.6-7.6-92 7.3-124.6 39.9l-12 12-12-12c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5zM160 192h48l24-48 32 96 24-64 16 16h48"/></svg>
+                            </div>
+                            <p>Blood Pressure</p>
+                        </td>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-mental">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="#0b5f84"><path d="M184 0c30.9 0 56 25.1 56 56V240H128c-35.3 0-64-28.7-64-64c0-23.6 12.8-44.3 32-55.4C92.2 108.6 88 92.8 88 76c0-41.9 34.1-76 76-76c7 0 13.7 1 20 2.8V0zM272 240V56c0-30.9 25.1-56 56-56c6.3-1.8 13-2.8 20-2.8c41.9 0 76 34.1 76 76c0 16.8-4.2 32.6-12 44.6c19.2 11.1 32 31.8 32 55.4c0 35.3-28.7 64-64 64H272zM0 328c0-30.9 25.1-56 56-56h184v184c0 30.9-25.1 56-56 56c-6.3 1.8-13 2.8-20 2.8c-41.9 0-76-34.1-76-76c0-16.8 4.2-32.6 12-44.6C80.8 481.1 68 460.4 68 436.8c0-35.3 28.7-64 64-64H0v-44.8z"/></svg>
+                            </div>
+                            <p>Mental Clarity</p>
+                        </td>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-cravings">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 448 512" fill="#0b5f84"><path d="M416 0C400 0 384 16 384 32V224H352V32c0-16-16-32-32-32s-32 16-32 32V224H256V32c0-16-16-32-32-32s-32 16-32 32V256c0 35.3 28.7 64 64 64h32v160c0 17.7 14.3 32 32 32s32-14.3 32-32V320h32c35.3 0 64-28.7 64-64V32c0-16-16-32-32-32zM64 32C46.3 32 32 46.3 32 64v192c0 53 43 96 96 96v128c0 17.7 14.3 32 32 32s32-14.3 32-32V352c53 0 96-43 96-96V64c0-17.7-14.3-32-32-32S224 46.3 224 64v128H160V64c0-17.7-14.3-32-32-32S96 46.3 96 64v128H64V64c0-17.7-14.3-32-32-32z"/></svg>
+                            </div>
+                            <p>Cravings</p>
+                        </td>
+                        <td class="circle" style="width: 25%;">
+                            <div class="icon-circle icon-mood">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="#0b5f84"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM176 208a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm192-32a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM160 336c12-20 40-48 96-48s84 28 96 48c7.7 12.8 3.8 29.4-8.9 37.1s-29.4 3.8-37.1-8.9c-2.4-4-16.1-23.2-50-23.2s-47.6 19.2-50 23.2c-7.7 12.8-24.4 16.6-37.1 8.9s-16.6-24.4-8.9-37.1z"/></svg>
+                            </div>
+                            <p>Mood</p>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
 
             <div class="middle-note">
