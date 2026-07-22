@@ -80,7 +80,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
     }
 
     return (
-        <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto', fontFamily: 'Outfit, sans-serif', boxSizing: 'border-box' }}>
+        <div style={{ width: '100%', maxWidth: '390px', margin: '0 auto', fontFamily: 'Outfit, sans-serif', boxSizing: 'border-box' }}>
 
             {/* SVG viewBox cropped around arc */}
             <svg viewBox="25 -20 450 220" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
@@ -108,14 +108,14 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                             >
                                 {band.label.includes(' ') ? (
                                     <>
-                                        <tspan x="0" dy="-7" fontSize="11" fontWeight="800">{band.label.split(' ')[0]}</tspan>
-                                        <tspan x="0" dy="12" fontSize="11" fontWeight="800">{band.label.split(' ').slice(1).join(' ')}</tspan>
-                                        <tspan x="0" dy="12" fill="#475569" fontSize="10" fontWeight="700">{band.range}</tspan>
+                                        <tspan x="0" dy="-7" fontSize="11" fontWeight="700">{band.label.split(' ')[0]}</tspan>
+                                        <tspan x="0" dy="12" fontSize="11" fontWeight="700">{band.label.split(' ').slice(1).join(' ')}</tspan>
+                                        <tspan x="0" dy="12" fill="#475569" fontSize="11" fontWeight="700">{band.range}</tspan>
                                     </>
                                 ) : (
                                     <>
-                                        <tspan x="0" dy="-2" fontSize="12" fontWeight="800">{band.label}</tspan>
-                                        <tspan x="0" dy="13" fill="#475569" fontSize="10" fontWeight="700">{band.range}</tspan>
+                                        <tspan x="0" dy="-2" fontSize="11" fontWeight="700">{band.label}</tspan>
+                                        <tspan x="0" dy="13" fill="#475569" fontSize="11" fontWeight="700">{band.range}</tspan>
                                     </>
                                 )}
                             </text>
@@ -149,8 +149,8 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                 })}
 
                 {/* 0 and 100 Scale Markers perfectly aligned with baseline tips */}
-                <text x="110" y="194" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="800">0</text>
-                <text x="390" y="194" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="800">100</text>
+                <text x="110" y="194" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">0</text>
+                <text x="390" y="194" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">100</text>
 
                 {/* Pointer Needle */}
                 <g filter="url(#needle-shadow)">
@@ -171,7 +171,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
             {/* Bottom Score & Status Callout Banner */}
             <div style={{ marginTop: '0.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '900', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
+                    <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '700', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
                         {displayedScore}
                     </span>
                     <span style={{ fontSize: 'clamp(1rem, 3.2vw, 1.25rem)', fontWeight: '700', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
@@ -203,12 +203,12 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                         backgroundColor: '#ffffff',
                         color: scoreColor,
                         fontWeight: '900',
-                        fontSize: '0.85rem',
+                        fontSize: '14px',
                         flexShrink: 0
                     }}>
                         !
                     </span>
-                    <span style={{ fontSize: 'clamp(0.72rem, 2.6vw, 0.82rem)', fontWeight: '800', letterSpacing: '0.3px', textTransform: 'uppercase', fontFamily: 'Outfit, sans-serif', textAlign: 'center' }}>
+                    <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'Outfit, sans-serif', textAlign: 'center' }}>
                         YOUR METABOLIC HEALTH: <strong>{categoryName}</strong>
                     </span>
                 </div>
@@ -264,7 +264,7 @@ const Results = ({ scores, onRetake }) => {
     };
 
     return (
-        <div className="results-wrapper" style={{ padding: 'clamp(0.5rem, 3vw, 1.8rem)', textAlign: 'center', animation: 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+        <div className="results-wrapper" style={{ padding: '0', textAlign: 'center', animation: 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
             <style>{`
                 @media (max-width: 480px) {
                     .results-wrapper {
@@ -279,20 +279,15 @@ const Results = ({ scores, onRetake }) => {
                 }
             `}</style>
 
-            <div style={{ margin: '1rem 0 2rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ margin: '1rem 0 1rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <GliaFitGauge score={health_score} scoreColor={scoreColor} categoryName={scoreCategoryName} />
             </div>
 
             <div style={{
                 textAlign: 'center',
-                backgroundColor: '#ffffff',
-                padding: 'clamp(1.2rem, 4vw, 2rem)',
-                borderRadius: '20px',
-                border: '1px solid #e2e8f0',
-                marginBottom: '1.8rem',
-                boxSizing: 'border-box'
+                marginBottom: '1.8rem'
             }}>
-                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '0 0 1.2rem 0', fontSize: 'clamp(1.15rem, 3.5vw, 1.35rem)', fontWeight: '800', textAlign: 'center' }}>
+                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '0 0 15px', fontSize: '22px', fontWeight: '700', textAlign: 'center' }}>
                     Based on What You Shared
                 </h3>
 
@@ -300,16 +295,16 @@ const Results = ({ scores, onRetake }) => {
                 {primary_goal && (
                     <div style={{
                         marginBottom: '1.2rem',
-                        backgroundColor: '#f8fafc',
+                        backgroundColor: '#eff7ff',
                         padding: '1rem 1.2rem',
                         borderRadius: '12px',
-                        border: '1px solid #e2e8f0',
+                        borderBottom: '1px solid #e2e8f0',
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        <p style={{ margin: '0 0 4px 0', fontSize: '12px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             Your Primary Goal:
                         </p>
-                        <p style={{ margin: 0, fontSize: '1.05rem', color: '#0f172a', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
+                        <p style={{ margin: 0, fontSize: '18px', color: '#f59c11', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
                             {primary_goal}
                         </p>
                     </div>
@@ -317,16 +312,16 @@ const Results = ({ scores, onRetake }) => {
 
                 {/* Main Areas of Concern */}
                 {main_concerns && main_concerns.length > 0 && (
-                    <div style={{ marginBottom: '1.2rem', textAlign: 'center' }}>
-                        <p style={{ margin: '0 0 0.8rem 0', fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    <div style={{ marginBottom: '12px', textAlign: 'center' }}>
+                        <p style={{ margin: '0', fontSize: '12px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             Your Main Areas of Concern:
                         </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'inline-block', textAlign: 'left' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
-                                    marginBottom: '0.6rem',
-                                    fontSize: '0.98rem',
-                                    color: '#1e293b',
+                                    marginBottom: '0',
+                                    fontSize: '16px',
+                                    color: '#f59c11',
                                     fontFamily: 'Lexend, sans-serif',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -336,11 +331,11 @@ const Results = ({ scores, onRetake }) => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        width: '20px',
-                                        height: '20px',
+                                        width: '18px',
+                                        height: '18px',
                                         borderRadius: '50%',
-                                        backgroundColor: `${primaryColor}15`,
-                                        color: primaryColor,
+                                        backgroundColor: `#f59c11`,
+                                        color: `#fff`,
                                         fontWeight: '800',
                                         fontSize: '0.75rem',
                                         flexShrink: 0
@@ -357,22 +352,17 @@ const Results = ({ scores, onRetake }) => {
                 {/* Category Explanation */}
                 {category_explanation && (
                     <div style={{
-                        backgroundColor: '#f8fafc',
-                        padding: '1rem 1.2rem',
-                        borderRadius: '12px',
-                        border: '1px solid #e2e8f0',
-                        marginTop: '1rem',
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: 0, color: '#334155', fontFamily: 'Lexend, sans-serif', fontSize: '0.92rem', lineHeight: '1.6' }}>
+                        <p style={{ margin: 0, color: '#096ba1', fontWeight: '600', fontFamily: 'Lexend, sans-serif', fontSize: '12px', lineHeight: '1.6' }}>
                             {category_explanation}
                         </p>
                     </div>
                 )}
 
                 {/* Disclaimer */}
-                <div style={{ marginTop: '1.2rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
-                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic', lineHeight: '1.5', fontFamily: 'Lexend, sans-serif' }}>
+                <div style={{ margin: '20px 0', paddingTop: '20px', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
+                    <p style={{ margin: 0, fontSize: '10px', color: '#64748b', fontStyle: 'italic', lineHeight: '14px', fontFamily: 'Lexend, sans-serif' }}>
                         This Health Score is based on your responses to lifestyle and symptom questions and is intended for educational purposes only. It is not a medical diagnosis. Some health conditions, including insulin resistance and other metabolic disorders, may only be identified through laboratory testing and a comprehensive medical evaluation.
                     </p>
                 </div>
@@ -384,14 +374,14 @@ const Results = ({ scores, onRetake }) => {
                 style={{
                     background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                     color: '#FFF',
-                    padding: 'clamp(1rem, 4vw, 1.2rem) clamp(1rem, 5vw, 2rem)',
-                    border: 'none',
+                    padding: '14px 24px',
+                    border: '1px solid rgba(220, 227, 235, 0.8)',
                     borderRadius: '50px',
                     cursor: 'pointer',
-                    fontSize: 'clamp(1.05rem, 3.8vw, 1.2rem)',
+                    fontSize: '16px',
                     fontFamily: 'Outfit, sans-serif',
-                    width: '100%',
                     fontWeight: '700',
+                    margin: '0 auto',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -401,34 +391,32 @@ const Results = ({ scores, onRetake }) => {
                 }}
                 onMouseOver={(e) => {
                     e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
-                    e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`;
                 }}
                 onMouseOut={(e) => {
                     e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
-                    e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
                 }}
             >
                 Book My Complimentary Consultation
             </button>
 
             {onRetake && (
-                <div style={{ marginTop: '1.2rem', textAlign: 'center' }}>
+                <div style={{ marginTop: '0', textAlign: 'center' }}>
                     <button
                         onClick={onRetake}
                         style={{
                             background: 'transparent',
                             border: 'none',
-                            color: '#64748b',
+                            color: '#096ba1',
                             cursor: 'pointer',
-                            fontSize: '0.95rem',
+                            fontSize: '16px',
                             fontFamily: 'Lexend, sans-serif',
                             fontWeight: '600',
                             textDecoration: 'underline',
-                            padding: '0.4rem 1rem',
+                            padding: '14px 24px 0',
                             transition: 'color 0.2s'
                         }}
                         onMouseOver={(e) => { e.currentTarget.style.color = '#1e293b'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.color = '#096ba1'; }}
                     >
                         Retake Health Assessment
                     </button>
