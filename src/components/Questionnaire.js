@@ -5,6 +5,7 @@ import ProgressBar from './ProgressBar';
 import LeadCapture from './LeadCapture';
 import Results from './Results';
 import AnalysisLoader from './AnalysisLoader';
+import confetti from 'canvas-confetti';
 
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
@@ -127,6 +128,18 @@ const Questionnaire = () => {
         setIsAnalyzing(false);
         setShowLeadCapture(true);
         scrollToTop();
+
+        // Fire central celebratory confetti burst when results are ready!
+        try {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: [btnBgTop, btnBgBottom, btnHoverTop, btnHoverBottom, '#10B981']
+            });
+        } catch (e) {
+            console.error("Confetti error:", e);
+        }
     };
 
     const handleBack = () => {
@@ -311,7 +324,60 @@ const Questionnaire = () => {
             margin: '0.8rem auto'
         }}>
             <style>{`
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+                .option-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 1.2rem;
+                    cursor: pointer;
+                    padding: 1.1rem 1.4rem;
+                    border: 2px solid rgba(220, 227, 235, 0.85);
+                    border-radius: 16px;
+                    background-color: #ffffff;
+                    outline: none;
+                    user-select: none;
+                    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+                }
+                .option-row:hover {
+                    border-color: #94a3b8;
+                    background-color: #f8fafc;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+                }
+                .option-row.selected {
+                    border-color: ${primaryColor} !important;
+                    background-color: ${primaryColor}08 !important;
+                    box-shadow: 0 4px 12px ${primaryColor}12 !important;
+                }
+                .primary-button {
+                    background: linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%) !important;
+                    color: #FFF !important;
+                    padding: 1.05rem 1.4rem !important;
+                    border: none !important;
+                    border-radius: 50px !important;
+                    cursor: pointer !important;
+                    font-size: clamp(1rem, 3.5vw, 1.1rem) !important;
+                    font-family: Outfit, sans-serif !important;
+                    font-weight: 700 !important;
+                    width: 100% !important;
+                    box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
+                    transition: all 0.3s ease !important;
+                    text-align: center !important;
+                    display: block !important;
+                    opacity: 1 !important;
+                }
+                .primary-button:disabled {
+                    opacity: 0.45 !important;
+                    cursor: not-allowed !important;
+                    box-shadow: none !important;
+                }
+                .primary-button:not(:disabled):hover {
+                    background: linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%) !important;
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.18) !important;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
             `}</style>
 
             {showExitIntent && (
@@ -355,20 +421,63 @@ const Questionnaire = () => {
             <h3 style={{ color: '#1a1f36', marginTop: '0.6rem', marginBottom: '0.3rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.3rem, 4vw, 1.65rem)', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
             {currentQuestion.subtitle && <p style={{ marginBottom: '0', fontStyle: 'italic', color: '#64748b', fontSize: 'clamp(0.85rem, 3vw, 1rem)', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '1rem', marginBottom: '1.2rem' }}>
-                {currentQuestion.type === 'checkbox' && currentQuestion.options.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', padding: '0.75rem 1rem', border: '1px solid', borderColor: currentAnswer.includes(option) ? primaryColor : 'rgba(220, 227, 235, 0.85)', borderRadius: '12px', backgroundColor: currentAnswer.includes(option) ? `${primaryColor}0C` : '#ffffff', outline: 'none', userSelect: 'none', transition: 'all 0.2s', boxShadow: currentAnswer.includes(option) ? `0 0 0 2px ${primaryColor}30` : '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <input type="checkbox" checked={currentAnswer.includes(option)} onChange={() => handleOptionToggle(option)} style={{ width: '22px', height: '22px', accentColor: primaryColor, cursor: 'pointer', border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }} />
-                        <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3.2vw, 1.1rem)', color: currentAnswer.includes(option) ? '#1a1f36' : '#334155', fontWeight: currentAnswer.includes(option) ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
-                    </label>
-                ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.2rem', marginBottom: '1.4rem' }}>
+                {currentQuestion.type === 'checkbox' && currentQuestion.options.map((option) => {
+                    const isSelected = currentAnswer.includes(option);
+                    return (
+                        <label key={option} className={`option-row ${isSelected ? 'selected' : ''}`} onClick={() => handleOptionToggle(option)}>
+                            <div style={{
+                                width: '24px',
+                                height: '24px',
+                                borderRadius: '6px',
+                                border: `2px solid ${isSelected ? primaryColor : '#94a3b8'}`,
+                                backgroundColor: isSelected ? primaryColor : '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                transition: 'all 0.2s'
+                            }}>
+                                {isSelected && (
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '14px', height: '14px' }}>
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                )}
+                            </div>
+                            <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1.05rem, 3.8vw, 1.18rem)', color: isSelected ? '#1a1f36' : '#334155', fontWeight: isSelected ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
+                        </label>
+                    );
+                })}
 
-                {currentQuestion.type === 'radio' && currentQuestion.options.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', padding: '0.75rem 1rem', border: '1px solid', borderColor: currentAnswer === option ? primaryColor : 'rgba(220, 227, 235, 0.85)', borderRadius: '12px', backgroundColor: currentAnswer === option ? `${primaryColor}0C` : '#ffffff', outline: 'none', userSelect: 'none', transition: 'all 0.2s', boxShadow: currentAnswer === option ? `0 0 0 2px ${primaryColor}30` : '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <input type="radio" name={`radio-${currentQuestion.id}`} checked={currentAnswer === option} onChange={() => handleRadioSelect(option)} style={{ width: '22px', height: '22px', accentColor: primaryColor, cursor: 'pointer', border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }} />
-                        <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.95rem, 3.2vw, 1.1rem)', color: currentAnswer === option ? '#1a1f36' : '#334155', fontWeight: currentAnswer === option ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
-                    </label>
-                ))}
+                {currentQuestion.type === 'radio' && currentQuestion.options.map((option) => {
+                    const isSelected = currentAnswer === option;
+                    return (
+                        <label key={option} className={`option-row ${isSelected ? 'selected' : ''}`} onClick={() => handleRadioSelect(option)}>
+                            <div style={{
+                                width: '24px',
+                                height: '24px',
+                                borderRadius: '50%',
+                                border: `2px solid ${isSelected ? primaryColor : '#94a3b8'}`,
+                                backgroundColor: '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                transition: 'all 0.2s'
+                            }}>
+                                {isSelected && (
+                                    <div style={{
+                                        width: '12px',
+                                        height: '12px',
+                                        borderRadius: '50%',
+                                        backgroundColor: primaryColor
+                                    }} />
+                                )}
+                            </div>
+                            <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1.05rem, 3.8vw, 1.18rem)', color: isSelected ? '#1a1f36' : '#334155', fontWeight: isSelected ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
+                        </label>
+                    );
+                })}
 
                 {currentQuestion.type === 'slider' && (
                     <div style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '14px', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
@@ -381,65 +490,78 @@ const Questionnaire = () => {
             {currentQuestion.insight && (
                 <div style={{
                     marginTop: '0.5rem',
-                    marginBottom: '1.4rem',
-                    padding: '0.8rem 1.1rem',
-                    backgroundColor: '#f8fafc',
-                    borderLeft: '3px solid #cbd5e1',
-                    borderRadius: '0 8px 8px 0',
-                    fontSize: 'clamp(0.8rem, 2.7vw, 0.9rem)',
-                    color: '#475569',
+                    marginBottom: '1.6rem',
+                    padding: '1rem 1.2rem',
+                    backgroundColor: '#eff6ff',
+                    borderLeft: `4px solid ${primaryColor}`,
+                    borderRadius: '8px',
+                    fontSize: 'clamp(0.85rem, 2.8vw, 0.95rem)',
+                    color: '#1e3a8a',
                     lineHeight: '1.55',
                     fontFamily: 'Lexend, sans-serif',
-                    fontStyle: 'italic'
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px'
                 }}>
-                    "{currentQuestion.insight}"
+                    <svg 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke={primaryColor} 
+                        strokeWidth="2.5" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        style={{ 
+                            width: '20px', 
+                            height: '20px', 
+                            minWidth: '20px', 
+                            minHeight: '20px', 
+                            flexShrink: 0, 
+                            marginTop: '2px',
+                            display: 'block'
+                        }}
+                    >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="16" x2="12" y2="12" />
+                        <line x1="12" y1="8" x2="12" y2="8" />
+                    </svg>
+                    <div>
+                        {currentQuestion.insight}
+                    </div>
                 </div>
             )}
 
-            <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: 'auto', width: '100%' }}>
+                <button
+                    onClick={handleNext}
+                    disabled={isNextDisabled()}
+                    className="primary-button"
+                >
+                    {currentStepIndex === questions.length - 1 ? 'Get My Health Score' : 'Continue'}
+                </button>
+
                 {currentStepIndex > 0 && (
                     <button
                         onClick={handleBack}
-                        style={{ backgroundColor: 'transparent', color: '#4f566b', padding: '0.75rem 1.2rem', border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer', fontSize: '1rem', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 100px', transition: 'all 0.2s', textAlign: 'center' }}
-                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                        style={{
+                            backgroundColor: 'transparent',
+                            color: '#64748b',
+                            padding: '0.6rem 1.2rem',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: 'clamp(0.9rem, 3vw, 0.98rem)',
+                            fontFamily: 'Outfit, sans-serif',
+                            fontWeight: '600',
+                            textAlign: 'center',
+                            margin: '0.2rem auto 0 auto',
+                            textDecoration: 'underline',
+                            transition: 'color 0.2s'
+                        }}
+                        onMouseOver={(e) => { e.currentTarget.style.color = '#1e293b'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; }}
                     >
                         Back
                     </button>
                 )}
-                <button
-                    onClick={handleNext}
-                    disabled={isNextDisabled()}
-                    style={{
-                        background: isNextDisabled() ? '#cbd5e1' : `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
-                        color: isNextDisabled() ? '#64748b' : '#FFF',
-                        padding: '0.75rem 1.4rem',
-                        border: 'none',
-                        borderRadius: '50px',
-                        cursor: isNextDisabled() ? 'not-allowed' : 'pointer',
-                        fontSize: '1rem',
-                        fontFamily: 'Outfit, sans-serif',
-                        fontWeight: '700',
-                        flex: '2 1 180px',
-                        boxShadow: isNextDisabled() ? 'none' : `0 6px 16px rgba(0,0,0,0.12)`,
-                        transition: 'all 0.3s',
-                        textAlign: 'center'
-                    }}
-                    onMouseOver={(e) => {
-                        if (!isNextDisabled()) {
-                            e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
-                            e.currentTarget.style.boxShadow = `0 10px 20px rgba(0,0,0,0.18)`;
-                        }
-                    }}
-                    onMouseOut={(e) => {
-                        if (!isNextDisabled()) {
-                            e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
-                            e.currentTarget.style.boxShadow = `0 6px 16px rgba(0,0,0,0.12)`;
-                        }
-                    }}
-                >
-                    {currentStepIndex === questions.length - 1 ? 'Get My Health Score' : 'Continue'}
-                </button>
             </div>
 
             {status === 'error' && <p style={{ color: '#d9534f', marginTop: '1.5rem', textAlign: 'center', fontFamily: 'Lexend, sans-serif' }}>An error occurred. Please try again.</p>}
