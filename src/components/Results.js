@@ -5,6 +5,7 @@ const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
 const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
 const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
 const primaryColor = btnBgBottom;
+const pluginUrl = window.healthScoreData?.pluginUrl || '';
 
 // Convert 0° (Left) to 180° (Right) along the top semi-circle arc
 function polarToCartesian(centerX, centerY, radius, deg) {
@@ -29,13 +30,13 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
     const [displayedScore, setDisplayedScore] = useState(0);
     const [animatedAngle, setAnimatedAngle] = useState(0);
 
-    // 5 Gauge Bands matching GliaFit spec image
+    // 5 Gauge Bands with rounded overlaps and original colors
     const bands = [
-        { label: 'SIGNIFICANT OPPORTUNITY', range: '0–19', color: '#E50914', start: 0, end: 35, textX: 60, textY: 108 },
-        { label: 'NEEDS ATTENTION', range: '20–39', color: '#FF5722', start: 36, end: 71, textX: 142, textY: 14 },
-        { label: 'FAIR', range: '40–59', color: '#FFB300', start: 72, end: 107, textX: 250, textY: -5 },
-        { label: 'GOOD', range: '60–79', color: '#4CAF50', start: 108, end: 143, textX: 358, textY: 14 },
-        { label: 'EXCELLENT', range: '80–100', color: '#1B7E39', start: 144, end: 180, textX: 440, textY: 108 }
+        { label: 'SIGNIFICANT OPPORTUNITY', range: '0-19', color: '#E50914', textColor: '#E50914', start: 0, end: 37, textX: 65, textY: 108 },
+        { label: 'NEEDS ATTENTION', range: '20-39', color: '#E50914', textColor: '#E50914', start: 33, end: 73, textX: 142, textY: 14 },
+        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#1E293B', start: 69, end: 111, textX: 250, textY: -18 },
+        { label: 'GOOD', range: '60-79', color: '#00C853', textColor: '#00C853', start: 107, end: 147, textX: 358, textY: 14 },
+        { label: 'EXCELLENT', range: '80-100', color: '#008A3B', textColor: '#008A3B', start: 143, end: 180, textX: 435, textY: 108 }
     ];
 
     useEffect(() => {
@@ -71,13 +72,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
     }, [score]);
 
     // Center = (250, 175), R = 140
-    const needleTip = polarToCartesian(250, 175, 106, animatedAngle);
-
-    // Ticks run from 0° to 180°
-    const ticks = [];
-    for (let a = 0; a <= 180; a += 3.6) {
-        ticks.push(a);
-    }
+    const needleTip = polarToCartesian(250, 175, 120, animatedAngle);
 
     return (
         <div style={{ width: '100%', maxWidth: '390px', margin: '0 auto', fontFamily: 'Outfit, sans-serif', boxSizing: 'border-box' }}>
@@ -91,66 +86,50 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                 </defs>
 
                 {/* 5 Color Arc Bands */}
-                {bands.map((band, idx) => (
-                    <g key={idx}>
-                        <path
-                            d={describeArc(250, 175, 140, band.start, band.end)}
-                            fill="none"
-                            stroke={band.color}
-                            strokeWidth="26"
-                        />
-                        {/* Text Label Above/Outside Band */}
-                        <g transform={`translate(${band.textX}, ${band.textY})`}>
-                            <text
-                                textAnchor="middle"
-                                fill={band.color}
-                                fontFamily="Outfit, sans-serif"
-                            >
-                                {band.label.includes(' ') ? (
-                                    <>
-                                        <tspan x="0" dy="-7" fontSize="11" fontWeight="700">{band.label.split(' ')[0]}</tspan>
-                                        <tspan x="0" dy="12" fontSize="11" fontWeight="700">{band.label.split(' ').slice(1).join(' ')}</tspan>
-                                        <tspan x="0" dy="12" fill="#475569" fontSize="11" fontWeight="700">{band.range}</tspan>
-                                    </>
-                                ) : (
-                                    <>
-                                        <tspan x="0" dy="-2" fontSize="11" fontWeight="700">{band.label}</tspan>
-                                        <tspan x="0" dy="13" fill="#475569" fontSize="11" fontWeight="700">{band.range}</tspan>
-                                    </>
-                                )}
-                            </text>
-                        </g>
-                    </g>
-                ))}
+                {bands.map((band, idx) => {
+                    const isTwoLines = band.label.includes(' ');
+                    const line1 = isTwoLines ? band.label.split(' ')[0] : band.label;
+                    const line2 = isTwoLines ? band.label.split(' ').slice(1).join(' ') : '';
 
-                {/* Inner Tick Arc */}
-                <path
-                    d={describeArc(250, 175, 124, 0, 180)}
-                    fill="none"
-                    stroke="#cbd5e1"
-                    strokeWidth="1.5"
-                />
-
-                {/* Ticks */}
-                {ticks.map((tAngle, i) => {
-                    const p1 = polarToCartesian(250, 175, 124, tAngle);
-                    const p2 = polarToCartesian(250, 175, (i % 5 === 0 ? 115 : 119), tAngle);
                     return (
-                        <line
-                            key={i}
-                            x1={p1.x}
-                            y1={p1.y}
-                            x2={p2.x}
-                            y2={p2.y}
-                            stroke={i % 5 === 0 ? "#475569" : "#94a3b8"}
-                            strokeWidth={i % 5 === 0 ? "1.5" : "1"}
-                        />
+                        <g key={idx}>
+                            <path
+                                d={describeArc(250, 175, 140, band.start, band.end)}
+                                fill="none"
+                                stroke={band.color}
+                                strokeWidth="24"
+                                strokeLinecap="round"
+                            />
+                            {/* Text Label Outside Band */}
+                            <g transform={`translate(${band.textX}, ${band.textY})`}>
+                                <text
+                                    textAnchor="middle"
+                                    fill={band.textColor}
+                                    fontFamily="Outfit, sans-serif"
+                                    fontSize="11"
+                                    fontWeight="700"
+                                >
+                                    {isTwoLines ? (
+                                        <>
+                                            <tspan x="0" dy="-7">{line1}</tspan>
+                                            <tspan x="0" dy="12">{line2}</tspan>
+                                        </>
+                                    ) : (
+                                        <tspan x="0" dy="2">{line1}</tspan>
+                                    )}
+                                </text>
+
+                                <text x="0" y={isTwoLines ? 30 : 25} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="11" fontWeight="700">
+                                    {band.range}
+                                </text>
+                            </g>
+                        </g>
                     );
                 })}
 
                 {/* 0 and 100 Scale Markers perfectly aligned with baseline tips */}
-                <text x="110" y="194" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">0</text>
-                <text x="390" y="194" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">100</text>
+                <text x="96" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">0</text>
+                <text x="404" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">100</text>
 
                 {/* Pointer Needle */}
                 <g filter="url(#needle-shadow)">
@@ -160,18 +139,17 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                         x2={needleTip.x}
                         y2={needleTip.y}
                         stroke="#1e293b"
-                        strokeWidth="7.5"
+                        strokeWidth="5"
                         strokeLinecap="round"
                     />
-                    <circle cx="250" cy="175" r="10" fill="#1e293b" />
-                    <circle cx="250" cy="175" r="4" fill="#ffffff" />
+                    <circle cx="250" cy="175" r="9" fill="#1e293b" />
                 </g>
             </svg>
 
             {/* Bottom Score & Status Callout Banner */}
             <div style={{ marginTop: '0.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '700', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
+                    <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '800', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
                         {displayedScore}
                     </span>
                     <span style={{ fontSize: 'clamp(1rem, 3.2vw, 1.25rem)', fontWeight: '700', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
@@ -182,13 +160,13 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                 <div style={{
                     backgroundColor: scoreColor,
                     color: '#ffffff',
-                    padding: '8px 18px',
+                    padding: '10px 24px',
                     borderRadius: '50px',
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px',
-                    marginTop: '0.6rem',
+                    gap: '10px',
+                    marginTop: '0.8rem',
                     maxWidth: '96%',
                     boxSizing: 'border-box',
                     boxShadow: `0 6px 18px ${scoreColor}40`
@@ -237,21 +215,21 @@ const Results = ({ scores, onRetake }) => {
         main_concerns
     } = scores;
 
-    // Determine 5-color band based on score (matching GliaFit spec)
+    // Determine 5-color band based on score (matching original colors)
     let scoreColor = '#E50914'; // Red (0-19)
     let scoreCategoryName = score_category || 'Significant Opportunity';
 
     if (health_score >= 80) {
-        scoreColor = '#1B7E39'; // Excellent (Green)
+        scoreColor = '#008A3B'; // Excellent (Dark Green)
         scoreCategoryName = 'EXCELLENT';
     } else if (health_score >= 60) {
-        scoreColor = '#4CAF50'; // Good (Lime Green)
+        scoreColor = '#00C853'; // Good (Green)
         scoreCategoryName = 'GOOD';
     } else if (health_score >= 40) {
-        scoreColor = '#FFB300'; // Fair (Yellow/Amber)
+        scoreColor = '#FCB017'; // Fair (Yellow/Orange)
         scoreCategoryName = 'FAIR';
     } else if (health_score >= 20) {
-        scoreColor = '#FF5722'; // Needs Attention (Orange)
+        scoreColor = '#E50914'; // Needs Attention (Red)
         scoreCategoryName = 'NEEDS ATTENTION';
     } else {
         scoreColor = '#E50914'; // Significant Opportunity (Red)
@@ -284,8 +262,8 @@ const Results = ({ scores, onRetake }) => {
             </div>
 
             <div style={{ textAlign: 'center', margin: '1.8rem 0' }}>
-            <img src="http://localhost/Gliafit-health/wp-content/plugins/hayat-health-score/assets/images/lotus-line.png" style={{ width: '260px', margin: '0 auto' }} alt="Health Score Results" />
-                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '20px 0 15px', fontSize: '22px', fontWeight: '700', textAlign: 'center' }}>
+                <img src={pluginUrl ? `${pluginUrl}assets/images/lotus-line.png` : ''} style={{ width: '260px', margin: '0 auto' }} alt="Health Score Results" />
+                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '20px 0 15px', fontSize: '18px', fontWeight: '700', textAlign: 'center' }}>
                     Based on What You Shared
                 </h3>
 
@@ -310,13 +288,14 @@ const Results = ({ scores, onRetake }) => {
 
                 {/* Main Areas of Concern */}
                 {main_concerns && main_concerns.length > 0 && (
-                    <div style={{ marginBottom: '12px', padding: '1rem 1.2rem',
-                        borderRadius: '12px', 
-                        border: '1px solid #ddd', 
+                    <div style={{
+                        marginBottom: '12px', padding: '1rem 1.2rem',
+                        borderRadius: '12px',
+                        border: '1px solid #ddd',
                         backgroundColor: '#fff',
                         borderLeft: `5px solid #ddd`,
                         textAlign: 'left'
-                         }}>
+                    }}>
 
                         <p style={{ margin: '0 0 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Main Areas of Concern -----
@@ -410,14 +389,14 @@ const Results = ({ scores, onRetake }) => {
                     <button
                         onClick={onRetake}
                         style={{
-                        backgroundColor: 'transparent',
-                        color: '#096ba1', padding: '0',
-                        border: 'none', 
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                        fontSize: '18px', fontFamily: 'Outfit, sans-serif', 
-                        fontWeight: '600',
-                        transition: 'all 0.2s ease', textAlign: 'center'
+                            backgroundColor: 'transparent',
+                            color: '#096ba1', padding: '0',
+                            border: 'none',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            fontSize: '18px', fontFamily: 'Outfit, sans-serif',
+                            fontWeight: '600',
+                            transition: 'all 0.2s ease', textAlign: 'center'
                         }}
                         onMouseOver={(e) => {
                             e.currentTarget.style.color = `#000`;
