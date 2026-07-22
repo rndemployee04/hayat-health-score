@@ -60,7 +60,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     return (
         <div style={{ padding: '1rem 0 0 0', textAlign: 'left', animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                <h3 style={{ color: '#1a1f36', margin: '0px 0px 5px', fontFamily: 'Outfit, sans-serif', fontSize: '30px', fontWeight: '800', letterSpacing: '-0.5px' }}>
+                <h3 style={{ color: '#1a1f36', margin: '0px 0px 5px', fontFamily: 'Outfit, sans-serif', fontSize: '35px', fontWeight: '700', letterSpacing: '-0.5px' }}>
                     Your Personalized Health Snapshot Is Ready!!!
                 </h3>
                 <p style={{ color: '#8792a2', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
@@ -126,13 +126,19 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         type="button"
                         onClick={onBack}
                         style={{
-                            backgroundColor: 'transparent', color: '#4f566b', padding: '14px 24px',
+                            backgroundColor: '#4f566b', color: '#fff', padding: '14px 24px',
                             border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
-                            fontSize: '16px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
+                            fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
                             transition: 'all 0.2s ease', textAlign: 'center'
                         }}
-                        onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.background = `#f7f7f7`;
+                            e.currentTarget.style.color = `#4f566b`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.background = `#4f566b`;
+                            e.currentTarget.style.color = `#fff`;
+                        }}
                     >
                         Back
                     </button>
@@ -144,7 +150,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                             background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                             color: '#FFF', padding: '14px 24px',
                             border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                            opacity: isSubmitting ? 0.7 : 1, fontSize: '16px', fontFamily: 'Outfit, sans-serif',
+                            opacity: isSubmitting ? 0.7 : 1, fontSize: '18px', fontFamily: 'Outfit, sans-serif',
                             fontWeight: '700', flex: '2 1 200px',
                             boxShadow: `0 8px 20px rgba(0,0,0,0.15)`,
                             transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
