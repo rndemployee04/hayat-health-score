@@ -32,11 +32,11 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
 
     // 5 Gauge Bands with rounded overlaps and original colors
     const bands = [
-        { label: 'SIGNIFICANT OPPORTUNITY', range: '0-19', color: '#E50914', textColor: '#E50914', start: 0, end: 37, textX: 65, textY: 108 },
-        { label: 'NEEDS ATTENTION', range: '20-39', color: '#E50914', textColor: '#E50914', start: 33, end: 73, textX: 142, textY: 14 },
-        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#1E293B', start: 69, end: 111, textX: 250, textY: -18 },
-        { label: 'GOOD', range: '60-79', color: '#00C853', textColor: '#00C853', start: 107, end: 147, textX: 358, textY: 14 },
-        { label: 'EXCELLENT', range: '80-100', color: '#008A3B', textColor: '#008A3B', start: 143, end: 180, textX: 435, textY: 108 }
+        { label: 'SIGNIFICANT OPPORTUNITY', range: '0-19', color: '#E50914', textColor: '#E50914', start: 0, end: 41, textX: 65, textY: 108 },
+        { label: 'NEEDS ATTENTION', range: '20-39', color: '#E50914', textColor: '#E50914', start: 39, end: 77, textX: 142, textY: 14 },
+        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#1E293B', start: 77, end: 113, textX: 250, textY: -18 },
+        { label: 'GOOD', range: '60-79', color: '#00C853', textColor: '#00C853', start: 113, end: 149, textX: 358, textY: 14 },
+        { label: 'EXCELLENT', range: '80-100', color: '#008A3B', textColor: '#008A3B', start: 149, end: 180, textX: 435, textY: 108 }
     ];
 
     useEffect(() => {
