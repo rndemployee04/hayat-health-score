@@ -5,6 +5,7 @@ const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
 const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
 const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
 const primaryColor = btnBgBottom;
+const pluginUrl = window.healthScoreData?.pluginUrl || '';
 
 // Convert 0° (Left) to 180° (Right) along the top semi-circle arc
 function polarToCartesian(centerX, centerY, radius, deg) {
@@ -261,8 +262,8 @@ const Results = ({ scores, onRetake }) => {
             </div>
 
             <div style={{ textAlign: 'center', margin: '1.8rem 0' }}>
-                <img src="http://localhost/Gliafit-health/wp-content/plugins/hayat-health-score/assets/images/lotus-line.png" style={{ width: '260px', margin: '0 auto' }} alt="Health Score Results" />
-                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '20px 0 15px', fontSize: '22px', fontWeight: '700', textAlign: 'center' }}>
+                <img src={pluginUrl ? `${pluginUrl}assets/images/lotus-line.png` : ''} style={{ width: '260px', margin: '0 auto' }} alt="Health Score Results" />
+                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '20px 0 15px', fontSize: '18px', fontWeight: '700', textAlign: 'center' }}>
                     Based on What You Shared
                 </h3>
 

@@ -527,14 +527,6 @@ const Questionnaire = () => {
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: 'auto', width: '100%' }}>
-                <button
-                    onClick={handleNext}
-                    disabled={isNextDisabled()}
-                    className="primary-button"
-                >
-                    {currentStepIndex === questions.length - 1 ? 'Get My Health Score' : 'Continue'}
-                </button>
-
                 {currentStepIndex > 0 && (
                     <button
                         onClick={handleBack}

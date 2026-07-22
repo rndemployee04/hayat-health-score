@@ -105,6 +105,7 @@ class Health_Score {
                 'restUrl'        => esc_url_raw( rest_url( 'health-score/v1/submit' ) ),
                 'nonce'          => wp_create_nonce( 'wp_rest' ),
                 'bookingUrl'     => esc_url_raw( $booking_url ),
+                'pluginUrl'      => esc_url_raw( plugin_dir_url( __FILE__ ) ),
                 'btnBgTop'       => sanitize_hex_color( $btn_bg_top ) ?: '#40BAD5',
                 'btnBgBottom'    => sanitize_hex_color( $btn_bg_bottom ) ?: '#07689F',
                 'btnHoverTop'    => sanitize_hex_color( $btn_hover_top ) ?: '#FCBF1E',
