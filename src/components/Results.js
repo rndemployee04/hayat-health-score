@@ -208,8 +208,8 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                     }}>
                         !
                     </span>
-                    <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'Outfit, sans-serif', textAlign: 'center' }}>
-                        YOUR METABOLIC HEALTH: <strong>{categoryName}</strong>
+                    <span style={{ fontSize: '16px', fontWeight: '700', letterSpacing: '1px', fontFamily: 'Outfit, sans-serif', textAlign: 'center' }}>
+                        Your Metabolic Health : <strong>{categoryName}</strong>
                     </span>
                 </div>
             </div>
@@ -283,11 +283,9 @@ const Results = ({ scores, onRetake }) => {
                 <GliaFitGauge score={health_score} scoreColor={scoreColor} categoryName={scoreCategoryName} />
             </div>
 
-            <div style={{
-                textAlign: 'center',
-                marginBottom: '1.8rem'
-            }}>
-                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '0 0 15px', fontSize: '22px', fontWeight: '700', textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', margin: '1.8rem 0' }}>
+            <img src="http://localhost/Gliafit-health/wp-content/plugins/hayat-health-score/assets/images/lotus-line.png" style={{ width: '260px', margin: '0 auto' }} alt="Health Score Results" />
+                <h3 style={{ color: '#0f172a', fontFamily: 'Outfit, sans-serif', margin: '20px 0 15px', fontSize: '22px', fontWeight: '700', textAlign: 'center' }}>
                     Based on What You Shared
                 </h3>
 
@@ -295,16 +293,16 @@ const Results = ({ scores, onRetake }) => {
                 {primary_goal && (
                     <div style={{
                         marginBottom: '1.2rem',
-                        backgroundColor: '#eff7ff',
+                        backgroundColor: '#f59c1117',
                         padding: '1rem 1.2rem',
                         borderRadius: '12px',
-                        borderBottom: '1px solid #e2e8f0',
+                        border: '1px solid #f59c11',
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: '0 0 4px 0', fontSize: '12px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
-                            Your Primary Goal:
+                        <p style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                            ----- Your Primary Goal -----
                         </p>
-                        <p style={{ margin: 0, fontSize: '18px', color: '#f59c11', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
+                        <p style={{ margin: 0, fontSize: '20px', color: '#f59c11', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
                             {primary_goal}
                         </p>
                     </div>
@@ -312,15 +310,23 @@ const Results = ({ scores, onRetake }) => {
 
                 {/* Main Areas of Concern */}
                 {main_concerns && main_concerns.length > 0 && (
-                    <div style={{ marginBottom: '12px', textAlign: 'center' }}>
-                        <p style={{ margin: '0', fontSize: '12px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
-                            Your Main Areas of Concern:
+                    <div style={{ marginBottom: '12px', padding: '1rem 1.2rem',
+                        borderRadius: '12px', 
+                        border: '1px solid #ddd', 
+                        backgroundColor: '#fff',
+                        borderLeft: `5px solid #ddd`,
+                        textAlign: 'left'
+                         }}>
+
+                        <p style={{ margin: '0 0 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                            ----- Your Main Areas of Concern -----
                         </p>
-                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'inline-block', textAlign: 'left' }}>
+                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
                                     marginBottom: '0',
                                     fontSize: '16px',
+                                    fontWeight: '700',
                                     color: '#f59c11',
                                     fontFamily: 'Lexend, sans-serif',
                                     display: 'flex',
@@ -354,15 +360,15 @@ const Results = ({ scores, onRetake }) => {
                     <div style={{
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: 0, color: '#096ba1', fontWeight: '600', fontFamily: 'Lexend, sans-serif', fontSize: '12px', lineHeight: '1.6' }}>
+                        <p style={{ margin: 0, color: '#444', fontWeight: '500', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6' }}>
                             {category_explanation}
                         </p>
                     </div>
                 )}
 
                 {/* Disclaimer */}
-                <div style={{ margin: '20px 0', paddingTop: '20px', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#64748b', fontStyle: 'italic', lineHeight: '14px', fontFamily: 'Lexend, sans-serif' }}>
+                <div style={{ margin: '20px 0', paddingTop: '20px', borderTop: '1px solid #8bc34a', textAlign: 'center' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontStyle: 'italic', lineHeight: '14px', fontFamily: 'Lexend, sans-serif' }}>
                         This Health Score is based on your responses to lifestyle and symptom questions and is intended for educational purposes only. It is not a medical diagnosis. Some health conditions, including insulin resistance and other metabolic disorders, may only be identified through laboratory testing and a comprehensive medical evaluation.
                     </p>
                 </div>
@@ -378,7 +384,7 @@ const Results = ({ scores, onRetake }) => {
                     border: '1px solid rgba(220, 227, 235, 0.8)',
                     borderRadius: '50px',
                     cursor: 'pointer',
-                    fontSize: '16px',
+                    fontSize: '18px',
                     fontFamily: 'Outfit, sans-serif',
                     fontWeight: '700',
                     margin: '0 auto',
@@ -400,23 +406,25 @@ const Results = ({ scores, onRetake }) => {
             </button>
 
             {onRetake && (
-                <div style={{ marginTop: '0', textAlign: 'center' }}>
+                <div style={{ marginTop: '10px', textAlign: 'center' }}>
                     <button
                         onClick={onRetake}
                         style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: '#096ba1',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            fontFamily: 'Lexend, sans-serif',
-                            fontWeight: '600',
-                            textDecoration: 'underline',
-                            padding: '14px 24px 0',
-                            transition: 'color 0.2s'
+                        backgroundColor: 'transparent',
+                        color: '#096ba1', padding: '0',
+                        border: 'none', 
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        fontSize: '18px', fontFamily: 'Outfit, sans-serif', 
+                        fontWeight: '600',
+                        transition: 'all 0.2s ease', textAlign: 'center'
                         }}
-                        onMouseOver={(e) => { e.currentTarget.style.color = '#1e293b'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.color = '#096ba1'; }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.color = `#000`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.color = `#096ba1`;
+                        }}
                     >
                         Retake Health Assessment
                     </button>

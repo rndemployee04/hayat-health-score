@@ -99,8 +99,8 @@ const AnalysisLoader = ({ onComplete }) => {
             <h3 style={{
                 color: '#1a1f36',
                 fontFamily: 'Outfit, sans-serif',
-                fontSize: '30px',
-                fontWeight: '800',
+                fontSize: '35px',
+                fontWeight: '700',
                 marginBottom: '0',
                 letterSpacing: '-0.5px'
             }}>
