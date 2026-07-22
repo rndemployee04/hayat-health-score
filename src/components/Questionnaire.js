@@ -378,6 +378,24 @@ const Questionnaire = () => {
                 )}
             </div>
 
+            {currentQuestion.insight && (
+                <div style={{
+                    marginTop: '0.5rem',
+                    marginBottom: '1.4rem',
+                    padding: '0.8rem 1.1rem',
+                    backgroundColor: '#f8fafc',
+                    borderLeft: '3px solid #cbd5e1',
+                    borderRadius: '0 8px 8px 0',
+                    fontSize: 'clamp(0.8rem, 2.7vw, 0.9rem)',
+                    color: '#475569',
+                    lineHeight: '1.55',
+                    fontFamily: 'Lexend, sans-serif',
+                    fontStyle: 'italic'
+                }}>
+                    "{currentQuestion.insight}"
+                </div>
+            )}
+
             <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                 {currentStepIndex > 0 && (
                     <button
