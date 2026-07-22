@@ -376,7 +376,7 @@ if ( ! function_exists( 'gliafit_get_meter_with_needle_base64' ) ) {
     }
 }
 
-$logo_img        = gliafit_get_img_base64( $img_dir . '/Neurology_logo.png' );
+$logo_img        = gliafit_get_img_base64( $img_dir . '/GliaFit_Logo.png' );
 $lotus_line_img  = gliafit_get_img_base64( $img_dir . '/lotus-line.png' );
 $meter_img       = gliafit_get_meter_with_needle_base64( $img_dir . '/Meter.png', $health_score );
 $process_img     = gliafit_get_img_base64( $img_dir . '/Process.png' );

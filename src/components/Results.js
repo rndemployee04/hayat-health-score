@@ -297,8 +297,10 @@ const Results = ({ scores, onRetake }) => {
                         textAlign: 'left'
                     }}>
 
-                        <p style={{ margin: '0 0 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
-                            ----- Your Main Areas of Concern -----
+                        <p style={{ margin: '0 auto 8px', width: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                            <hr style={{ width:`50px`, border: '0', borderTop: '2px solid green' }}></hr> 
+                            Your Main Areas of Concern 
+                            <hr style={{ width:`50px`, border: '0', borderTop: '2px solid green' }}></hr>
                         </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
                             {main_concerns.map((concern, idx) => (
@@ -347,7 +349,7 @@ const Results = ({ scores, onRetake }) => {
 
                 {/* Disclaimer */}
                 <div style={{ margin: '20px 0', paddingTop: '20px', borderTop: '1px solid #8bc34a', textAlign: 'center' }}>
-                    <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontStyle: 'italic', lineHeight: '14px', fontFamily: 'Lexend, sans-serif' }}>
+                    <p style={{ margin: 0, fontSize: '11px', color: '#64748b', lineHeight: '12px', fontFamily: 'Lexend, sans-serif' }}>
                         This Health Score is based on your responses to lifestyle and symptom questions and is intended for educational purposes only. It is not a medical diagnosis. Some health conditions, including insulin resistance and other metabolic disorders, may only be identified through laboratory testing and a comprehensive medical evaluation.
                     </p>
                 </div>
