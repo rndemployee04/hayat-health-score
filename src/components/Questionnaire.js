@@ -171,7 +171,7 @@ const Questionnaire = () => {
         maxWidth: '650px',
         width: '100%',
         margin: 'clamp(1rem, 4vw, 2rem) auto',
-        backgroundColor: '#FFFDF9',
+        backgroundColor: '#fff',
         padding: '40px 30px',
         borderRadius: '24px',
         boxShadow: '0 20px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02)',
@@ -379,18 +379,18 @@ const Questionnaire = () => {
                     <button
                         onClick={handleBack}
                         style={{ 
-                            backgroundColor: '#4f566b', color: '#fff', padding: '14px 24px',
+                            backgroundColor: '#f7f7f7', color: '#4f566b', padding: '14px 24px',
                             border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
                             fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
                             transition: 'all 0.2s ease', textAlign: 'center'
                         }}
                         onMouseOver={(e) => {
-                            e.currentTarget.style.background = `#f7f7f7`;
-                            e.currentTarget.style.color = `#4f566b`;
-                        }}
-                        onMouseOut={(e) => {
                             e.currentTarget.style.background = `#4f566b`;
                             e.currentTarget.style.color = `#fff`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.background = `#f7f7f7`;
+                            e.currentTarget.style.color = `#4f566b`;
                         }}
                     >
                         Back

@@ -126,18 +126,18 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         type="button"
                         onClick={onBack}
                         style={{
-                            backgroundColor: '#4f566b', color: '#fff', padding: '14px 24px',
+                            backgroundColor: '#f7f7f7', color: '#4f566b', padding: '14px 24px',
                             border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
                             fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
                             transition: 'all 0.2s ease', textAlign: 'center'
                         }}
                         onMouseOver={(e) => {
-                            e.currentTarget.style.background = `#f7f7f7`;
-                            e.currentTarget.style.color = `#4f566b`;
-                        }}
-                        onMouseOut={(e) => {
                             e.currentTarget.style.background = `#4f566b`;
                             e.currentTarget.style.color = `#fff`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.background = `#f7f7f7`;
+                            e.currentTarget.style.color = `#4f566b`;
                         }}
                     >
                         Back

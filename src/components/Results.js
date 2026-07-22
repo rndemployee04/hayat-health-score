@@ -406,22 +406,24 @@ const Results = ({ scores, onRetake }) => {
             </button>
 
             {onRetake && (
-                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                <div style={{ marginTop: '10px', textAlign: 'center' }}>
                     <button
                         onClick={onRetake}
                         style={{
-                          backgroundColor: '#4f566b', color: '#fff', padding: '14px 24px',
-                            border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
-                            fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
-                            transition: 'all 0.2s ease', textAlign: 'center'
+                        backgroundColor: 'transparent',
+                        color: '#096ba1', padding: '0',
+                        border: 'none', 
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        fontSize: '18px', fontFamily: 'Outfit, sans-serif', 
+                        fontWeight: '600',
+                        transition: 'all 0.2s ease', textAlign: 'center'
                         }}
                         onMouseOver={(e) => {
-                            e.currentTarget.style.background = `#f7f7f7`;
-                            e.currentTarget.style.color = `#4f566b`;
+                            e.currentTarget.style.color = `#000`;
                         }}
                         onMouseOut={(e) => {
-                            e.currentTarget.style.background = `#4f566b`;
-                            e.currentTarget.style.color = `#fff`;
+                            e.currentTarget.style.color = `#096ba1`;
                         }}
                     >
                         Retake Health Assessment
