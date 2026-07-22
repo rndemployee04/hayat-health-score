@@ -321,7 +321,7 @@ const Results = ({ scores, onRetake }) => {
                         <p style={{ margin: '0 0 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Main Areas of Concern -----
                         </p>
-                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex' }}>
+                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
                                     marginBottom: '0',
