@@ -246,6 +246,7 @@ const Questionnaire = () => {
                         background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                         color: '#FFF',
                         padding: '14px 24px',
+                        outline: 'none',
                         border: '1px solid rgba(220, 227, 235, 0.8)',
                         borderRadius: '50px',
                         cursor: 'pointer',
@@ -389,6 +390,7 @@ const Questionnaire = () => {
                                 background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                                 color: '#FFF',
                                 padding: '14px 24px',
+                                outline: 'none',
                                 border: '1px solid rgba(220, 227, 235, 0.8)',
                                 borderRadius: '50px',
                                 cursor: 'pointer',
@@ -423,8 +425,8 @@ const Questionnaire = () => {
                     return (
                         <label key={option} className={`option-row ${isSelected ? 'selected' : ''}`} onClick={() => handleOptionToggle(option)}>
                             <div style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '18px',
+                                height: '18px',
                                 borderRadius: '6px',
                                 border: `2px solid ${isSelected ? primaryColor : '#94a3b8'}`,
                                 backgroundColor: isSelected ? primaryColor : '#ffffff',
@@ -440,7 +442,7 @@ const Questionnaire = () => {
                                     </svg>
                                 )}
                             </div>
-                            <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1.05rem, 3.8vw, 1.18rem)', color: isSelected ? '#1a1f36' : '#334155', fontWeight: isSelected ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
+                            <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: '16px', color: isSelected ? '#1a1f36' : '#334155', fontWeight: isSelected ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
                         </label>
                     );
                 })}
@@ -450,8 +452,8 @@ const Questionnaire = () => {
                     return (
                         <label key={option} className={`option-row ${isSelected ? 'selected' : ''}`} onClick={() => handleRadioSelect(option)}>
                             <div style={{
-                                width: '24px',
-                                height: '24px',
+                                width: '18px',
+                                height: '18px',
                                 borderRadius: '50%',
                                 border: `2px solid ${isSelected ? primaryColor : '#94a3b8'}`,
                                 backgroundColor: '#ffffff',
@@ -470,7 +472,7 @@ const Questionnaire = () => {
                                     }} />
                                 )}
                             </div>
-                            <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1.05rem, 3.8vw, 1.18rem)', color: isSelected ? '#1a1f36' : '#334155', fontWeight: isSelected ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
+                            <span style={{ fontFamily: 'Lexend, sans-serif', fontSize: '16px', color: isSelected ? '#1a1f36' : '#334155', fontWeight: isSelected ? '600' : '400', lineHeight: '1.35' }}>{option}</span>
                         </label>
                     );
                 })}
@@ -526,23 +528,26 @@ const Questionnaire = () => {
                 </div>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: 'auto', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column-reverse', gap: '0.6rem', marginTop: 'auto', width: '100%' }}>
                 {currentStepIndex > 0 && (
                     <button
                         onClick={handleBack}
                         style={{
-                            backgroundColor: '#f7f7f7', color: '#4f566b', padding: '14px 24px',
-                            border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
-                            fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
-                            transition: 'all 0.2s ease', textAlign: 'center'
+                        backgroundColor: 'transparent',
+                        color: '#000', padding: '10px 0 0',
+                        border: 'none',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        outline: 'none',
+                        fontSize: '18px', fontFamily: 'Outfit, sans-serif',
+                        fontWeight: '600',
+                        transition: 'all 0.2s ease', textAlign: 'center'
                         }}
                         onMouseOver={(e) => {
-                            e.currentTarget.style.background = `#4f566b`;
-                            e.currentTarget.style.color = `#fff`;
+                            e.currentTarget.style.color = `#096ba1`;
                         }}
                         onMouseOut={(e) => {
-                            e.currentTarget.style.background = `#f7f7f7`;
-                            e.currentTarget.style.color = `#4f566b`;
+                            e.currentTarget.style.color = `#000`;
                         }}
                     >
                         Back
@@ -555,13 +560,13 @@ const Questionnaire = () => {
                         background: isNextDisabled() ? '#cbd5e1' : `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                         color: isNextDisabled() ? '#64748b' : '#FFF',
                         padding: '14px 24px',
+                        outline: 'none',
                         border: '1px solid rgba(220, 227, 235, 0.8)',
                         borderRadius: '50px',
                         cursor: isNextDisabled() ? 'not-allowed' : 'pointer',
                         fontSize: '18px',
                         fontFamily: 'Outfit, sans-serif',
                         fontWeight: '700',
-                        flex: '2 1 180px',
                         boxShadow: isNextDisabled() ? 'none' : `0 6px 16px rgba(0,0,0,0.12)`,
                         transition: 'all 0.3s',
                         textAlign: 'center'
