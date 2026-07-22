@@ -30,14 +30,16 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
     const [displayedScore, setDisplayedScore] = useState(0);
     const [animatedAngle, setAnimatedAngle] = useState(0);
 
-    // 5 Gauge Bands with rounded overlaps and original colors
+    // 5 Gauge Bands with Red -> Orange -> Yellow -> Green -> Dark Green
     const bands = [
-        { label: 'SIGNIFICANT OPPORTUNITY', range: '0-19', color: '#E50914', textColor: '#E50914', start: 0, end: 41, textX: 65, textY: 108 },
-        { label: 'NEEDS ATTENTION', range: '20-39', color: '#E50914', textColor: '#E50914', start: 39, end: 77, textX: 142, textY: 14 },
-        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#1E293B', start: 77, end: 113, textX: 250, textY: -18 },
-        { label: 'GOOD', range: '60-79', color: '#00C853', textColor: '#00C853', start: 113, end: 149, textX: 358, textY: 14 },
-        { label: 'EXCELLENT', range: '80-100', color: '#008A3B', textColor: '#008A3B', start: 149, end: 180, textX: 435, textY: 108 }
+        { label: 'SIGNIFICANT OPPORTUNITY', range: '0-19', color: '#E50914', textColor: '#E50914', start: 0, end: 36, textX: 65, textY: 108 },
+        { label: 'NEEDS ATTENTION', range: '20-39', color: '#FF7A00', textColor: '#FF7A00', start: 36, end: 72, textX: 142, textY: 14 },
+        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#1E293B', start: 72, end: 108, textX: 250, textY: -18 },
+        { label: 'GOOD', range: '60-79', color: '#00C853', textColor: '#00C853', start: 108, end: 144, textX: 358, textY: 14 },
+        { label: 'EXCELLENT', range: '80-100', color: '#008A3B', textColor: '#008A3B', start: 144, end: 180, textX: 435, textY: 108 }
     ];
+
+    const gapAngles = [36, 72, 108, 144];
 
     useEffect(() => {
         const targetScore = Math.min(100, Math.max(0, score));
@@ -73,6 +75,10 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
 
     // Center = (250, 175), R = 140
     const needleTip = polarToCartesian(250, 175, 120, animatedAngle);
+    
+    // Outer caps center coordinates
+    const leftEnd = polarToCartesian(250, 175, 140, 0);
+    const rightEnd = polarToCartesian(250, 175, 140, 180);
 
     return (
         <div style={{ width: '100%', maxWidth: '390px', margin: '0 auto', fontFamily: 'Outfit, sans-serif', boxSizing: 'border-box' }}>
@@ -85,51 +91,74 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                     </filter>
                 </defs>
 
-                {/* 5 Color Arc Bands */}
+                {/* 5 Flat Color Segments */}
+                {bands.map((band, idx) => (
+                    <path
+                        key={idx}
+                        d={describeArc(250, 175, 140, band.start, band.end)}
+                        fill="none"
+                        stroke={band.color}
+                        strokeWidth="24"
+                        strokeLinecap="butt"
+                    />
+                ))}
+
+                {/* Rounded End Caps */}
+                <circle cx={leftEnd.x} cy={leftEnd.y} r="12" fill="#E50914" />
+                <circle cx={rightEnd.x} cy={rightEnd.y} r="12" fill="#008A3B" />
+
+                {/* White Gap Lines to divide segments cleanly */}
+                {gapAngles.map((angle, i) => {
+                    const p1 = polarToCartesian(250, 175, 125, angle);
+                    const p2 = polarToCartesian(250, 175, 155, angle);
+                    return (
+                        <line
+                            key={i}
+                            x1={p1.x}
+                            y1={p1.y}
+                            x2={p2.x}
+                            y2={p2.y}
+                            stroke="#ffffff"
+                            strokeWidth="3.5"
+                        />
+                    );
+                })}
+
+                {/* Labels and Ranges */}
                 {bands.map((band, idx) => {
                     const isTwoLines = band.label.includes(' ');
                     const line1 = isTwoLines ? band.label.split(' ')[0] : band.label;
                     const line2 = isTwoLines ? band.label.split(' ').slice(1).join(' ') : '';
 
                     return (
-                        <g key={idx}>
-                            <path
-                                d={describeArc(250, 175, 140, band.start, band.end)}
-                                fill="none"
-                                stroke={band.color}
-                                strokeWidth="24"
-                                strokeLinecap="round"
-                            />
-                            {/* Text Label Outside Band */}
-                            <g transform={`translate(${band.textX}, ${band.textY})`}>
-                                <text
-                                    textAnchor="middle"
-                                    fill={band.textColor}
-                                    fontFamily="Outfit, sans-serif"
-                                    fontSize="13"
-                                    fontWeight="700"
-                                >
-                                    {isTwoLines ? (
-                                        <>
-                                            <tspan x="0" dy="-10">{line1}</tspan>
-                                            <tspan x="0" dy="15">{line2}</tspan>
-                                        </>
-                                    ) : (
-                                        <tspan x="0" dy="2">{line1}</tspan>
-                                    )}
-                                </text>
+                        <g key={idx} transform={`translate(${band.textX}, ${band.textY})`}>
+                            <text
+                                textAnchor="middle"
+                                fill={band.textColor}
+                                fontFamily="Outfit, sans-serif"
+                                fontSize="11"
+                                fontWeight="700"
+                            >
+                                {isTwoLines ? (
+                                    <>
+                                        <tspan x="0" dy="-7">{line1}</tspan>
+                                        <tspan x="0" dy="12">{line2}</tspan>
+                                    </>
+                                ) : (
+                                    <tspan x="0" dy="2">{line1}</tspan>
+                                )}
+                            </text>
 
-                                <text x="0" y={isTwoLines ? 25 : 20} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="14" fontWeight="700">
-                                    {band.range}
-                                </text>
-                            </g>
+                            <text x="0" y={isTwoLines ? 30 : 25} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="11" fontWeight="700">
+                                {band.range}
+                            </text>
                         </g>
                     );
                 })}
 
                 {/* 0 and 100 Scale Markers perfectly aligned with baseline tips */}
-                <text x="96" y="200" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="700">0</text>
-                <text x="404" y="200" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="700">100</text>
+                <text x="96" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">0</text>
+                <text x="404" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">100</text>
 
                 {/* Pointer Needle */}
                 <g filter="url(#needle-shadow)">
@@ -229,7 +258,7 @@ const Results = ({ scores, onRetake }) => {
         scoreColor = '#FCB017'; // Fair (Yellow/Orange)
         scoreCategoryName = 'FAIR';
     } else if (health_score >= 20) {
-        scoreColor = '#E50914'; // Needs Attention (Red)
+        scoreColor = '#FF7A00'; // Needs Attention (Orange)
         scoreCategoryName = 'NEEDS ATTENTION';
     } else {
         scoreColor = '#E50914'; // Significant Opportunity (Red)
