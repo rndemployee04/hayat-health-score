@@ -111,7 +111,7 @@ td {
 }
 
 .status-caption {
-    font-size: 6.5pt;
+    font-size: 7pt;
     text-transform: uppercase;
     display: block;
     letter-spacing: 0.5px;
@@ -150,7 +150,7 @@ td {
 }
 
 .icon-circle-badge i {
-    line-height: 30px;
+    line-height: 32px;
 }
 
 /* Grid Circle Icons */
@@ -360,7 +360,7 @@ if ( ! function_exists( 'gliafit_get_meter_with_needle_base64' ) ) {
         $y2 = $cy - $needle_len * sin( $rad );
 
         $black = imagecolorallocate( $im, 34, 34, 34 );
-        imagesetthickness( $im, 14 );
+        imagesetthickness( $im, 20 );
         imageline( $im, (int)$cx, (int)$cy, (int)$x2, (int)$y2, $black );
 
         imagefilledellipse( $im, (int)$cx, (int)$cy, 44, 44, $black );
@@ -376,7 +376,7 @@ if ( ! function_exists( 'gliafit_get_meter_with_needle_base64' ) ) {
     }
 }
 
-$logo_img        = gliafit_get_img_base64( $img_dir . '/Neurology_logo.png' );
+$logo_img        = gliafit_get_img_base64( $img_dir . '/GliaFit-logo.png' );
 $lotus_line_img  = gliafit_get_img_base64( $img_dir . '/lotus-line.png' );
 $meter_img       = gliafit_get_meter_with_needle_base64( $img_dir . '/Meter.png', $health_score );
 $process_img     = gliafit_get_img_base64( $img_dir . '/Process.png' );
@@ -432,7 +432,7 @@ if ( ! empty( $qr_code_url ) ) {
     <tr>
         <!-- Left Column: Gauge & Status -->
         <td style="width: 50%; padding-right: 8px;">
-            <div class="section-title">YOUR GLIAFIT METABOLIC HEALTH GAUGE&trade;</div>
+            <div class="section-title">YOUR GLIAFIT METABOLIC HEALTH GAUGE</div>
 
             <div style="text-align: center;">
                 <?php if ( $meter_img ): ?>
@@ -466,7 +466,7 @@ if ( ! empty( $qr_code_url ) ) {
                 <table style="width: 100%;">
                     <tr>
                         <td>
-                        <i class="fa-regular fa-heart" style="font-size:22px; padding-right: 5px;"></i>
+                        <i class="fa-regular fa-heart" style="font-size:18px; padding-right: 5px;"></i>
                 </td>
                 <td><?php echo esc_html( $hope_statement ); ?>
                         </td>

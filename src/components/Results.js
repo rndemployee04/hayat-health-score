@@ -136,20 +136,20 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                                 textAnchor="middle"
                                 fill={band.textColor}
                                 fontFamily="Outfit, sans-serif"
-                                fontSize="11"
+                                fontSize="12"
                                 fontWeight="700"
                             >
                                 {isTwoLines ? (
                                     <>
-                                        <tspan x="0" dy="-7">{line1}</tspan>
-                                        <tspan x="0" dy="12">{line2}</tspan>
+                                        <tspan x="0" dy="-5">{line1}</tspan>
+                                        <tspan x="0" dy="15">{line2}</tspan>
                                     </>
                                 ) : (
                                     <tspan x="0" dy="2">{line1}</tspan>
                                 )}
                             </text>
 
-                            <text x="0" y={isTwoLines ? 30 : 25} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="11" fontWeight="700">
+                            <text x="0" y={isTwoLines ? 30 : 25} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="14" fontWeight="700">
                                 {band.range}
                             </text>
                         </g>
@@ -157,8 +157,8 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                 })}
 
                 {/* 0 and 100 Scale Markers perfectly aligned with baseline tips */}
-                <text x="96" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">0</text>
-                <text x="404" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">100</text>
+                <text x="95" y="200" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="700">0</text>
+                <text x="410" y="200" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="700">100</text>
 
                 {/* Pointer Needle */}
                 <g filter="url(#needle-shadow)">
@@ -178,10 +178,10 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
             {/* Bottom Score & Status Callout Banner */}
             <div style={{ marginTop: '0.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontSize: 'clamp(2rem, 6vw, 2.6rem)', fontWeight: '800', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
+                    <span style={{ fontSize: '50px', fontWeight: '700', color: scoreColor, lineHeight: '1', fontFamily: 'Outfit, sans-serif', letterSpacing: '-1px' }}>
                         {displayedScore}
                     </span>
-                    <span style={{ fontSize: 'clamp(1rem, 3.2vw, 1.25rem)', fontWeight: '700', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
+                    <span style={{ fontSize: '22px', fontWeight: '700', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
                         /100
                     </span>
                 </div>
@@ -192,11 +192,11 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                     padding: '10px 24px',
                     borderRadius: '50px',
                     display: 'inline-flex',
-                    alignItems: 'center',
+                    alignItems: 'start',
                     justifyContent: 'center',
                     gap: '10px',
                     marginTop: '0.8rem',
-                    maxWidth: '96%',
+                    maxWidth: '100%',
                     boxSizing: 'border-box',
                     boxShadow: `0 6px 18px ${scoreColor}40`
                 }}>
@@ -204,6 +204,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        marginTop: '2px',
                         width: '20px',
                         height: '20px',
                         borderRadius: '50%',
@@ -215,7 +216,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                     }}>
                         !
                     </span>
-                    <span style={{ fontSize: '16px', fontWeight: '700', letterSpacing: '1px', fontFamily: 'Outfit, sans-serif', textAlign: 'center' }}>
+                    <span style={{ fontSize: '16px', fontWeight: '700', letterSpacing: '1px', fontFamily: 'Outfit, sans-serif', textAlign: 'left' }}>
                         Your Metabolic Health : <strong>{categoryName}</strong>
                     </span>
                 </div>
@@ -326,9 +327,9 @@ const Results = ({ scores, onRetake }) => {
                         textAlign: 'left'
                     }}>
 
-                        <p style={{ margin: '0 0 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
-                            ----- Your Main Areas of Concern -----
-                        </p>
+                        <p style={{ margin: '0 auto 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                             ----- Your Main Areas of Concern  -----                        
+                            </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
@@ -376,7 +377,7 @@ const Results = ({ scores, onRetake }) => {
 
                 {/* Disclaimer */}
                 <div style={{ margin: '20px 0', paddingTop: '20px', borderTop: '1px solid #8bc34a', textAlign: 'center' }}>
-                    <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontStyle: 'italic', lineHeight: '14px', fontFamily: 'Lexend, sans-serif' }}>
+                    <p style={{ margin: 0, fontSize: '11px', color: '#64748b', lineHeight: '12px', fontFamily: 'Lexend, sans-serif' }}>
                         This Health Score is based on your responses to lifestyle and symptom questions and is intended for educational purposes only. It is not a medical diagnosis. Some health conditions, including insulin resistance and other metabolic disorders, may only be identified through laboratory testing and a comprehensive medical evaluation.
                     </p>
                 </div>
