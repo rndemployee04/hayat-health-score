@@ -6,6 +6,11 @@ import LeadCapture from './LeadCapture';
 import Results from './Results';
 import AnalysisLoader from './AnalysisLoader';
 import confetti from 'canvas-confetti';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHandsHoldingCircle} from '@fortawesome/free-solid-svg-icons';
+
+
+
 
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
@@ -234,6 +239,9 @@ const Questionnaire = () => {
                         .show-on-mobile { display: none !important; }
                     }
                 `}</style>
+
+                <FontAwesomeIcon icon={faHandsHoldingCircle} style={{ fontSize: '80px', color: '#f59c11', margin: '0 auto 30px' }} />
+
                 <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: '40px', fontWeight: '700', margin: '0 0 10px', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                     GliaFit – 60-Second <br></br>Health Score
                 </h2>
