@@ -13,5 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "@wordpress/scripts": "^33.0.0"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4"
   }
 }
