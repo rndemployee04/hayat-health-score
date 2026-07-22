@@ -106,20 +106,20 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                                     textAnchor="middle"
                                     fill={band.textColor}
                                     fontFamily="Outfit, sans-serif"
-                                    fontSize="11"
+                                    fontSize="13"
                                     fontWeight="700"
                                 >
                                     {isTwoLines ? (
                                         <>
-                                            <tspan x="0" dy="-7">{line1}</tspan>
-                                            <tspan x="0" dy="12">{line2}</tspan>
+                                            <tspan x="0" dy="-10">{line1}</tspan>
+                                            <tspan x="0" dy="15">{line2}</tspan>
                                         </>
                                     ) : (
                                         <tspan x="0" dy="2">{line1}</tspan>
                                     )}
                                 </text>
 
-                                <text x="0" y={isTwoLines ? 30 : 25} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="11" fontWeight="700">
+                                <text x="0" y={isTwoLines ? 25 : 20} textAnchor="middle" fill="#475569" fontFamily="Outfit, sans-serif" fontSize="14" fontWeight="700">
                                     {band.range}
                                 </text>
                             </g>
@@ -128,8 +128,8 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                 })}
 
                 {/* 0 and 100 Scale Markers perfectly aligned with baseline tips */}
-                <text x="96" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">0</text>
-                <text x="404" y="192" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700">100</text>
+                <text x="96" y="200" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="700">0</text>
+                <text x="404" y="200" textAnchor="middle" fill="#1e293b" fontSize="14" fontWeight="700">100</text>
 
                 {/* Pointer Needle */}
                 <g filter="url(#needle-shadow)">
@@ -300,7 +300,7 @@ const Results = ({ scores, onRetake }) => {
                         <p style={{ margin: '0 0 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Main Areas of Concern -----
                         </p>
-                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex' }}>
+                        <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
                                     marginBottom: '0',
@@ -363,6 +363,7 @@ const Results = ({ scores, onRetake }) => {
                     border: '1px solid rgba(220, 227, 235, 0.8)',
                     borderRadius: '50px',
                     cursor: 'pointer',
+                    outline: 'none',
                     fontSize: '18px',
                     fontFamily: 'Outfit, sans-serif',
                     fontWeight: '700',
@@ -392,6 +393,7 @@ const Results = ({ scores, onRetake }) => {
                             backgroundColor: 'transparent',
                             color: '#096ba1', padding: '0',
                             border: 'none',
+                            outline: 'none',
                             textDecoration: 'underline',
                             cursor: 'pointer',
                             fontSize: '18px', fontFamily: 'Outfit, sans-serif',

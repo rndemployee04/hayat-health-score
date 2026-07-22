@@ -63,7 +63,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                 <h3 style={{ color: '#1a1f36', margin: '0px 0px 5px', fontFamily: 'Outfit, sans-serif', fontSize: '35px', fontWeight: '700', letterSpacing: '-0.5px' }}>
                     Your Personalized Health Snapshot Is Ready!!!
                 </h3>
-                <p style={{ color: '#8792a2', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
+                <p style={{ color: '#595959', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
                     Enter your first name and email to view your results and receive your Health Snapshot.
                 </p>
             </div>
@@ -121,23 +121,26 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                     </div>
                 )}
 
-                <div style={{ marginTop: 'clamp(1rem, 4vw, 1.5rem)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ marginTop: 'clamp(1rem, 4vw, 1.5rem)', display: 'flex', flexDirection: 'column-reverse', gap: '0.6rem' }}>
                     <button
                         type="button"
                         onClick={onBack}
                         style={{
-                            backgroundColor: '#f7f7f7', color: '#4f566b', padding: '14px 24px',
-                            border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
-                            fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
-                            transition: 'all 0.2s ease', textAlign: 'center'
+                        backgroundColor: 'transparent',
+                        color: '#000', padding: '10px 0 0',
+                        border: 'none',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        outline: 'none',
+                        fontSize: '18px', fontFamily: 'Outfit, sans-serif',
+                        fontWeight: '600',
+                        transition: 'all 0.2s ease', textAlign: 'center'
                         }}
                         onMouseOver={(e) => {
-                            e.currentTarget.style.background = `#4f566b`;
-                            e.currentTarget.style.color = `#fff`;
+                            e.currentTarget.style.color = `#096ba1`;
                         }}
                         onMouseOut={(e) => {
-                            e.currentTarget.style.background = `#f7f7f7`;
-                            e.currentTarget.style.color = `#4f566b`;
+                            e.currentTarget.style.color = `#000`;
                         }}
                     >
                         Back
@@ -151,8 +154,9 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                             color: '#FFF', padding: '14px 24px',
                             border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: isSubmitting ? 'not-allowed' : 'pointer',
                             opacity: isSubmitting ? 0.7 : 1, fontSize: '18px', fontFamily: 'Outfit, sans-serif',
-                            fontWeight: '700', flex: '2 1 200px',
+                            fontWeight: '700',
                             boxShadow: `0 8px 20px rgba(0,0,0,0.15)`,
+                            outline: 'none',
                             transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                             letterSpacing: '0.5px',
                             textAlign: 'center'

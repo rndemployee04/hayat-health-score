@@ -8,7 +8,7 @@ const ProgressBar = ({ currentStep, totalSteps, isCompleted = false }) => {
     const secondsLeft = isCompleted ? 0 : Math.max(5, (totalSteps - currentStep + 1) * 5);
 
     return (
-        <div style={{ marginBottom: '2.2rem' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -16,10 +16,10 @@ const ProgressBar = ({ currentStep, totalSteps, isCompleted = false }) => {
                 gap: '0.5rem',
                 marginBottom: '0.8rem',
                 fontFamily: 'Lexend, sans-serif',
-                fontSize: 'clamp(0.85rem, 3vw, 0.95rem)',
+                fontSize: '15px',
                 color: '#475569', // Darker gray for high contrast (> 4.5:1)
-                fontWeight: '500',
-                letterSpacing: '-0.1px'
+                fontWeight: '600',
+                letterSpacing: '0.5px'
             }}>
                 <span>{isCompleted ? 'Assessment Completed' : `Question ${currentStep} of ${totalSteps}`}</span>
                 {isCompleted ? (
