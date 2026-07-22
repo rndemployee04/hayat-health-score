@@ -184,7 +184,7 @@ const Questionnaire = () => {
         maxWidth: '650px',
         width: '100%',
         margin: 'clamp(1rem, 4vw, 2rem) auto',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fff',
         padding: '40px 30px',
         borderRadius: '24px',
         boxShadow: '0 20px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02)',
@@ -234,10 +234,10 @@ const Questionnaire = () => {
                         .show-on-mobile { display: none !important; }
                     }
                 `}</style>
-                <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.8rem, 6vw, 2.5rem)', fontWeight: '800', marginBottom: '1.5rem', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
-                    GliaFit – 60-Second Health Score
+                <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: '40px', fontWeight: '700', margin: '0 0 10px', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
+                    GliaFit – 60-Second <br></br>Health Score
                 </h2>
-                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(1.05rem, 3.5vw, 1.2rem)', marginBottom: 'clamp(2rem, 5vw, 3rem)', lineHeight: '1.7', maxWidth: '90%', margin: '0 auto clamp(2rem, 5vw, 3rem) auto' }}>
+                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: '18px', margin: '0px auto 25px', lineHeight: '1.3' }}>
                     Discover your personalized health score, identify your top opportunities for vitality, and take the first step towards a healthier you. It only takes a minute.
                 </p>
                 <button
@@ -249,7 +249,7 @@ const Questionnaire = () => {
                         border: '1px solid rgba(220, 227, 235, 0.8)',
                         borderRadius: '50px',
                         cursor: 'pointer',
-                        fontSize: '16px',
+                        fontSize: '18px',
                         fontFamily: 'Outfit, sans-serif',
                         fontWeight: '700',
                         width: '100%',
@@ -381,8 +381,8 @@ const Questionnaire = () => {
             {showExitIntent && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', zIndex: 999999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1.5rem' }}>
                     <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', padding: 'clamp(2rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)', border: '1px solid rgba(220, 227, 235, 0.8)' }}>
-                        <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '800', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
-                        <p style={{ marginBottom: '2rem', fontSize: '1.05rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.6' }}>You're only a few questions away from seeing your personalized Health Score.</p>
+                        <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: '700', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
+                        <p style={{ marginBottom: '2rem', fontSize: '12px', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.6' }}>You're only a few questions away from seeing your personalized Health Score.</p>
                         <button
                             onClick={() => setShowExitIntent(false)}
                             style={{
@@ -392,7 +392,7 @@ const Questionnaire = () => {
                                 border: '1px solid rgba(220, 227, 235, 0.8)',
                                 borderRadius: '50px',
                                 cursor: 'pointer',
-                                fontSize: '16px',
+                                fontSize: '18px',
                                 fontFamily: 'Outfit, sans-serif',
                                 fontWeight: '700',
                                 width: '100%',
@@ -414,7 +414,7 @@ const Questionnaire = () => {
 
             <ProgressBar currentStep={currentStepIndex + 1} totalSteps={questions.length} />
 
-            <h3 style={{ color: '#1a1f36', margin: '0 0 0.3rem 0', fontFamily: 'Outfit, sans-serif', fontSize: '18px', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
+            <h3 style={{ color: '#1a1f36', margin: '0 0 0.3rem 0', fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
             {currentQuestion.subtitle && <p style={{ margin: '0', fontStyle: 'italic', color: '#64748b', fontSize: '12px', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.2rem', marginBottom: '1.4rem' }}>
@@ -539,25 +539,54 @@ const Questionnaire = () => {
                     <button
                         onClick={handleBack}
                         style={{
-                            backgroundColor: 'transparent',
-                            color: '#64748b',
-                            padding: '0.6rem 1.2rem',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: 'clamp(0.9rem, 3vw, 0.98rem)',
-                            fontFamily: 'Outfit, sans-serif',
-                            fontWeight: '600',
-                            textAlign: 'center',
-                            margin: '0.2rem auto 0 auto',
-                            textDecoration: 'underline',
-                            transition: 'color 0.2s'
+                            backgroundColor: '#f7f7f7', color: '#4f566b', padding: '14px 24px',
+                            border: '1px solid rgba(220, 227, 235, 0.8)', borderRadius: '50px', cursor: 'pointer',
+                            fontSize: '18px', fontFamily: 'Outfit, sans-serif', fontWeight: '600', flex: '1 1 120px',
+                            transition: 'all 0.2s ease', textAlign: 'center'
                         }}
-                        onMouseOver={(e) => { e.currentTarget.style.color = '#1e293b'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.background = `#4f566b`;
+                            e.currentTarget.style.color = `#fff`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.background = `#f7f7f7`;
+                            e.currentTarget.style.color = `#4f566b`;
+                        }}
                     >
                         Back
                     </button>
                 )}
+                <button
+                    onClick={handleNext}
+                    disabled={isNextDisabled()}
+                    style={{
+                        background: isNextDisabled() ? '#cbd5e1' : `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
+                        color: isNextDisabled() ? '#64748b' : '#FFF',
+                        padding: '14px 24px',
+                        border: '1px solid rgba(220, 227, 235, 0.8)',
+                        borderRadius: '50px',
+                        cursor: isNextDisabled() ? 'not-allowed' : 'pointer',
+                        fontSize: '18px',
+                        fontFamily: 'Outfit, sans-serif',
+                        fontWeight: '700',
+                        flex: '2 1 180px',
+                        boxShadow: isNextDisabled() ? 'none' : `0 6px 16px rgba(0,0,0,0.12)`,
+                        transition: 'all 0.3s',
+                        textAlign: 'center'
+                    }}
+                    onMouseOver={(e) => {
+                        if (!isNextDisabled()) {
+                            e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
+                        }
+                    }}
+                    onMouseOut={(e) => {
+                        if (!isNextDisabled()) {
+                            e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
+                        }
+                    }}
+                >
+                    {currentStepIndex === questions.length - 1 ? 'Get My Health Score' : 'Continue'}
+                </button>
             </div>
 
             {status === 'error' && <p style={{ color: '#d9534f', marginTop: '1.5rem', textAlign: 'center', fontFamily: 'Lexend, sans-serif' }}>An error occurred. Please try again.</p>}
