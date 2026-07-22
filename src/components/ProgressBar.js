@@ -33,7 +33,7 @@ const ProgressBar = ({ currentStep, totalSteps, isCompleted = false }) => {
                 )}
             </div>
             <div style={{ width: '100%', height: '8px', backgroundColor: '#e2e8f0', borderRadius: '10px', overflow: 'hidden', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.06)' }}>
-                <div 
+                <div
                     style={{
                         height: '100%',
                         width: `${percentage}%`,

@@ -467,14 +467,14 @@ class Health_Score_Admin {
         <div id="health-profile-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
             <div style="background-color:#fff; margin:5% auto; padding:20px; border-radius:8px; width:600px; max-width:90%; box-shadow:0 5px 15px rgba(0,0,0,0.3);">
                 <span id="health-modal-close" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
-                <h2 id="modal-name" style="margin-top:0;">Patient Profile</h2>
+                <h2 id="modal-name" style="color:#fc7909; margin-top:0;">Patient Profile</h2>
                 <hr>
                 <div style="display:flex; gap:20px; margin-bottom:20px;">
                     <div style="flex:1;">
-                        <strong>Health Score:</strong> <span id="modal-health-score"></span><br>
-                        <strong>Readiness:</strong> <span id="modal-readiness"></span>/10<br>
-                        <strong>Phone:</strong> <span id="modal-phone"></span><br>
-                        <strong>Email:</strong> <span id="modal-email"></span>
+                        <strong>Health Score:</strong> <span style="color:#0c6fa4;" id="modal-health-score"></span><br>
+                        <strong>Readiness:</strong> <span style="color:#0c6fa4;" id="modal-readiness"></span>/10<br>
+                        <strong>Phone:</strong> <span style="color:#0c6fa4;" id="modal-phone"></span><br>
+                        <strong>Email:</strong> <span style="color:#0c6fa4;" id="modal-email"></span>
                     </div>
                 </div>
                 <h3>Patient's Stated Goals</h3>

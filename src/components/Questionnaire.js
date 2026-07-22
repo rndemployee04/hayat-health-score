@@ -39,7 +39,7 @@ const Questionnaire = () => {
                 if (refUrl.hostname && !refUrl.hostname.includes(window.location.hostname)) {
                     utm_source = refUrl.hostname.replace('www.', '');
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
 
         if (!utm_source) {
@@ -97,7 +97,7 @@ const Questionnaire = () => {
             const element = containerRef.current;
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
             window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-            
+
             // Additional fail-safe for custom theme wrappers
             try {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -185,7 +185,7 @@ const Questionnaire = () => {
         width: '100%',
         margin: 'clamp(1rem, 4vw, 2rem) auto',
         backgroundColor: '#ffffff',
-        padding: 'clamp(1.5rem, 5vw, 3rem)',
+        padding: '40px 30px',
         borderRadius: '24px',
         boxShadow: '0 20px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02)',
         border: '1px solid rgba(220, 227, 235, 0.8)',
@@ -245,11 +245,11 @@ const Questionnaire = () => {
                     style={{
                         background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                         color: '#FFF',
-                        padding: '1rem 2.5rem',
-                        border: 'none',
+                        padding: '14px 24px',
+                        border: '1px solid rgba(220, 227, 235, 0.8)',
                         borderRadius: '50px',
                         cursor: 'pointer',
-                        fontSize: 'clamp(0.95rem, 3.5vw, 1.15rem)',
+                        fontSize: '16px',
                         fontFamily: 'Outfit, sans-serif',
                         fontWeight: '700',
                         width: '100%',
@@ -265,11 +265,9 @@ const Questionnaire = () => {
                     }}
                     onMouseOver={(e) => {
                         e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
-                        e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`;
                     }}
                     onMouseOut={(e) => {
                         e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
-                        e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
                     }}
                 >
                     <span>
@@ -390,11 +388,11 @@ const Questionnaire = () => {
                             style={{
                                 background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
                                 color: '#FFF',
-                                padding: '1rem 2rem',
-                                border: 'none',
+                                padding: '14px 24px',
+                                border: '1px solid rgba(220, 227, 235, 0.8)',
                                 borderRadius: '50px',
                                 cursor: 'pointer',
-                                fontSize: '1.15rem',
+                                fontSize: '16px',
                                 fontFamily: 'Outfit, sans-serif',
                                 fontWeight: '700',
                                 width: '100%',
@@ -403,11 +401,9 @@ const Questionnaire = () => {
                             }}
                             onMouseOver={(e) => {
                                 e.currentTarget.style.background = `linear-gradient(180deg, ${btnHoverTop} 0%, ${btnHoverBottom} 100%)`;
-                                e.currentTarget.style.boxShadow = `0 12px 25px rgba(245, 156, 17, 0.4)`;
                             }}
                             onMouseOut={(e) => {
                                 e.currentTarget.style.background = `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`;
-                                e.currentTarget.style.boxShadow = `0 8px 20px rgba(0,0,0,0.15)`;
                             }}
                         >
                             Continue Assessment
@@ -418,8 +414,8 @@ const Questionnaire = () => {
 
             <ProgressBar currentStep={currentStepIndex + 1} totalSteps={questions.length} />
 
-            <h3 style={{ color: '#1a1f36', marginTop: '0.6rem', marginBottom: '0.3rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(1.3rem, 4vw, 1.65rem)', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
-            {currentQuestion.subtitle && <p style={{ marginBottom: '0', fontStyle: 'italic', color: '#64748b', fontSize: 'clamp(0.85rem, 3vw, 1rem)', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
+            <h3 style={{ color: '#1a1f36', margin: '0 0 0.3rem 0', fontFamily: 'Outfit, sans-serif', fontSize: '18px', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
+            {currentQuestion.subtitle && <p style={{ margin: '0', fontStyle: 'italic', color: '#64748b', fontSize: '12px', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.2rem', marginBottom: '1.4rem' }}>
                 {currentQuestion.type === 'checkbox' && currentQuestion.options.map((option) => {
@@ -503,19 +499,19 @@ const Questionnaire = () => {
                     alignItems: 'flex-start',
                     gap: '10px'
                 }}>
-                    <svg 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke={primaryColor} 
-                        strokeWidth="2.5" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        style={{ 
-                            width: '20px', 
-                            height: '20px', 
-                            minWidth: '20px', 
-                            minHeight: '20px', 
-                            flexShrink: 0, 
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke={primaryColor}
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{
+                            width: '20px',
+                            height: '20px',
+                            minWidth: '20px',
+                            minHeight: '20px',
+                            flexShrink: 0,
                             marginTop: '2px',
                             display: 'block'
                         }}
