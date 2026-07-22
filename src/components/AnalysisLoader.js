@@ -99,9 +99,9 @@ const AnalysisLoader = ({ onComplete }) => {
             <h3 style={{
                 color: '#1a1f36',
                 fontFamily: 'Outfit, sans-serif',
-                fontSize: 'clamp(1.5rem, 5vw, 2rem)',
+                fontSize: '30px',
                 fontWeight: '800',
-                marginBottom: '0.6rem',
+                marginBottom: '0',
                 letterSpacing: '-0.5px'
             }}>
                 Analyzing Your Results...

@@ -7,8 +7,8 @@ const ProgressBar = ({ currentStep, totalSteps, isCompleted = false }) => {
     const percentage = Math.round((completedSteps / totalSteps) * 100);
 
     return (
-        <div style={{ marginBottom: '2.5rem' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.8rem', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.75rem, 3vw, 0.95rem)', color: '#8792a2', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.8rem', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(0.75rem, 3vw, 0.95rem)', color: '#8792a2', fontWeight: '600', letterSpacing: '0.5px' }}>
                 <span>{isCompleted ? 'Assessment Completed' : `Question ${currentStep} of ${totalSteps}`}</span>
                 <span style={{ color: primaryColor }}>{percentage}% Complete</span>
             </div>
