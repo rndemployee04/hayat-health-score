@@ -297,11 +297,9 @@ const Results = ({ scores, onRetake }) => {
                         textAlign: 'left'
                     }}>
 
-                        <p style={{ margin: '0 auto 8px', width: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
-                            <hr style={{ width:`50px`, border: '0', borderTop: '2px solid green' }}></hr> 
-                            Your Main Areas of Concern 
-                            <hr style={{ width:`50px`, border: '0', borderTop: '2px solid green' }}></hr>
-                        </p>
+                        <p style={{ margin: '0 auto 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                             ----- Your Main Areas of Concern  -----                        
+                            </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
