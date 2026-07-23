@@ -2,8 +2,8 @@ import { useEffect, useState } from '@wordpress/element';
 
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
-const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
-const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
+const btnHoverTop = window.healthScoreData?.btnHoverTop || '#99ca1d';
+const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#799928';
 const primaryColor = btnBgBottom;
 const pluginUrl = window.healthScoreData?.pluginUrl || '';
 
@@ -34,8 +34,8 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
     const bands = [
         { label: 'SIGNIFICANT OPPORTUNITY', range: '0-19', color: '#E50914', textColor: '#E50914', start: 0, end: 36, textX: 65, textY: 108 },
         { label: 'NEEDS ATTENTION', range: '20-39', color: '#FF7A00', textColor: '#FF7A00', start: 36, end: 72, textX: 142, textY: 14 },
-        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#1E293B', start: 72, end: 108, textX: 250, textY: -18 },
-        { label: 'GOOD', range: '60-79', color: '#00C853', textColor: '#00C853', start: 108, end: 144, textX: 358, textY: 14 },
+        { label: 'FAIR', range: '40-59', color: '#FCB017', textColor: '#FCB017', start: 72, end: 108, textX: 250, textY: -18 },
+        { label: 'GOOD', range: '60-79', color: '#4caf50', textColor: '#4caf50', start: 108, end: 144, textX: 358, textY: 14 },
         { label: 'EXCELLENT', range: '80-100', color: '#008A3B', textColor: '#008A3B', start: 144, end: 180, textX: 435, textY: 108 }
     ];
 
@@ -253,7 +253,7 @@ const Results = ({ scores, onRetake }) => {
         scoreColor = '#008A3B'; // Excellent (Dark Green)
         scoreCategoryName = 'EXCELLENT';
     } else if (health_score >= 60) {
-        scoreColor = '#00C853'; // Good (Green)
+        scoreColor = '#4caf50'; // Good (Green)
         scoreCategoryName = 'GOOD';
     } else if (health_score >= 40) {
         scoreColor = '#FCB017'; // Fair (Yellow/Orange)
@@ -301,16 +301,16 @@ const Results = ({ scores, onRetake }) => {
                 {primary_goal && (
                     <div style={{
                         marginBottom: '1.2rem',
-                        backgroundColor: '#f59c1117',
+                        backgroundColor: '#79992817',
                         padding: '1rem 1.2rem',
                         borderRadius: '12px',
-                        border: '1px solid #f59c11',
+                        border: '1px solid #799928',
                         textAlign: 'center'
                     }}>
                         <p style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Primary Goal -----
                         </p>
-                        <p style={{ margin: 0, fontSize: '20px', color: '#f59c11', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
+                        <p style={{ margin: 0, fontSize: '18px', color: '#799928', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
                             {primary_goal}
                         </p>
                     </div>
@@ -334,9 +334,9 @@ const Results = ({ scores, onRetake }) => {
                             {main_concerns.map((concern, idx) => (
                                 <li key={idx} style={{
                                     marginBottom: '0',
-                                    fontSize: '16px',
+                                    fontSize: '18px',
                                     fontWeight: '700',
-                                    color: '#f59c11',
+                                    color: '#799928',
                                     fontFamily: 'Lexend, sans-serif',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -349,10 +349,11 @@ const Results = ({ scores, onRetake }) => {
                                         width: '18px',
                                         height: '18px',
                                         borderRadius: '50%',
-                                        backgroundColor: `#f59c11`,
+                                        backgroundColor: `#799928`,
                                         color: `#fff`,
                                         fontWeight: '800',
-                                        fontSize: '0.75rem',
+                                        lineHeight: '0',
+                                        fontSize: '12px',
                                         flexShrink: 0
                                     }}>
                                         ✓

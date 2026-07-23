@@ -98,8 +98,8 @@ class Health_Score {
             $booking_url      = get_option( 'health_score_booking_url', '' );
             $btn_bg_top       = get_option( 'health_score_btn_bg_top', '#40BAD5' );
             $btn_bg_bottom    = get_option( 'health_score_btn_bg_bottom', '#07689F' );
-            $btn_hover_top    = get_option( 'health_score_btn_hover_top', '#FCBF1E' );
-            $btn_hover_bottom = get_option( 'health_score_btn_hover_bottom', '#F59C11' );
+            $btn_hover_top    = get_option( 'health_score_btn_hover_top', '#99ca1d' );
+            $btn_hover_bottom = get_option( 'health_score_btn_hover_bottom', '#799928' );
 
             wp_localize_script( 'health-score-js', 'healthScoreData', [
                 'restUrl'        => esc_url_raw( rest_url( 'health-score/v1/submit' ) ),
@@ -108,8 +108,8 @@ class Health_Score {
                 'pluginUrl'      => esc_url_raw( plugin_dir_url( __FILE__ ) ),
                 'btnBgTop'       => sanitize_hex_color( $btn_bg_top ) ?: '#40BAD5',
                 'btnBgBottom'    => sanitize_hex_color( $btn_bg_bottom ) ?: '#07689F',
-                'btnHoverTop'    => sanitize_hex_color( $btn_hover_top ) ?: '#FCBF1E',
-                'btnHoverBottom' => sanitize_hex_color( $btn_hover_bottom ) ?: '#F59C11'
+                'btnHoverTop'    => sanitize_hex_color( $btn_hover_top ) ?: '#99ca1d',
+                'btnHoverBottom' => sanitize_hex_color( $btn_hover_bottom ) ?: '#799928'
             ] );
             
             wp_enqueue_style(

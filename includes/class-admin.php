@@ -376,13 +376,13 @@ class Health_Score_Admin {
         register_setting( 'health_score_options_group', 'health_score_btn_hover_top', [
             'type' => 'string',
             'sanitize_callback' => 'sanitize_hex_color',
-            'default' => '#FCBF1E'
+            'default' => '#99ca1d'
         ] );
 
         register_setting( 'health_score_options_group', 'health_score_btn_hover_bottom', [
             'type' => 'string',
             'sanitize_callback' => 'sanitize_hex_color',
-            'default' => '#F59C11'
+            'default' => '#799928'
         ] );
     }
 
@@ -411,10 +411,10 @@ class Health_Score_Admin {
                         <th scope="row">Button Hover Color</th>
                         <td>
                             <label style="margin-right: 15px;">
-                                Top Shade: <input type="color" name="health_score_btn_hover_top" value="<?php echo esc_attr( get_option('health_score_btn_hover_top', '#FCBF1E') ); ?>" />
+                                Top Shade: <input type="color" name="health_score_btn_hover_top" value="<?php echo esc_attr( get_option('health_score_btn_hover_top', '#99ca1d') ); ?>" />
                             </label>
                             <label>
-                                Bottom Shade: <input type="color" name="health_score_btn_hover_bottom" value="<?php echo esc_attr( get_option('health_score_btn_hover_bottom', '#F59C11') ); ?>" />
+                                Bottom Shade: <input type="color" name="health_score_btn_hover_bottom" value="<?php echo esc_attr( get_option('health_score_btn_hover_bottom', '#799928') ); ?>" />
                             </label>
                             <p class="description">Gradient applied to primary buttons when hovered.</p>
                         </td>
@@ -465,26 +465,26 @@ class Health_Score_Admin {
 
         <!-- Patient Profile Modal -->
         <div id="health-profile-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
-            <div style="background-color:#fff; margin:5% auto; padding:20px; border-radius:8px; width:600px; max-width:90%; box-shadow:0 5px 15px rgba(0,0,0,0.3);">
+            <div style="background-color:#fff;margin:5% auto;padding:20px;border-radius:8px;width:600px;max-width:90%;font-size: 15px;box-shadow:0 5px 15px rgba(0,0,0,0.3);line-height: 22px;">
                 <span id="health-modal-close" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
-                <h2 id="modal-name" style="color:#fc7909; margin-top:0;">Patient Profile</h2>
+                <h2 id="modal-name" style="margin-top:0;color: #799928;font-size: 20px;">Patient Profile</h2>
                 <hr>
                 <div style="display:flex; gap:20px; margin-bottom:20px;">
                     <div style="flex:1;">
-                        <strong>Health Score:</strong> <span style="color:#0c6fa4;" id="modal-health-score"></span><br>
-                        <strong>Readiness:</strong> <span style="color:#0c6fa4;" id="modal-readiness"></span>/10<br>
-                        <strong>Phone:</strong> <span style="color:#0c6fa4;" id="modal-phone"></span><br>
-                        <strong>Email:</strong> <span style="color:#0c6fa4;" id="modal-email"></span>
+                        <strong>Health Score:</strong> <span style="color:#096ba1;" id="modal-health-score"></span><br>
+                        <strong>Readiness:</strong> <span style="color:#096ba1;" id="modal-readiness"></span>/10<br>
+                        <strong>Phone:</strong> <span style="color:#096ba1;" id="modal-phone"></span><br>
+                        <strong>Email:</strong> <span style="color:#096ba1;" id="modal-email"></span>
                     </div>
                 </div>
-                <h3>Patient's Stated Goals</h3>
-                <ul id="modal-goals" style="list-style-type:disc; padding-left:20px;"></ul>
+                <h3 style="margin-bottom: 0;font-size: 18px;">Patient's Stated Goals</h3>
+                <ul id="modal-goals" style="list-style-type:disc;padding-left:20px;margin-top: 5px;"></ul>
                 
-                <h3>Potential Discussion Topics</h3>
-                <ul id="modal-topics" style="list-style-type:disc; padding-left:20px;"></ul>
+                <h3 style="margin-bottom: 0;font-size: 18px;">Potential Discussion Topics</h3>
+                <ul id="modal-topics" style="list-style-type:disc;padding-left:20px;margin-top: 5px;"></ul>
 
-                <h3>Readiness Context</h3>
-                <p id="modal-context"></p>
+                <h3 style="margin-bottom: 0;font-size: 18px;">Readiness Context</h3>
+                <p id="modal-context" style="margin-top: 5px;"></p>
             </div>
         </div>
 

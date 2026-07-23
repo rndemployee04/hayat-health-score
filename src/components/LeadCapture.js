@@ -1,8 +1,8 @@
 import { useState } from '@wordpress/element';
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
-const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
-const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
+const btnHoverTop = window.healthScoreData?.btnHoverTop || '#99ca1d';
+const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#799928';
 const primaryColor = btnBgBottom;
 
 const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
