@@ -10,11 +10,49 @@
  * }
  */
 
-/* Uncomment and modify below to add custom styles:
-#health-score-root {
-    
+/* Custom premium range slider styling */
+.custom-range-slider {
+    width: 100%;
+    outline: none;
+    margin: 20px 0;
 }
-*/
+
+/* Chrome/Safari thumb */
+.custom-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #99ca1d;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4);
+    border: 3px solid #ffffff;
+    transition: all 0.2s ease;
+}
+
+.custom-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: #799928;
+    box-shadow: 0 6px 14px rgba(121, 153, 40, 0.5);
+}
+
+/* Mozilla thumb */
+.custom-range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #99ca1d;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4);
+    border: 3px solid #ffffff;
+    transition: all 0.2s ease;
+}
+
+.custom-range-slider::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    background: #799928;
+}
 
 @media (max-width: 768px) {
 .health_score {
