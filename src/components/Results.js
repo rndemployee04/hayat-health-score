@@ -2,8 +2,8 @@ import { useEffect, useState } from '@wordpress/element';
 
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
-const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
-const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
+const btnHoverTop = window.healthScoreData?.btnHoverTop || '#99ca1d';
+const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#799928';
 const primaryColor = btnBgBottom;
 const pluginUrl = window.healthScoreData?.pluginUrl || '';
 
@@ -301,16 +301,16 @@ const Results = ({ scores, onRetake }) => {
                 {primary_goal && (
                     <div style={{
                         marginBottom: '1.2rem',
-                        backgroundColor: '#f59c1117',
+                        backgroundColor: '#79992817',
                         padding: '1rem 1.2rem',
                         borderRadius: '12px',
-                        border: '1px solid #f59c11',
+                        border: '1px solid #799928',
                         textAlign: 'center'
                     }}>
                         <p style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Primary Goal -----
                         </p>
-                        <p style={{ margin: 0, fontSize: '20px', color: '#f59c11', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
+                        <p style={{ margin: 0, fontSize: '20px', color: '#799928', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
                             {primary_goal}
                         </p>
                     </div>
@@ -336,7 +336,7 @@ const Results = ({ scores, onRetake }) => {
                                     marginBottom: '0',
                                     fontSize: '16px',
                                     fontWeight: '700',
-                                    color: '#f59c11',
+                                    color: '#799928',
                                     fontFamily: 'Lexend, sans-serif',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -349,7 +349,7 @@ const Results = ({ scores, onRetake }) => {
                                         width: '18px',
                                         height: '18px',
                                         borderRadius: '50%',
-                                        backgroundColor: `#f59c11`,
+                                        backgroundColor: `#799928`,
                                         color: `#fff`,
                                         fontWeight: '800',
                                         fontSize: '0.75rem',

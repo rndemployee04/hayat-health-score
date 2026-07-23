@@ -14,8 +14,8 @@ import { faHandsHoldingCircle} from '@fortawesome/free-solid-svg-icons';
 
 const btnBgTop = window.healthScoreData?.btnBgTop || '#40BAD5';
 const btnBgBottom = window.healthScoreData?.btnBgBottom || '#07689F';
-const btnHoverTop = window.healthScoreData?.btnHoverTop || '#FCBF1E';
-const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#F59C11';
+const btnHoverTop = window.healthScoreData?.btnHoverTop || '#99ca1d';
+const btnHoverBottom = window.healthScoreData?.btnHoverBottom || '#799928';
 const primaryColor = btnBgBottom;
 
 const STORAGE_KEY = 'health_score_state';
@@ -240,7 +240,7 @@ const Questionnaire = () => {
                     }
                 `}</style>
 
-                <FontAwesomeIcon icon={faHandsHoldingCircle} style={{ fontSize: '80px', color: '#f59c11', margin: '0 auto 30px' }} />
+                <FontAwesomeIcon icon={faHandsHoldingCircle} style={{ fontSize: '80px', color: '#799928', margin: '0 auto 30px' }} />
 
                 <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: '40px', fontWeight: '700', margin: '0 0 10px', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                     GliaFit – 60-Second <br></br>Health Score
@@ -487,7 +487,7 @@ const Questionnaire = () => {
 
                 {currentQuestion.type === 'slider' && (
                     <div style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '14px', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
-                        <input type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer', outline: 'none', accentColor: '#1a1f36' }} />
+                        <input type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer', outline: 'none', accentColor: '#99ca1d' }} />
                         <div style={{ textAlign: 'center', marginTop: '0.8rem', fontSize: '1.5rem', fontWeight: '800', color: '#1a1f36', fontFamily: 'Outfit, sans-serif' }}>{currentAnswer}</div>
                     </div>
                 )}

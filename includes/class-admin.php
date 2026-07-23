@@ -376,13 +376,13 @@ class Health_Score_Admin {
         register_setting( 'health_score_options_group', 'health_score_btn_hover_top', [
             'type' => 'string',
             'sanitize_callback' => 'sanitize_hex_color',
-            'default' => '#FCBF1E'
+            'default' => '#99ca1d'
         ] );
 
         register_setting( 'health_score_options_group', 'health_score_btn_hover_bottom', [
             'type' => 'string',
             'sanitize_callback' => 'sanitize_hex_color',
-            'default' => '#F59C11'
+            'default' => '#799928'
         ] );
     }
 
@@ -411,10 +411,10 @@ class Health_Score_Admin {
                         <th scope="row">Button Hover Color</th>
                         <td>
                             <label style="margin-right: 15px;">
-                                Top Shade: <input type="color" name="health_score_btn_hover_top" value="<?php echo esc_attr( get_option('health_score_btn_hover_top', '#FCBF1E') ); ?>" />
+                                Top Shade: <input type="color" name="health_score_btn_hover_top" value="<?php echo esc_attr( get_option('health_score_btn_hover_top', '#99ca1d') ); ?>" />
                             </label>
                             <label>
-                                Bottom Shade: <input type="color" name="health_score_btn_hover_bottom" value="<?php echo esc_attr( get_option('health_score_btn_hover_bottom', '#F59C11') ); ?>" />
+                                Bottom Shade: <input type="color" name="health_score_btn_hover_bottom" value="<?php echo esc_attr( get_option('health_score_btn_hover_bottom', '#799928') ); ?>" />
                             </label>
                             <p class="description">Gradient applied to primary buttons when hovered.</p>
                         </td>
@@ -467,7 +467,7 @@ class Health_Score_Admin {
         <div id="health-profile-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
             <div style="background-color:#fff;margin:5% auto;padding:20px;border-radius:8px;width:600px;max-width:90%;font-size: 15px;box-shadow:0 5px 15px rgba(0,0,0,0.3);line-height: 22px;">
                 <span id="health-modal-close" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
-                <h2 id="modal-name" style="margin-top:0;color: #f59c11;font-size: 20px;">Patient Profile</h2>
+                <h2 id="modal-name" style="margin-top:0;color: #799928;font-size: 20px;">Patient Profile</h2>
                 <hr>
                 <div style="display:flex; gap:20px; margin-bottom:20px;">
                     <div style="flex:1;">
