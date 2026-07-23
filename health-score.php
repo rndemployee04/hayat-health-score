@@ -72,6 +72,11 @@ class Health_Score {
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
+
+        update_option( 'health_score_btn_bg_top', '#40BAD5' );
+        update_option( 'health_score_btn_bg_bottom', '#07689F' );
+        update_option( 'health_score_btn_hover_top', '#99ca1d' );
+        update_option( 'health_score_btn_hover_bottom', '#799928' );
     }
 
     public function render_shortcode() {
