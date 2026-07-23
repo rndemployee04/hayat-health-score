@@ -41,7 +41,7 @@ const AnalysisLoader = ({ onComplete }) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2.5rem 1rem',
+            padding: '1rem',
             textAlign: 'center',
             animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
             minHeight: '380px'
@@ -99,7 +99,7 @@ const AnalysisLoader = ({ onComplete }) => {
             <h3 style={{
                 color: '#1a1f36',
                 fontFamily: 'Outfit, sans-serif',
-                fontSize: '35px',
+                fontSize: 'clamp(26px, 3vw, 40px)',
                 fontWeight: '700',
                 marginBottom: '0',
                 letterSpacing: '-0.5px'

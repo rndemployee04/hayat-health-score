@@ -216,7 +216,7 @@ const GliaFitGauge = ({ score, scoreColor, categoryName }) => {
                     }}>
                         !
                     </span>
-                    <span style={{ fontSize: '16px', fontWeight: '700', letterSpacing: '1px', fontFamily: 'Outfit, sans-serif', textAlign: 'left' }}>
+                    <span className='metabolic_sts' style={{ fontSize: '16px', fontWeight: '700', letterSpacing: '1px', fontFamily: 'Outfit, sans-serif', textAlign: 'left' }}>
                         Your Metabolic Health : <strong>{categoryName}</strong>
                     </span>
                 </div>
@@ -273,20 +273,6 @@ const Results = ({ scores, onRetake }) => {
 
     return (
         <div className="results-wrapper" style={{ padding: '0', textAlign: 'center', animation: 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-            <style>{`
-                @media (max-width: 480px) {
-                    .results-wrapper {
-                        padding: 0.5rem 0.2rem !important;
-                    }
-                    .cta-button {
-                        border-radius: 14px !important;
-                        padding: 0.9rem 1.2rem !important;
-                        font-size: 1rem !important;
-                        line-height: 1.3 !important;
-                    }
-                }
-            `}</style>
-
             <div style={{ margin: '1rem 0 1rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <GliaFitGauge score={health_score} scoreColor={scoreColor} categoryName={scoreCategoryName} />
             </div>
@@ -307,7 +293,7 @@ const Results = ({ scores, onRetake }) => {
                         border: '1px solid #799928',
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                        <p className='goal_fnt' style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Primary Goal -----
                         </p>
                         <p style={{ margin: 0, fontSize: '18px', color: '#799928', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
@@ -327,7 +313,7 @@ const Results = ({ scores, onRetake }) => {
                         textAlign: 'left'
                     }}>
 
-                        <p style={{ margin: '0 auto 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
+                        <p className='goal_fnt' style={{ margin: '0 auto 8px', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                              ----- Your Main Areas of Concern  -----                        
                             </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
@@ -370,7 +356,7 @@ const Results = ({ scores, onRetake }) => {
                     <div style={{
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: 0, color: '#444', fontWeight: '500', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6' }}>
+                        <p style={{ margin: 0, color: '#444', fontWeight: '500', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.5' }}>
                             {category_explanation}
                         </p>
                     </div>
@@ -418,7 +404,7 @@ const Results = ({ scores, onRetake }) => {
 
             {onRetake && (
                 <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                    <button
+                    <button className="retake-button"
                         onClick={onRetake}
                         style={{
                             backgroundColor: 'transparent',
