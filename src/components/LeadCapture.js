@@ -58,17 +58,17 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
     };
 
     return (
-        <div style={{ padding: '1rem 0 0 0', textAlign: 'left', animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <div style={{ padding: '0', textAlign: 'left', animation: 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)', display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                <h3 style={{ color: '#1a1f36', margin: '0px 0px 5px', fontFamily: 'Outfit, sans-serif', fontSize: '35px', fontWeight: '700', letterSpacing: '-0.5px' }}>
+                <h3 style={{ color: '#1a1f36', margin: '0px 0px 5px', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: '700', letterSpacing: '-0.5px' }}>
                     Your Personalized Health Snapshot Is Ready!!!
                 </h3>
-                <p style={{ color: '#595959', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6', maxWidth: '90%', margin: '0 auto' }}>
+                <p style={{ color: '#595959', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.6', margin: '0 auto' }}>
                     Enter your first name and email to view your results and receive your Health Snapshot.
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', backgroundColor: '#ffffff', padding: '25px', borderRadius: '20px', boxShadow: '0 15px 35px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.02)', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
+            <form className="lead-capture-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', backgroundColor: '#ffffff', padding: '25px', borderRadius: '20px', boxShadow: '0 15px 35px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.02)', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
 
                 <div>
                     <label style={labelStyle}>
@@ -110,7 +110,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         onChange={(e) => setConsent(e.target.checked)}
                         style={{ marginTop: '0', width: '22px', height: '22px', cursor: 'pointer', accentColor: primaryColor, border: 'none', boxShadow: 'none', appearance: 'auto', outline: 'none' }}
                     />
-                    <label htmlFor="consent" style={{ fontSize: '0.95rem', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.5', cursor: 'pointer' }}>
+                    <label htmlFor="consent" style={{ fontSize: '14px', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.5', cursor: 'pointer' }}>
                         I agree to receive my assessment report and updates via email. I understand that I may unsubscribe at any time.
                     </label>
                 </div>
@@ -146,7 +146,7 @@ const LeadCapture = ({ onSubmit, onBack, isSubmitting }) => {
                         Back
                     </button>
 
-                    <button
+                    <button className="cta-button"
                         type="submit"
                         disabled={isSubmitting}
                         style={{

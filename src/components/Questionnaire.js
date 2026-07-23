@@ -190,7 +190,7 @@ const Questionnaire = () => {
         width: '100%',
         margin: 'clamp(1rem, 4vw, 2rem) auto',
         backgroundColor: '#fff',
-        padding: '40px 30px',
+        padding: 'clamp(1.3rem, 3.5vw, 2.5rem)',
         borderRadius: '24px',
         boxShadow: '0 20px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02)',
         border: '1px solid rgba(220, 227, 235, 0.8)',
@@ -242,13 +242,13 @@ const Questionnaire = () => {
 
                 <FontAwesomeIcon icon={faHandsHoldingCircle} style={{ fontSize: '80px', color: '#799928', margin: '0 auto 30px' }} />
 
-                <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: '40px', fontWeight: '700', margin: '0 0 10px', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
+                <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: '700', margin: '0 0 10px', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                     GliaFit – 60-Second <br></br>Health Score
                 </h2>
-                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: '18px', margin: '0px auto 25px', lineHeight: '1.3' }}>
+                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: '18px', margin: '0px auto 25px', lineHeight: '1.5' }}>
                     Discover your personalized health score, identify your top opportunities for vitality, and take the first step towards a healthier you. It only takes a minute.
                 </p>
-                <button
+                <button className="cta-button"
                     onClick={handleStart}
                     style={{
                         background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
@@ -326,7 +326,7 @@ const Questionnaire = () => {
     return (
         <div ref={containerRef} style={{
             ...cardStyle,
-            padding: 'clamp(1rem, 3.5vw, 1.8rem)',
+            padding: 'clamp(1.3rem, 3.5vw, 2.5rem)',
             minHeight: 'auto',
             margin: '0.8rem auto'
         }}>
@@ -390,9 +390,9 @@ const Questionnaire = () => {
             {showExitIntent && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', zIndex: 999999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1.5rem' }}>
                     <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', padding: 'clamp(2rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)', border: '1px solid rgba(220, 227, 235, 0.8)' }}>
-                        <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: '700', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
+                        <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(18px, 2vw, 20px)', fontWeight: '700', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
                         <p style={{ marginBottom: '2rem', fontSize: '12px', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.6' }}>You're only a few questions away from seeing your personalized Health Score.</p>
-                        <button
+                        <button className="cta-button"
                             onClick={() => setShowExitIntent(false)}
                             style={{
                                 background: `linear-gradient(180deg, ${btnBgTop} 0%, ${btnBgBottom} 100%)`,
@@ -424,7 +424,7 @@ const Questionnaire = () => {
 
             <ProgressBar currentStep={currentStepIndex + 1} totalSteps={questions.length} />
 
-            <h3 style={{ color: '#1a1f36', margin: '0 0 0.3rem 0', fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
+            <h3 style={{ color: '#1a1f36', margin: '0 0 0.3rem 0', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(18px, 2vw, 20px)', fontWeight: '700', letterSpacing: '-0.5px', lineHeight: '1.25' }}>{currentQuestion.title}</h3>
             {currentQuestion.subtitle && <p style={{ margin: '0', fontStyle: 'italic', color: '#64748b', fontSize: '12px', fontFamily: 'Lexend, sans-serif' }}>{currentQuestion.subtitle}</p>}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.2rem', marginBottom: '1.4rem' }}>
@@ -432,7 +432,7 @@ const Questionnaire = () => {
                     const isSelected = currentAnswer.includes(option);
                     return (
                         <label key={option} className={`option-row ${isSelected ? 'selected' : ''}`} onClick={() => handleOptionToggle(option)}>
-                            <div style={{
+                            <div className="option-circle" style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '6px',
@@ -459,7 +459,7 @@ const Questionnaire = () => {
                     const isSelected = currentAnswer === option;
                     return (
                         <label key={option} className={`option-row ${isSelected ? 'selected' : ''}`} onClick={() => handleRadioSelect(option)}>
-                            <div style={{
+                            <div className="option-circle"style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '50%',
@@ -542,7 +542,7 @@ const Questionnaire = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column-reverse', gap: '0.6rem', marginTop: 'auto', width: '100%' }}>
                 {currentStepIndex > 0 && (
-                    <button
+                    <button className="back-button"
                         onClick={handleBack}
                         style={{
                         backgroundColor: 'transparent',
@@ -565,7 +565,7 @@ const Questionnaire = () => {
                         Back
                     </button>
                 )}
-                <button
+                <button className="cta-button"
                     onClick={handleNext}
                     disabled={isNextDisabled()}
                     style={{
