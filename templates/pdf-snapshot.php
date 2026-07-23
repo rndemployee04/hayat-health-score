@@ -114,7 +114,8 @@ td {
     font-size: 7pt;
     text-transform: uppercase;
     display: block;
-    letter-spacing: 0.5px;
+    font-weight: bold;
+    letter-spacing: 0.2px;
     color: #ffffff;
 }
 
@@ -454,7 +455,7 @@ if ( ! empty( $qr_code_url ) ) {
                             <div style="width: 18px; height: 18px; border: 1.5px solid #ffffff; border-radius: 50%; color: #ffffff; font-size: 10pt; font-weight: bold; line-height: 16px; text-align: center; margin: 0 auto;">!</div>
                         </td>
                         <td style="vertical-align: middle; text-align: left;">
-                            <span class="status-caption">YOUR CURRENT METABOLIC HEALTH STATUS</span>
+                            <span class="status-caption">YOUR CURRENT METABOLIC HEALTH STATUS : </span>
                             <span class="status-message"><?php echo esc_html( $score_category ); ?></span>
                         </td>
                     </tr>
@@ -747,9 +748,9 @@ if ( ! empty( $qr_code_url ) ) {
 
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                    <td width="20" valign="top">
+                    <td valign="top">
                         <i class="fa-solid fa-user-shield"
-                           style="color:#0b4d67; font-size:14px;"></i>
+                           style="color:#0b4d67; font-size:14px; margin-top: 4px;"></i>
                     </td>
 
                     <td valign="top" style="padding-left:4px;">
@@ -762,7 +763,7 @@ if ( ! empty( $qr_code_url ) ) {
 
         <td style="width:6%; text-align:right;" valign="middle">
             <?php if ($logo_img): ?>
-                <img src="<?php echo $logo_img; ?>" height="28" alt="GliaFit Logo" />
+                <img src="<?php echo $logo_img; ?>" height="32" alt="GliaFit Logo" />
             <?php endif; ?>
         </td>
     </tr>
