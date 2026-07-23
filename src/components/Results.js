@@ -340,6 +340,7 @@ const Results = ({ scores, onRetake }) => {
                                         fontWeight: '800',
                                         lineHeight: '0',
                                         fontSize: '12px',
+                                        marginTop: '-2px',
                                         flexShrink: 0
                                     }}>
                                         ✓
