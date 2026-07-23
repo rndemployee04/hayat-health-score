@@ -487,7 +487,11 @@ const Questionnaire = () => {
 
                 {currentQuestion.type === 'slider' && (
                     <div style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '14px', border: '1px solid rgba(220, 227, 235, 0.5)' }}>
-                        <input type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer', outline: 'none', accentColor: '#99ca1d' }} />
+                        <input className="custom-range-slider" type="range" min={currentQuestion.min} max={currentQuestion.max} value={currentAnswer} onChange={handleSliderChange} style={{ width: '100%', cursor: 'pointer', outline: 'none', accentColor: '#99ca1d' }} />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '-12px', padding: '0 6px', fontSize: '12px', fontWeight: '800', color: '#64748b', fontFamily: 'Outfit, sans-serif' }}>
+                            <span>Not Ready</span>
+                            <span>I'm Ready</span>
+                        </div>
                         <div style={{ textAlign: 'center', marginTop: '0.8rem', fontSize: '1.5rem', fontWeight: '800', color: '#1a1f36', fontFamily: 'Outfit, sans-serif' }}>{currentAnswer}</div>
                     </div>
                 )}

@@ -128,7 +128,7 @@ export const questions = [
     {
         id: 'q9',
         title: "On a scale of 1–10, how ready are you to improve your health?",
-        subtitle: "Slider: 1 = Not Ready • 10 = I'm Ready",
+        subtitle: "",
         insight: "Your readiness helps us personalize recommendations that match where you are today.",
         type: 'slider',
         min: 1,
