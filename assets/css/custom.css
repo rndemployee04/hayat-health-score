@@ -1,12 +1,18 @@
 /* Custom premium range slider styling */
 .custom-range-slider {
-    width: 100%;
-    outline: none;
-    margin: 20px 0;
+    width: 100% !important;
+    outline: none !important;
+    margin: 20px 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
     -webkit-appearance: auto !important;
     appearance: auto !important;
 }
-
+input[type="range"]::-webkit-slider-runnable-track {
+    box-shadow: none !important;
+}
 /* Chrome/Safari thumb */
 .custom-range-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -42,6 +48,16 @@
 .custom-range-slider::-moz-range-thumb:hover {
     transform: scale(1.15);
     background: #799928;
+}
+
+/* Force Back button to be transparent without borders (overriding WP themes) */
+.back-button {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
 }
 
 @media (max-width: 768px) {
