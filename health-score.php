@@ -65,7 +65,6 @@ class Health_Score {
             top_opportunities text NULL,
             raw_answers longtext NULL,
             utm_source varchar(100) NULL,
-            status varchar(50) DEFAULT 'Needs Follow-up' NULL,
             created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
             PRIMARY KEY  (id)
         ) $charset_collate;";

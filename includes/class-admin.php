@@ -28,7 +28,6 @@ class Assessments_List_Table extends WP_List_Table {
             'health_score'           => 'Health Score',
             'readiness_score'        => 'Readiness',
             'score_category'         => 'Category',
-            'status'                 => 'Status',
             'utm_source'             => 'UTM Source',
             'created_at'             => 'Date',
             'actions'                => 'Actions'
@@ -41,7 +40,6 @@ class Assessments_List_Table extends WP_List_Table {
             'first_name'      => [ 'first_name', false ],
             'health_score'    => [ 'health_score', false ],
             'readiness_score' => [ 'readiness_score', false ],
-            'status'          => [ 'status', false ],
             'created_at'      => [ 'created_at', true ]
         ];
     }
@@ -75,25 +73,6 @@ class Assessments_List_Table extends WP_List_Table {
                     $badge_color,
                     $val
                 );
-            case 'status':
-                $current_status = ! empty( $item['status'] ) ? $item['status'] : 'Needs Follow-up';
-                $colors = [
-                    'Needs Follow-up' => 'color: #d63638; font-weight: 600;',
-                    'Contacted'       => 'color: #dba617; font-weight: 600;',
-                    'Booked'          => 'color: #00a32a; font-weight: 600;',
-                    'Not Interested'  => 'color: #646970; font-weight: 600;'
-                ];
-                $text_color = isset($colors[$current_status]) ? $colors[$current_status] : '#3c434a';
-                $html = '<div style="position: relative; display: inline-block;">';
-                $html .= '<select class="health-status-dropdown" data-id="' . esc_attr($item['id']) . '" style="appearance: none; -webkit-appearance: none; -moz-appearance: none; color: ' . $text_color . '; font-weight: 600; background: transparent; border: 1px solid transparent; padding: 0 24px 0 0; box-shadow: none; cursor: pointer; height: auto; min-height: unset; line-height: 1;">';
-                foreach ( $colors as $status_option => $style ) {
-                    $selected = selected( $current_status, $status_option, false );
-                    $html .= '<option value="' . esc_attr( $status_option ) . '" ' . $selected . ' style="color: #2c3338;">' . esc_html( $status_option ) . '</option>';
-                }
-                $html .= '</select>';
-                $html .= '<span class="dashicons dashicons-edit" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 14px; width: 14px; height: 14px; color: #a7aaad; pointer-events: none;"></span>';
-                $html .= '</div>';
-                return $html;
             case 'actions':
                 $lead_data = esc_attr( wp_json_encode( $item ) );
                 return '<button type="button" class="button health-view-lead" data-lead="' . $lead_data . '"><span class="dashicons dashicons-visibility"></span></button>';
@@ -134,15 +113,7 @@ class Assessments_List_Table extends WP_List_Table {
             return;
         }
 
-        $current_status   = isset( $_REQUEST['filter_status'] ) ? sanitize_text_field( $_REQUEST['filter_status'] ) : '';
         $current_category = isset( $_REQUEST['filter_category'] ) ? sanitize_text_field( $_REQUEST['filter_category'] ) : '';
-
-        $statuses = [
-            'Needs Follow-up' => 'Needs Follow-up',
-            'Contacted'       => 'Contacted',
-            'Booked'          => 'Booked',
-            'Not Interested'  => 'Not Interested'
-        ];
 
         $categories = [
             'Excellent'               => 'Excellent',
@@ -153,13 +124,6 @@ class Assessments_List_Table extends WP_List_Table {
         ];
 
         echo '<div class="alignleft actions">';
-        
-        echo '<select name="filter_status">';
-        echo '<option value="">All Statuses</option>';
-        foreach ( $statuses as $val => $label ) {
-            printf( '<option value="%s" %s>%s</option>', esc_attr( $val ), selected( $current_status, $val, false ), esc_html( $label ) );
-        }
-        echo '</select>';
 
         echo '<select name="filter_category">';
         echo '<option value="">All Categories</option>';
@@ -185,22 +149,16 @@ class Assessments_List_Table extends WP_List_Table {
         $this->process_bulk_action();
 
         $search          = isset( $_REQUEST['s'] ) ? sanitize_text_field( trim( $_REQUEST['s'] ) ) : '';
-        $filter_status   = isset( $_REQUEST['filter_status'] ) ? sanitize_text_field( trim( $_REQUEST['filter_status'] ) ) : '';
         $filter_category = isset( $_REQUEST['filter_category'] ) ? sanitize_text_field( trim( $_REQUEST['filter_category'] ) ) : '';
 
         $where_clauses = [];
         if ( ! empty( $search ) ) {
             $where_clauses[] = $wpdb->prepare(
-                "(first_name LIKE %s OR email LIKE %s OR score_category LIKE %s OR status LIKE %s)",
-                '%' . $wpdb->esc_like( $search ) . '%',
+                "(first_name LIKE %s OR email LIKE %s OR score_category LIKE %s)",
                 '%' . $wpdb->esc_like( $search ) . '%',
                 '%' . $wpdb->esc_like( $search ) . '%',
                 '%' . $wpdb->esc_like( $search ) . '%'
             );
-        }
-
-        if ( ! empty( $filter_status ) ) {
-            $where_clauses[] = $wpdb->prepare( "status = %s", $filter_status );
         }
 
         if ( ! empty( $filter_category ) ) {
@@ -236,14 +194,12 @@ class Health_Score_Admin {
         add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
         add_action( 'admin_init', [ $this, 'register_settings' ] );
         add_action( 'admin_init', [ $this, 'check_db_schema' ] );
-        add_action( 'wp_ajax_health_score_update_status', [ $this, 'ajax_update_status' ] );
     }
 
     public function check_db_schema() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'health_assessments';
         $columns_to_check = [
-            'status'                  => "VARCHAR(50) DEFAULT 'Needs Follow-up' NULL",
             'score_category'          => "VARCHAR(100) NULL",
             'primary_goal'            => "VARCHAR(255) NULL",
             'selected_health_concerns'=> "TEXT NULL",
@@ -265,18 +221,6 @@ class Health_Score_Admin {
                 $wpdb->query( "ALTER TABLE `$table_name` ADD `$col` $definition" );
             }
         }
-    }
-
-    public function ajax_update_status() {
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( 'Unauthorized' );
-        }
-        global $wpdb;
-        $id = intval( $_POST['id'] );
-        $status = sanitize_text_field( $_POST['status'] );
-        $table_name = $wpdb->prefix . 'health_assessments';
-        $wpdb->update( $table_name, [ 'status' => $status ], [ 'id' => $id ] );
-        wp_send_json_success();
     }
 
     public function add_admin_menu() {
@@ -450,7 +394,6 @@ class Health_Score_Admin {
             .wp-list-table th.sortable a, .wp-list-table th.sorted a { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
             .column-health_score { width: 130px; white-space: nowrap; }
             .column-readiness_score { width: 110px; white-space: nowrap; }
-            .column-status { width: 170px; white-space: nowrap; }
             .column-actions { width: 60px; text-align: center; }
         </style>
         <div class="wrap">
@@ -505,78 +448,55 @@ class Health_Score_Admin {
                 }
             }
 
-            var viewBtns = document.querySelectorAll('.health-view-lead');
-            viewBtns.forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
+            var viewButtons = document.querySelectorAll('.health-view-lead');
+            viewButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
                     var lead = JSON.parse(this.getAttribute('data-lead'));
                     
                     document.getElementById('modal-name').innerText = lead.first_name + "'s Profile";
-                    document.getElementById('modal-health-score').innerText = lead.health_score;
+                    document.getElementById('modal-health-score').innerText = lead.health_score + '/100';
                     document.getElementById('modal-readiness').innerText = lead.readiness_score;
                     document.getElementById('modal-phone').innerText = lead.phone || 'N/A';
-                    document.getElementById('modal-email').innerText = lead.email;
-                    
-                    var answers = JSON.parse(lead.raw_answers);
-                    var opps = JSON.parse(lead.top_opportunities);
-                    
-                    var goalsHtml = '';
-                    if (answers.q2) {
-                        goalsHtml += '<li>Wants to: <strong>' + answers.q2 + '</strong></li>';
+                    document.getElementById('modal-email').innerText = lead.email || 'N/A';
+
+                    var goalsList = document.getElementById('modal-goals');
+                    goalsList.innerHTML = '';
+                    if (lead.primary_goal) {
+                        goalsList.innerHTML += '<li>' + lead.primary_goal + '</li>';
                     }
-                    if (answers.q1 && answers.q1.length > 0) {
-                        goalsHtml += '<li>Struggling with: ' + answers.q1.join(', ') + '</li>';
-                    }
-                    document.getElementById('modal-goals').innerHTML = goalsHtml || '<li>No goals stated</li>';
-                    
-                    var topicsHtml = '';
-                    if (opps && opps.length > 0) {
-                        opps.forEach(function(opp) {
-                            topicsHtml += '<li>' + opp + '</li>';
+                    var concerns = [];
+                    try {
+                        concerns = JSON.parse(lead.selected_health_concerns);
+                    } catch(e) {}
+                    if (concerns.length > 0) {
+                        concerns.forEach(function(item) {
+                            goalsList.innerHTML += '<li>Address concern: ' + item + '</li>';
                         });
                     }
-                    document.getElementById('modal-topics').innerHTML = topicsHtml || '<li>General optimization</li>';
-                    
-                    var context = '';
+
+                    var topicsList = document.getElementById('modal-topics');
+                    topicsList.innerHTML = '';
+                    var mainConcerns = [];
+                    try {
+                        mainConcerns = JSON.parse(lead.main_concerns);
+                    } catch(e) {}
+                    if (mainConcerns.length > 0) {
+                        mainConcerns.forEach(function(item) {
+                            topicsList.innerHTML += '<li>Discuss opportunity: ' + item + '</li>';
+                        });
+                    }
+
                     var readiness = parseInt(lead.readiness_score);
+                    var context = '';
                     if (readiness >= 8) {
-                        context = 'High readiness (' + readiness + '/10). Highly motivated to make lifestyle changes. Ready for immediate structured plan.';
+                        context = 'High readiness (' + readiness + '/10). Extremely motivated to make changes. Focus on clear next steps and quick wins.';
                     } else if (readiness >= 5) {
-                        context = 'Medium readiness (' + readiness + '/10). Interested but may need some reassurance or clear explanation of the process.';
+                        context = 'Moderate readiness (' + readiness + '/10). Open to advice but may need help with sustainable habits and building confidence.';
                     } else {
                         context = 'Low readiness (' + readiness + '/10). Might be hesitant or overwhelmed. Needs a gentle, supportive approach.';
                     }
                     document.getElementById('modal-context').innerText = context;
                     if (modal) modal.style.display = 'block';
-                });
-            });
-
-            var statusDropdowns = document.querySelectorAll('.health-status-dropdown');
-            statusDropdowns.forEach(function(dropdown) {
-                dropdown.addEventListener('change', function() {
-                    var select = this;
-                    var id = select.getAttribute('data-id');
-                    var status = select.value;
-                    
-                    // Update styling instantly
-                    var textColors = {
-                        'Needs Follow-up': '#d63638',
-                        'Contacted': '#dba617',
-                        'Booked': '#00a32a',
-                        'Not Interested': '#646970'
-                    };
-                    select.style.color = textColors[status];
-
-                    // AJAX call
-                    var data = new FormData();
-                    data.append('action', 'health_score_update_status');
-                    data.append('id', id);
-                    data.append('status', status);
-
-                    fetch(ajaxurl, {
-                        method: 'POST',
-                        body: data
-                    });
                 });
             });
         });
