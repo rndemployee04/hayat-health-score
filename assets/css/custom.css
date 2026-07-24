@@ -1,9 +1,8 @@
-/* Custom premium range slider styling scoped to plugin root to avoid theme conflicts */
+/* Custom premium range slider styling */
 #health-score-root .custom-range-slider {
     width: 100% !important;
     outline: none !important;
     margin: 20px 0 !important;
-    background: transparent !important;
 }
 
 /* Chrome/Safari thumb */
@@ -28,8 +27,8 @@
 
 /* Mozilla thumb */
 #health-score-root .custom-range-slider::-moz-range-thumb {
-    width: 20px !important;
-    height: 20px !important;
+    width: 18px !important;
+    height: 18px !important;
     border-radius: 50% !important;
     background: #99ca1d !important;
     cursor: pointer !important;
