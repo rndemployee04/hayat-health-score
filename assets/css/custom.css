@@ -1,45 +1,46 @@
-/* Custom premium range slider styling */
-.custom-range-slider {
-    width: 100%;
-    outline: none;
-    margin: 20px 0;
+/* Custom premium range slider styling scoped to plugin root to avoid theme conflicts */
+#health-score-root .custom-range-slider {
+    width: 100% !important;
+    outline: none !important;
+    margin: 20px 0 !important;
+    background: transparent !important;
 }
 
 /* Chrome/Safari thumb */
-.custom-range-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #99ca1d;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4);
-    border: 3px solid #ffffff;
-    transition: all 0.2s ease;
+#health-score-root .custom-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    background: #99ca1d !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4) !important;
+    border: 3px solid #ffffff !important;
+    transition: all 0.2s ease !important;
 }
 
-.custom-range-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
-    background: #799928;
-    box-shadow: 0 6px 14px rgba(121, 153, 40, 0.5);
+#health-score-root .custom-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15) !important;
+    background: #799928 !important;
+    box-shadow: 0 6px 14px rgba(121, 153, 40, 0.5) !important;
 }
 
 /* Mozilla thumb */
-.custom-range-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: #99ca1d;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4);
-    border: 3px solid #ffffff;
-    transition: all 0.2s ease;
+#health-score-root .custom-range-slider::-moz-range-thumb {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    background: #99ca1d !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4) !important;
+    border: 3px solid #ffffff !important;
+    transition: all 0.2s ease !important;
 }
 
-.custom-range-slider::-moz-range-thumb:hover {
-    transform: scale(1.15);
-    background: #799928;
+#health-score-root .custom-range-slider::-moz-range-thumb:hover {
+    transform: scale(1.15) !important;
+    background: #799928 !important;
 }
 
 @media (max-width: 768px) {
