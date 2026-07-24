@@ -245,7 +245,7 @@ const Questionnaire = () => {
                 <h2 style={{ color: '#1a1f36', fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: '700', margin: '0 0 10px', letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                     GliaFit – 60-Second <br></br>Health Score
                 </h2>
-                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: '18px', margin: '0px auto 25px', lineHeight: '1.5' }}>
+                <p style={{ color: '#4f566b', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(16px, 1.2vw, 18px)', margin: '0px auto 25px', lineHeight: '1.5' }}>
                     Discover your personalized health score, identify your top opportunities for vitality, and take the first step towards a healthier you. It only takes a minute.
                 </p>
                 <button className="cta-button"
@@ -389,8 +389,8 @@ const Questionnaire = () => {
 
             {showExitIntent && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', zIndex: 999999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1.5rem' }}>
-                    <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', padding: 'clamp(2rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)', border: '1px solid rgba(220, 227, 235, 0.8)' }}>
-                        <h3 style={{ color: '#1a1f36', marginBottom: '1rem', fontFamily: 'Outfit, sans-serif', fontSize: '22px', fontWeight: '700', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
+                    <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', padding: 'clamp(1.5rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)', border: '1px solid rgba(220, 227, 235, 0.8)' }}>
+                        <h3 style={{ color: '#1a1f36', marginBottom: '5px', fontFamily: 'Outfit, sans-serif', fontSize: '22px', fontWeight: '700', letterSpacing: '-0.5px' }}>Wait! Don't leave just yet.</h3>
                         <p style={{ margin: '0 0 1rem', fontSize: '16px', color: '#4f566b', fontFamily: 'Lexend, sans-serif', lineHeight: '1.6' }}>You're only a few questions away from seeing your personalized Health Score.</p>
                         <button className="cta-button"
                             onClick={() => setShowExitIntent(false)}

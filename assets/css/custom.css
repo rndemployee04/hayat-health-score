@@ -46,6 +46,9 @@
 .health_score {
     padding: 20px !important;
 }
+.concern-main{
+    align-items: start !important;
+}
 label.option-row {
     gap: 10px !important;
     align-items: start;
