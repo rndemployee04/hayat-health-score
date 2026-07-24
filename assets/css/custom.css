@@ -1,77 +1,79 @@
 /* Custom premium range slider styling */
-#health-score-root .custom-range-slider {
-    width: 100% !important;
-    outline: none !important;
-    margin: 20px 0 !important;
+.custom-range-slider {
+    width: 100%;
+    outline: none;
+    margin: 20px 0;
+    -webkit-appearance: auto !important;
+    appearance: auto !important;
 }
 
 /* Chrome/Safari thumb */
-#health-score-root .custom-range-slider::-webkit-slider-thumb {
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    width: 24px !important;
-    height: 24px !important;
-    border-radius: 50% !important;
-    background: #99ca1d !important;
-    cursor: pointer !important;
-    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4) !important;
-    border: 3px solid #ffffff !important;
-    transition: all 0.2s ease !important;
+.custom-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #99ca1d;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4);
+    border: 3px solid #ffffff;
+    transition: all 0.2s ease;
 }
 
-#health-score-root .custom-range-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.15) !important;
-    background: #799928 !important;
-    box-shadow: 0 6px 14px rgba(121, 153, 40, 0.5) !important;
+.custom-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: #799928;
+    box-shadow: 0 6px 14px rgba(121, 153, 40, 0.5);
 }
 
 /* Mozilla thumb */
-#health-score-root .custom-range-slider::-moz-range-thumb {
-    width: 18px !important;
-    height: 18px !important;
-    border-radius: 50% !important;
-    background: #99ca1d !important;
-    cursor: pointer !important;
-    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4) !important;
-    border: 3px solid #ffffff !important;
-    transition: all 0.2s ease !important;
+.custom-range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #99ca1d;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(153, 202, 29, 0.4);
+    border: 3px solid #ffffff;
+    transition: all 0.2s ease;
 }
 
-#health-score-root .custom-range-slider::-moz-range-thumb:hover {
-    transform: scale(1.15) !important;
-    background: #799928 !important;
+.custom-range-slider::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    background: #799928;
 }
 
 @media (max-width: 768px) {
 .health_score {
-    padding: 20px !important;
+    padding: 20px;
 }
 label.option-row {
-    gap: 10px !important;
+    gap: 10px;
     align-items: start;
     padding: 14px;
-    font-size: 12px !important;
+    font-size: 12px;
 }
 .retake-button, .back-button {
-    font-size: 16px !important;
+    font-size: 16px;
 }
 .option-circle {
-    height: 14px !important;
-    width: 14px !important;
+    height: 14px;
+    width: 14px;
     margin-top: 2px;
 }
 .cta-button {
-font-size: 16px !important;
-line-height: 1.3 !important;
+font-size: 16px;
+line-height: 1.3;
 }
 .metabolic_sts, .goal_fnt {
-    font-size: 14px !important;
+    font-size: 14px;
 }
 .lead-capture-form {
-    background-color: transparent !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
+    background-color: transparent;
+    padding: 0;
+    box-shadow: none;
+    border: none;
 }    
 
 }
