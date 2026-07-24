@@ -2,7 +2,7 @@
 /**
  * Plugin Name: GliaFit Health Score Assessment
  * Description: Lead Generation Form Questionnaire “60-Second Health Assessment”. The goal is to educate visitors, engage them, generate a personalized health score, collect their contact information, and encourage them to book a complimentary consultation.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: RND Experts
  * Author URI: https://rndexperts.com/
  */
