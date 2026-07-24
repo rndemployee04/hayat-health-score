@@ -115,6 +115,42 @@ class Health_Score_API {
         if ( $inserted ) {
             $assessment_id = $wpdb->insert_id;
             
+            // Trigger GHL Webhook
+            $webhook_url = get_option( 'health_score_ghl_webhook_url', '' );
+            if ( ! empty( $webhook_url ) ) {
+                $webhook_payload = [
+                    'first_name'             => $first_name,
+                    'email'                  => $email,
+                    'score_category'         => isset( $scores['score_category'] ) ? $scores['score_category'] : '',
+                    'primary_goal'           => isset( $answers['q2'] ) ? $answers['q2'] : '',
+                    'top_concern_1'          => isset( $scores['main_concerns'][0] ) ? $scores['main_concerns'][0] : '',
+                    'top_concern_2'          => isset( $scores['main_concerns'][1] ) ? $scores['main_concerns'][1] : '',
+                    'top_concern_3'          => isset( $scores['main_concerns'][2] ) ? $scores['main_concerns'][2] : '',
+                    'all_health_concerns'    => isset( $answers['q1'] ) ? implode( ', ', (array) $answers['q1'] ) : '',
+                    'health_score'           => isset( $scores['health_score'] ) ? $scores['health_score'] : 100,
+                    'risk_score'             => isset( $scores['risk_score'] ) ? $scores['risk_score'] : 0,
+                    'symptom_duration'       => isset( $answers['q3'] ) ? $answers['q3'] : '',
+                    'energy_pattern'         => isset( $answers['q4'] ) ? $answers['q4'] : '',
+                    'craving_frequency'      => isset( $answers['q5'] ) ? $answers['q5'] : '',
+                    'diagnosed_conditions'   => isset( $answers['q6'] ) ? implode( ', ', (array) $answers['q6'] ) : '',
+                    'previous_attempts'      => isset( $answers['q7'] ) ? implode( ', ', (array) $answers['q7'] ) : '',
+                    'biggest_future_concern' => isset( $answers['q8'] ) ? $answers['q8'] : '',
+                    'readiness_score'        => isset( $answers['q9'] ) ? (int) $answers['q9'] : 5,
+                    'support_preference'     => isset( $answers['q10'] ) ? $answers['q10'] : '',
+                    'current_mindset'        => isset( $answers['q11'] ) ? $answers['q11'] : '',
+                    'utm_source'             => $utm_source,
+                    'assessment_date'        => date('Y-m-d'),
+                    'pdf_sent'               => 'Pending'
+                ];
+
+                wp_remote_post( $webhook_url, [
+                    'body'    => wp_json_encode( $webhook_payload ),
+                    'headers' => [ 'Content-Type' => 'application/json' ],
+                    'timeout' => 5,
+                    'blocking'=> false
+                ] );
+            }
+
             // Schedule the background event to generate the PDF and send the email
             wp_schedule_single_event( time(), 'health_score_process_assessment', [ $assessment_id ] );
 

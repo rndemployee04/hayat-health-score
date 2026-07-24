@@ -263,6 +263,12 @@ class Health_Score_Admin {
             'default' => ''
         ] );
 
+        register_setting( 'health_score_options_group', 'health_score_ghl_webhook_url', [
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw',
+            'default' => ''
+        ] );
+
         register_setting( 'health_score_options_group', 'health_score_scoring_config', [
             'type' => 'string',
             'sanitize_callback' => function( $val ) {
@@ -368,6 +374,13 @@ class Health_Score_Admin {
                         <td>
                             <input type="url" name="health_score_booking_url" value="<?php echo esc_attr( get_option('health_score_booking_url', '') ); ?>" style="width: 100%; max-width: 400px;" />
                             <p class="description">Users will be redirected to this URL after clicking on the "Book Your Complimentary Consultation" button.</p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">GoHighLevel Webhook URL</th>
+                        <td>
+                            <input type="url" name="health_score_ghl_webhook_url" value="<?php echo esc_attr( get_option('health_score_ghl_webhook_url', '') ); ?>" style="width: 100%; max-width: 400px;" placeholder="https://services.leadconnectorhq.com/hooks/..." />
+                            <p class="description">When a lead submits the quiz, their data will be instantly pushed to this Webhook URL.</p>
                         </td>
                     </tr>
                     <tr valign="top">
