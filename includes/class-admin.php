@@ -408,7 +408,7 @@ class Health_Score_Admin {
 
         <!-- Patient Profile Modal -->
         <div id="health-profile-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
-            <div style="background-color:#fff;margin:5% auto;padding:20px;border-radius:8px;width:600px;max-width:90%;font-size: 15px;box-shadow:0 5px 15px rgba(0,0,0,0.3);line-height: 22px;">
+            <div class="pop-view" style="background-color:#fff;margin:8% auto;padding:20px;border-radius:8px;width:600px;max-width:90%;font-size: 15px;box-shadow:0 5px 15px rgba(0,0,0,0.3);line-height: 22px;">
                 <span id="health-modal-close" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
                 <h2 id="modal-name" style="margin-top:0;color: #799928;font-size: 20px;">Patient Profile</h2>
                 <hr>

@@ -296,7 +296,7 @@ const Results = ({ scores, onRetake }) => {
                         <p className='goal_fnt' style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#444', fontFamily: 'Lexend, sans-serif', fontWeight: '700', letterSpacing: '0.5px' }}>
                             ----- Your Primary Goal -----
                         </p>
-                        <p style={{ margin: 0, fontSize: '18px', color: '#799928', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
+                        <p style={{ margin: 0, fontSize: 'clamp(16px, 1.2vw, 18px)', color: '#799928', fontFamily: 'Outfit, sans-serif', fontWeight: '700' }}>
                             {primary_goal}
                         </p>
                     </div>
@@ -318,9 +318,9 @@ const Results = ({ scores, onRetake }) => {
                             </p>
                         <ul style={{ listStyleType: 'none', padding: 0, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '100%' }}>
                             {main_concerns.map((concern, idx) => (
-                                <li key={idx} style={{
+                                <li className='concern-main' key={idx} style={{
                                     marginBottom: '0',
-                                    fontSize: '18px',
+                                    fontSize: 'clamp(16px, 1.2vw, 18px)',
                                     fontWeight: '700',
                                     color: '#799928',
                                     fontFamily: 'Lexend, sans-serif',
@@ -340,7 +340,7 @@ const Results = ({ scores, onRetake }) => {
                                         fontWeight: '800',
                                         lineHeight: '0',
                                         fontSize: '12px',
-                                        marginTop: '-2px',
+                                        marginTop: '2px',
                                         flexShrink: 0
                                     }}>
                                         ✓
@@ -357,7 +357,7 @@ const Results = ({ scores, onRetake }) => {
                     <div style={{
                         textAlign: 'center'
                     }}>
-                        <p style={{ margin: 0, color: '#444', fontWeight: '500', fontFamily: 'Lexend, sans-serif', fontSize: '16px', lineHeight: '1.5' }}>
+                        <p style={{ margin: 0, color: '#444', fontWeight: '500', fontFamily: 'Lexend, sans-serif', fontSize: 'clamp(14px, 1.2vw, 16px)', lineHeight: '1.5' }}>
                             {category_explanation}
                         </p>
                     </div>
